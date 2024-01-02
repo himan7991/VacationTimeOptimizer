@@ -1,4 +1,7 @@
 import { useEffect } from 'react'
+import Header from './components/Header'
+import BlurBackground from './components/BlurBackground'
+import Content from './components/Content'
 
 export default function App() {
 	useEffect(() => {
@@ -18,5 +21,13 @@ export default function App() {
 		}
 	}, [])
 
-	return <main className="min-h-screen bg-background"></main>
+	return (
+		<main className="min-h-screen bg-background">
+			<Header />
+
+			<Content />
+
+			<BlurBackground />
+		</main>
+	)
 }
