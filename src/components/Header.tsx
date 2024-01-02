@@ -1,11 +1,26 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FaGithub } from 'react-icons/fa'
 import { FaGlobeEurope } from 'react-icons/fa'
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import SpringModal from './AboutModal'
+import SliderToggle from './SliderToggle'
 
 export default function Header() {
 	const [isAboutOpen, setIsAboutOpen] = useState<boolean>(false)
+	const [theme, setTheme] = useState('light')
+
+	const handleThemeChange = (_theme: string) => {
+		document.body.classList.remove('dark', 'light')
+		document.body.classList.add(_theme)
+		localStorage.setItem('theme', _theme)
+		setTheme(_theme)
+	}
+
+	useEffect(() => {
+		const selectedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+		document.body.classList.add(selectedTheme)
+		setTheme(selectedTheme)
+	}, [])
 
 	const buttonVariant = {
 		initial: { y: 0, opacity: 0 },
@@ -23,7 +38,7 @@ export default function Header() {
 		<>
 			<header className="py-4 px-[5%] z-10 flex justify-between items-center absolute top-0 inset-x-0">
 				<h2 className="text-copy font-bold text-2xl">HS.</h2>
-				<div className="flex gap-4">
+				<div className="flex gap-4 items-center">
 					<motion.div className="overflow-hidden flex flex-col h-6" whileHover="hover">
 						<motion.button
 							className="text-copy font-semibold"
@@ -44,12 +59,11 @@ export default function Header() {
 							About
 						</motion.button>
 					</motion.div>
-
 					<motion.div className="overflow-hidden flex flex-col h-6" whileHover="hover">
 						<motion.a
 							href="https://github.com/himan7991/VacationTimeOptimizer"
 							className="text-copy flex items-center gap-2 font-semibold"
-							key={1}
+							key={3}
 							variants={buttonVariant}
 							transition={buttonTransition}
 						>
@@ -58,14 +72,14 @@ export default function Header() {
 						<motion.a
 							href="https://github.com/himan7991/VacationTimeOptimizer"
 							className="text-primary flex items-center gap-2 font-semibold"
-							key={1}
+							key={4}
 							variants={buttonVariant}
 							transition={buttonTransition}
 						>
 							Contribute <FaGithub />
 						</motion.a>
 					</motion.div>
-
+					<SliderToggle theme={theme} handleThemeChange={handleThemeChange} />
 					<button className="text-copy border-b-[1px] border-transparent hover:text-primary">
 						<FaGlobeEurope />
 					</button>
