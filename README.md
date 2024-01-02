@@ -1,0 +1,2 @@
+# VacationTimeOptimizer
+Maximize Your Getaways
