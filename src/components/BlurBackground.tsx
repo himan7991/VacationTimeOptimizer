@@ -1,6 +1,6 @@
 export default function BlurBackground() {
 	return (
-		<div className="absolute -z-10 inset-0 top-1/2 -translate-y-1/2">
+		<div className="absolute z-[1] inset-0 top-1/2 -translate-y-1/2">
 			<div className="relative isolate px-6 pt-14 lg:px-8">
 				<div className="absolute inset-x-0 transform-gpu overflow-hidden blur-3xl sm:-top-80" aria-hidden="true">
 					<div

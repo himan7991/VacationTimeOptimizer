@@ -22,7 +22,7 @@ export default function App() {
 	}, [])
 
 	return (
-		<main className="min-h-screen bg-background">
+		<main className="min-h-screen bg-background relative overflow-hidden">
 			<Header />
 
 			<Content />
