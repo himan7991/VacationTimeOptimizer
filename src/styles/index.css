@@ -3,41 +3,41 @@
 @tailwind utilities;
 
 :root {
-	--primary: 262, 83%, 58%;
-	--primary-content: 0, 0%, 100%;
-	--primary-dark: 262, 84%, 48%;
-	--primary-light: 262, 83%, 68%;
+	--primary: 124, 58, 237;
+	--primary-content: 255, 255, 255;
+	--primary-dark: 95, 20, 224;
+	--primary-light: 155, 105, 241;
 
-	--secondary: 82, 83%, 58%;
-	--secondary-content: 83, 85%, 8%;
-	--secondary-dark: 82, 84%, 48%;
-	--secondary-light: 82, 83%, 68%;
+	--secondary: 171, 237, 58;
+	--secondary-content: 24, 37, 3;
+	--secondary-dark: 149, 224, 20;
+	--secondary-light: 191, 241, 105;
 
-	--success: 120, 83%, 58%;
-	--warning: 60, 83%, 58%;
-	--error: 0, 83%, 58%;
+	--success: 58, 237, 58;
+	--warning: 237, 237, 58;
+	--error: 237, 58, 58;
 
-	--success-content: 120, 85%, 8%;
-	--warning-content: 60, 85%, 8%;
-	--error-content: 0, 0%, 100%;
+	--success-content: 3, 37, 3;
+	--warning-content: 37, 37, 3;
+	--error-content: 255, 255, 25;
 }
 
 .light {
-	--background: 0, 0%, 94%;
-	--foreground: 0, 0%, 98%;
-	--border: 0, 0%, 87%;
+	--background: 240, 240, 240;
+	--foreground: 251, 251, 251;
+	--border: 223, 223, 223;
 
-	--copy: 0, 0%, 15%;
-	--copy-light: 0, 0%, 40%;
-	--copy-lighter: 0, 0%, 55%;
+	--copy: 38, 38, 38;
+	--copy-light: 102, 102, 102;
+	--copy-lighter: 140, 140, 140;
 }
 
 .dark {
-	--background: 0, 0%, 10%;
-	--foreground: 0, 0%, 15%;
-	--border: 0, 0%, 25%;
+	--background: 26, 26, 26;
+	--foreground: 38, 38, 38;
+	--border: 64, 64, 64;
 
-	--copy: 0, 0%, 98%;
-	--copy-light: 0, 0%, 85%;
-	--copy-lighter: 0, 0%, 65%;
+	--copy: 251, 251, 251;
+	--copy-light: 217, 217, 217;
+	--copy-lighter: 166, 166, 166;
 }

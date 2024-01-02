@@ -10,7 +10,7 @@ export default function Header() {
 				</a>
 				<a
 					href="https://github.com/himan7991/VacationTimeOptimizer"
-					className="text-copy flex items-center gap-1 border-b-[1px] border-transparent hover:border-copy"
+					className="text-copy flex items-center gap-2 border-b-[1px] border-transparent hover:border-copy"
 				>
 					Contribute <FaGithub />
 				</a>

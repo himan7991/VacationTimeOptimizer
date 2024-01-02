@@ -7,31 +7,31 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "hsl(var(--primary))",
-        "primary-content": "hsl(var(--primary-content))",
-        "primary-dark": "hsl(var(--primary-dark))",
-        "primary-light": "hsl(var(--primary-light))",
+        primary: "rgba(var(--primary))",
+        "primary-content": "rgba(var(--primary-content))",
+        "primary-dark": "rgba(var(--primary-dark))",
+        "primary-light": "rgba(var(--primary-light))",
 
-        secondary: "hsl(var(--secondary))",
-        "secondary-content": "hsl(var(--secondary-content))",
-        "secondary-dark": "hsl(var(--secondary-dark))",
-        "secondary-light": "hsl(var(--secondary-light))",
+        secondary: "rgba(var(--secondary))",
+        "secondary-content": "rgba(var(--secondary-content))",
+        "secondary-dark": "rgba(var(--secondary-dark))",
+        "secondary-light": "rgba(var(--secondary-light))",
 
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        border: "hsl(var(--border))",
+        background: "rgba(var(--background))",
+        foreground: "rgba(var(--foreground))",
+        border: "rgba(var(--border))",
 
-        copy: "hsl(var(--copy))",
-        "copy-light": "hsl(var(--copy-light))",
-        "copy-lighter": "hsl(var(--copy-lighter))",
+        copy: "rgba(var(--copy))",
+        "copy-light": "rgba(var(--copy-light))",
+        "copy-lighter": "rgba(var(--copy-lighter))",
 
-        success: "hsl(var(--success))",
-        warning: "hsl(var(--warning))",
-        error: "hsl(var(--error))",
+        success: "rgba(var(--success))",
+        warning: "rgba(var(--warning))",
+        error: "rgba(var(--error))",
 
-        "success-content": "hsl(var(--success-content))",
-        "warning-content": "hsl(var(--warning-content))",
-        "error-content": "hsl(var(--error-content))",
+        "success-content": "rgba(var(--success-content))",
+        "warning-content": "rgba(var(--warning-content))",
+        "error-content": "rgba(var(--error-content))",
       },
     }
   },
