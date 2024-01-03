@@ -34,14 +34,16 @@ export default function CountryModal({ isOpen, setIsOpen }: { isOpen: boolean; s
 								Vacation Time Optimizer supports over 100 countries! Choose yours below. <br />
 							</p>
 							<div className="grid grid-cols-10 gap-2 items-center mb-4">
-								{supportedCountries.map((c, i) => (
-									<p
-										className={`text-center cursor-pointer hover:underline ${c.countryCode === country ? 'underline' : ''}`}
-										key={i}
-									>
-										{c.name}
-									</p>
-								))}
+								{supportedCountries
+									.sort((a, b) => a.name.localeCompare(b.name))
+									.map((c, i) => (
+										<p
+											className={`text-center cursor-pointer hover:underline ${c.countryCode === country ? 'underline' : ''}`}
+											key={i}
+										>
+											{c.name}
+										</p>
+									))}
 							</div>
 
 							<div className="flex gap-2">
