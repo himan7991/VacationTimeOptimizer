@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 
-export default function Page1({ getStarted }: { getStarted: () => void }) {
+export default function Page1({ goto }: { goto: (arg: number) => void }) {
 	return (
 		<motion.div id="page1" layoutId="pages">
 			<div className="text-center">
@@ -10,7 +10,7 @@ export default function Page1({ getStarted }: { getStarted: () => void }) {
 				</p>
 				<div className="mt-10 flex items-center justify-center gap-x-6">
 					<button
-						onClick={() => getStarted()}
+						onClick={() => goto(2)}
 						className="rounded-md bg-primary px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
 					>
 						Get started
