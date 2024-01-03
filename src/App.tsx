@@ -9,7 +9,7 @@ import { IpApi } from './types/IpApi'
 export default function App() {
 	// context
 	const [year, setYear] = useState<number>(new Date().getFullYear())
-	const [country, setCountry] = useState<string>('US')
+	const [countryCode, setCountryCode] = useState<string>('US')
 	const [daysInYear, setDaysInYear] = useState<number>(365)
 	const [weekends, setWeekends] = useState<number[]>([])
 	const [publicHolidays, setPublicHolidays] = useState<number[]>([])
@@ -18,8 +18,8 @@ export default function App() {
 	const passedAppContext = {
 		year,
 		setYear,
-		country,
-		setCountry,
+		countryCode,
+		setCountryCode,
 		daysInYear,
 		setDaysInYear,
 		weekends,
@@ -39,7 +39,7 @@ export default function App() {
 			})
 			.then((countryResponse) => countryResponse.json())
 			.then((countryData) => {
-				setCountry(countryData.country_code)
+				setCountryCode(countryData.country_code)
 				// use the user country to retrieve the holidays in that country
 				return fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/${countryData.country_code}`)
 			})

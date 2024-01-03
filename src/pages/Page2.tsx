@@ -4,7 +4,7 @@ import AppContext from '../context/AppContext'
 import { supportedCountries } from '../constants/SupportedCountries'
 
 export default function Page2({ goto }: { goto: (arg: number) => void }) {
-	const { country, publicHolidays, year } = useContext(AppContext)
+	const { countryCode, publicHolidays, year } = useContext(AppContext)
 
 	return (
 		<>
@@ -14,15 +14,15 @@ export default function Page2({ goto }: { goto: (arg: number) => void }) {
 					<p className="text-lg leading-8 text-copy-light max-w-[75ch]">
 						Vacation Time Optimizer defaults to your current location and{' '}
 						<span className="font-semibold">we found {publicHolidays.length} public holidays</span> for{' '}
-						{supportedCountries.find((c) => c.countryCode === country)?.name || 'your country'} in {year}. To check other countries, click
-						the globe icon at the top right.
+						{supportedCountries.find((c) => c.countryCode === countryCode)?.name || 'your country'} in {year}. To check other countries,
+						click the globe icon at the top right.
 					</p>
 					{/* <p className="text-lg leading-8 text-copy-light font-bold">Enjoy planning!</p> */}
 					<div className="mt-10 flex items-center justify-center gap-x-6">
 						<button
 							className="rounded-md bg-primary px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:bg-border disabled:cursor-not-allowed"
 							onClick={() => goto(3)}
-							disabled={!supportedCountries.find((c) => c.countryCode === country)}
+							disabled={!supportedCountries.find((c) => c.countryCode === countryCode)}
 						>
 							{/* todo: make it so this sets local storage "tutorial" to 'passed' */}
 							Let's go!

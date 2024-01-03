@@ -4,8 +4,8 @@ import React from 'react'
 const AppContext = React.createContext({
 	year: 2024,
 	setYear: (arg: number) => {},
-	country: 'GR',
-	setCountry: (arg: string) => {},
+	countryCode: 'GR',
+	setCountryCode: (arg: string) => {},
 	daysInYear: 365,
 	setDaysInYear: (arg: number) => {},
 	weekends: [1, 2, 3],
