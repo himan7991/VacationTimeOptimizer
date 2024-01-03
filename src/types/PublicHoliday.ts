@@ -1,6 +1,6 @@
 // from https://date.nager.at/swagger/index.html
 export type PublicHoliday = {
-	date: string
+	date: string // '2024-01-02
 	localName: string
 	name: string
 	countryCode: string

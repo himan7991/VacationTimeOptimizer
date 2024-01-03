@@ -1,4 +1,4 @@
-const supportedCountries = [
+export const supportedCountries = [
 	{
 		countryCode: 'AD',
 		name: 'Andorra'
