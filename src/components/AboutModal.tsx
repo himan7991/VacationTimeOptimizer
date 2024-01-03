@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { TbBeach } from 'react-icons/tb'
 
-export default function SpringModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (arg: boolean) => void }) {
+export default function AboutModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (arg: boolean) => void }) {
 	return (
 		<AnimatePresence>
 			{isOpen && (
@@ -29,6 +29,13 @@ export default function SpringModal({ isOpen, setIsOpen }: { isOpen: boolean; se
 								Vacation Time Optimizer is a web application that helps you determine the optimal time to use your paid time off (PTO)
 							</p>
 							<div className="flex gap-2">
+								{/* todo: show the "tutorial" again -- reset local storage "tutorial" from 'passed' and show the first two screens again */}
+								<button
+									onClick={() => setIsOpen(false)}
+									className="bg-transparent hover:bg-white/10 transition-colors text-white font-semibold w-full py-2 rounded"
+								>
+									Show tutorial again
+								</button>
 								<button
 									onClick={() => setIsOpen(false)}
 									className="bg-white hover:opacity-90 transition-opacity text-primary font-semibold w-full py-2 rounded"

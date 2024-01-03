@@ -2,11 +2,14 @@ import { useEffect, useState } from 'react'
 import { FaGithub } from 'react-icons/fa'
 import { FaGlobeEurope } from 'react-icons/fa'
 import { motion } from 'framer-motion'
-import SpringModal from './AboutModal'
+import AboutModal from './AboutModal'
+import CountryModal from './CountryModal'
 import SliderToggle from './SliderToggle'
+import { GITHUB } from '../constants/links'
 
 export default function Header() {
 	const [isAboutOpen, setIsAboutOpen] = useState<boolean>(false)
+	const [isCountryOpen, setIsCountryOpen] = useState<boolean>(false)
 	const [theme, setTheme] = useState('light')
 
 	const handleThemeChange = (_theme: string) => {
@@ -61,7 +64,7 @@ export default function Header() {
 					</motion.div>
 					<motion.div className="overflow-hidden flex flex-col h-6" whileHover="hover">
 						<motion.a
-							href="https://github.com/himan7991/VacationTimeOptimizer"
+							href={GITHUB}
 							className="text-copy flex items-center gap-2 font-semibold"
 							key={3}
 							variants={buttonVariant}
@@ -70,7 +73,7 @@ export default function Header() {
 							Contribute <FaGithub />
 						</motion.a>
 						<motion.a
-							href="https://github.com/himan7991/VacationTimeOptimizer"
+							href={GITHUB}
 							className="text-primary flex items-center gap-2 font-semibold"
 							key={4}
 							variants={buttonVariant}
@@ -80,13 +83,21 @@ export default function Header() {
 						</motion.a>
 					</motion.div>
 					<SliderToggle theme={theme} handleThemeChange={handleThemeChange} />
-					<button className="text-copy border-b-[1px] border-transparent hover:text-primary">
+
+					<motion.button
+						className="text-copy border-b-[1px] border-transparent hover:text-primary"
+						onClick={() => setIsCountryOpen(true)}
+						key={1}
+						variants={buttonVariant}
+						transition={buttonTransition}
+					>
 						<FaGlobeEurope />
-					</button>
+					</motion.button>
 				</div>
 			</header>
 
-			<SpringModal isOpen={isAboutOpen} setIsOpen={setIsAboutOpen} />
+			<AboutModal isOpen={isAboutOpen} setIsOpen={setIsAboutOpen} />
+			<CountryModal isOpen={isCountryOpen} setIsOpen={setIsCountryOpen} />
 		</>
 	)
 }
