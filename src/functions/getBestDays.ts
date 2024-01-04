@@ -26,7 +26,6 @@ export const getBestDaysToTakeOff = (workingDays: number[], maxDays: number, wee
 	for (let i = 0; i < workingDays.length; i++) {
 		const currentDay = workingDays[i]
 		const currentPoints = calculatePoints(currentDay)
-		// console.log('🚀 ~ file: getBestDays.ts:36 ~ getBestDaysToTakeOff ~ currentDay:', currentDay, currentPoints)
 
 		if (currentPoints > 0) {
 			currentVacation.push({ day: currentDay, points: currentPoints })
@@ -34,6 +33,5 @@ export const getBestDaysToTakeOff = (workingDays: number[], maxDays: number, wee
 	}
 
 	currentVacation = currentVacation.sort((a, b) => b.points - a.points).slice(0, maxDays)
-	console.log('🚀 ~ file: getBestDays.ts:44 ~ getBestDaysToTakeOff ~ currentVacation:', JSON.stringify(currentVacation))
 	return currentVacation.map((dayObj) => dayObj.day)
 }

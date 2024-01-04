@@ -8,10 +8,10 @@ export default function Page2({ goto }: { goto: (arg: number) => void }) {
 
 	return (
 		<>
-			<motion.div id="page2" layoutId="pages">
-				<div className="text-center flex flex-col">
-					<h1 className="text-4xl font-bold tracking-tight text-copy sm:text-6xl mb-6">Let's get started</h1>
-					<p className="text-lg leading-8 text-copy-light max-w-[75ch]">
+			<motion.div id="page2" layoutId="pages" className="px-[5%]">
+				<div className="flex flex-col text-center">
+					<h1 className="mb-6 text-4xl font-bold tracking-tight text-copy sm:text-6xl">Let's get started</h1>
+					<p className="max-w-[75ch] text-lg leading-8 text-copy-light">
 						Vacation Time Optimizer defaults to your current location and{' '}
 						<span className="font-semibold">we found {publicHolidays.length} public holidays</span> for{' '}
 						{supportedCountries.find((c) => c.countryCode === countryCode)?.name || 'your country'} in {year}. To check other countries,
@@ -20,7 +20,7 @@ export default function Page2({ goto }: { goto: (arg: number) => void }) {
 					{/* <p className="text-lg leading-8 text-copy-light font-bold">Enjoy planning!</p> */}
 					<div className="mt-10 flex items-center justify-center gap-x-6">
 						<button
-							className="rounded-md bg-primary px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:bg-border disabled:cursor-not-allowed"
+							className="rounded-md bg-primary px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:bg-border"
 							onClick={() => goto(3)}
 							disabled={!supportedCountries.find((c) => c.countryCode === countryCode)}
 						>
@@ -30,14 +30,14 @@ export default function Page2({ goto }: { goto: (arg: number) => void }) {
 					</div>
 				</div>
 			</motion.div>
-			<p className="text-sm leading-8 text-copy-light absolute bottom-4">
+			<p className="absolute bottom-4 px-[5%] text-center text-sm leading-8 text-copy-light">
 				Vacation Time Optimizer supports over 100 countries thanks to{' '}
 				<a href="https://date.nager.at/" className="text-primary-light hover:text-primary">
 					nager.date
 				</a>
 				.
 			</p>
-			<div className="absolute top-0 right-0 h-32 w-32 rotate-90">
+			<div className="absolute right-0 top-0 h-32 w-32 rotate-90">
 				<svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 300 300">
 					<path
 						className="fill-primary-light"

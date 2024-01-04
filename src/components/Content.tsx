@@ -13,7 +13,7 @@ export default function Content() {
 		exit: { opacity: 0, x: '-100vw', transition: { duration: 0.5, ease: [0.83, 0, 0.17, 1] } }
 	}
 	return (
-		<div className="bg-foreground/75 absolute inset-x-[5%] inset-y-16 z-[2] h-[calc(100vh-6rem)] w-[calc(100vw-10%)] shadow-2xl rounded-2xl mx-auto flex flex-col justify-center items-center overflow-hidden">
+		<div className="absolute inset-x-[5%] inset-y-16 z-[2] mx-auto flex h-[calc(100vh-6rem)] w-[calc(100vw-10%)] flex-col items-center justify-center rounded-2xl bg-foreground/75 shadow-2xl sm:inset-x-[2.5%] lg:overflow-hidden">
 			<AnimatePresence mode="wait">
 				{page === 1 && (
 					<motion.div
@@ -22,7 +22,7 @@ export default function Content() {
 						animate="visible"
 						exit="exit"
 						variants={variants}
-						className="h-full w-full flex justify-center items-center"
+						className="flex h-full w-full items-center justify-center"
 					>
 						<Page1 goto={setPage} />
 					</motion.div>
@@ -35,7 +35,7 @@ export default function Content() {
 						animate="visible"
 						exit="exit"
 						variants={variants}
-						className="h-full w-full flex justify-center items-center relative"
+						className="relative flex h-full w-full items-center justify-center"
 					>
 						<Page2 goto={setPage} />
 					</motion.div>

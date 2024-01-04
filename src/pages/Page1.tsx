@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 export default function Page1({ goto }: { goto: (arg: number) => void }) {
 	return (
 		<motion.div id="page1" layoutId="pages">
-			<div className="text-center">
+			<div className="px-[5%] text-center">
 				<h1 className="text-4xl font-bold tracking-tight text-copy sm:text-6xl">Vacation Time Optimizer</h1>
 				<p className="mt-6 text-lg leading-8 text-copy-light">
 					Optimize your time, maximize your escape: find the perfect moment for your getaway
