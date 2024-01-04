@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { daysIntoYear } from '../functions/functions'
+import { twMerge } from 'tailwind-merge'
 
 export default function CalendarDay({
 	inDisplay,
@@ -18,9 +19,10 @@ export default function CalendarDay({
 
 	const textColor = () => {
 		if (index < daysIntoYear(new Date())) return 'text-copy-lighter'
+		if (index === daysIntoYear(new Date())) return 'text-copy-lighter border-b-copy-lighter'
 		if (isPublicHoliday) return 'text-primary'
-		if (isWeekend) return 'text-error'
-		if (isBestDay) return 'text-secondary'
+		if (isWeekend) return 'text-red-500'
+		if (isBestDay) return 'text-emerald-500 border-emerald-500'
 		// if (index >= 79 && index <= 83) return 'text-emerald-500' // 10 days in march, 4 pto
 		// if (index >= 86 && index <= 90) return 'text-emerald-500' // 8 days in may, 3 pto
 		// if (index >= 120 && index <= 126) return 'text-emerald-500' // 9 days in march, 4 pto
@@ -30,7 +32,7 @@ export default function CalendarDay({
 
 	return (
 		<p
-			className={`text-center ${textColor()}`}
+			className={twMerge('text-center border-b-[1px] border-transparent', textColor())}
 			key={index}
 			title={index.toString()}
 			onMouseOver={() => setDisplay(index)}
