@@ -1,52 +1,38 @@
 import { motion } from 'framer-motion'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import CalendarDay from '../components/CalendarDay'
 import AppContext from '../context/AppContext'
 import { daysIntoYear } from '../functions/functions'
 import { supportedCountries } from '../constants/SupportedCountries'
+import ReactSlider from 'react-slider'
+import '../styles/Slider.module.css'
+import { getBestDaysToTakeOff } from '../functions/getBestDays'
+import { getBestConsecutiveDays } from '../functions/getBestConsecutiveDays'
+import ModeToggle from '../components/ModeToggle'
 
 export default function Page3() {
+	let count = 0
+	const [mode, setMode] = useState('best')
+
+	const handleThemeChange = (_mode: string) => {
+		localStorage.setItem('mode', _mode)
+		setMode(_mode)
+	}
+
 	const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 	const weekdays = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
-	let count = 0
 
 	const { countryCode, daysInYear, weekends, publicHolidays, year } = useContext(AppContext)
 	const daysInYearArr: number[] = Array.from({ length: daysInYear }, (_, index) => index + 1)
 	const workingDays: number[] = daysInYearArr.filter(
-		(day) => !weekends.includes(day) && !publicHolidays.includes(day) && day >= daysIntoYear(new Date())
+		(day) => !weekends.includes(day) && !publicHolidays.includes(day) && day > daysIntoYear(new Date())
 	)
 
-	const getBestDaysToTakeOff = (workingDays: number[], maxDays: number): number[] => {
-		const sortedWorkingDays = [...workingDays].sort((a, b) => a - b)
-
-		let bestDays: number[] = []
-		let currentVacation: number[] = []
-
-		for (let i = 0; i < sortedWorkingDays.length; i++) {
-			const currentDay = sortedWorkingDays[i]
-
-			const isNextToPublicHoliday = publicHolidays.includes(currentDay - 1) || publicHolidays.includes(currentDay + 1)
-
-			const includesWeekend = weekends.includes(currentDay - 1) || weekends.includes(currentDay + 1)
-
-			if (isNextToPublicHoliday || includesWeekend) {
-				currentVacation.push(currentDay)
-			} else {
-				if (currentVacation.length > bestDays.length) {
-					bestDays = [...currentVacation]
-				}
-				currentVacation = []
-			}
-		}
-
-		return bestDays.slice(0, maxDays)
-	}
-
-	// Specify the maximum number of days you want to take off
-	const maxVacationDays = 4 // Adjust as needed
-
-	const bestDays: number[] = getBestDaysToTakeOff(workingDays, maxVacationDays)
-	console.log('🚀 ~ file: Page3.tsx:52 ~ Page3 ~ bestDays:', bestDays)
+	const maxVacationDays = 3
+	const bestDays: number[] =
+		mode === 'best'
+			? getBestDaysToTakeOff(workingDays, maxVacationDays, weekends, publicHolidays)
+			: getBestConsecutiveDays(workingDays, maxVacationDays, weekends, publicHolidays)
 
 	return (
 		<motion.div id="page3" className="w-full p-4 flex flex-col justify-center items-center h-full xl:flex-row" layoutId="pages">
@@ -61,8 +47,23 @@ export default function Page3() {
 						We found <span className="font-semibold text-primary">{publicHolidays.length} public holidays</span> in{' '}
 						{supportedCountries.filter((c) => c.countryCode === countryCode)[0].name},{' '}
 						<span className="font-semibold text-error">{Math.floor(weekends.length / 2)} weekends</span> and <br />
-						<span className="font-semibold">{workingDays.length} working days ahead</span>
+						<span className="font-semibold">{workingDays.length - 1} working days</span> ahead
 					</p>
+
+					{/* todo: fix the slider or get a new one */}
+				</div>
+				{/* <ReactSlider
+					renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+					min={0}
+					max={25}
+					defaultValue={3}
+					className="bg-red-200"
+					onChange={() => console.log('a')}
+					orientation="horizontal"
+					withTracks
+				/> */}
+				<div className="absolute top-4 right-4">
+					<ModeToggle mode={mode} handleModeChange={handleThemeChange} />
 				</div>
 			</div>
 			<div className="grid grid-cols-4 gap-4">
@@ -74,7 +75,7 @@ export default function Page3() {
 					const emptyDays = Array(new Date(year, m, 0).getDay()).fill(null)
 
 					return (
-						<div className="border border-border p-4 grid grid-cols-7 rounded-xl bg-foreground h-56 w-56" key={monthIndex}>
+						<div className="border border-border p-4 grid grid-cols-7 gap-x-1 rounded-xl bg-foreground h-56 w-56" key={monthIndex}>
 							<h2 className="col-span-7 text-copy font-semibold">{month}</h2>
 
 							<div className="grid grid-cols-7 col-span-7 text-center">
