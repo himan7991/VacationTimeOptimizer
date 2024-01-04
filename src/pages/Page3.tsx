@@ -8,6 +8,7 @@ import { getBestDaysToTakeOff } from '../functions/getBestDays'
 import { getBestConsecutiveDays } from '../functions/getBestConsecutiveDays'
 import ModeToggle from '../components/ModeToggle'
 import { BestDay } from '../types/BestDays'
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts'
 
 export default function Page3() {
 	let count = 0
@@ -28,10 +29,17 @@ export default function Page3() {
 		(day) => !weekends.includes(day) && !publicHolidays.includes(day) && day > daysIntoYear(new Date())
 	)
 
+	getBestDaysToTakeOff(workingDays, range, weekends, publicHolidays)
+
 	const bestDays: BestDay[] =
 		mode === 'best'
 			? getBestDaysToTakeOff(workingDays, range, weekends, publicHolidays)
 			: getBestConsecutiveDays(workingDays, range, weekends, publicHolidays)
+
+	const graphData = bestDays.map((item, index) => ({
+		day: index + 1,
+		vacations: item.points + bestDays.slice(0, index).reduce((acc, curr) => acc + curr.points, 0) + index + 1
+	}))
 
 	useEffect(() => {
 		console.log('update')
@@ -72,6 +80,15 @@ export default function Page3() {
 						of vacation <br />
 						with just <span className="border-b border-primary font-semibold">{bestDays.length} days of PTO</span>!
 					</p>
+				</div>
+				<div className="hidden xl:block">
+					<LineChart width={600} height={300} data={graphData}>
+						<Line type="monotone" dataKey="vacations" stroke="rgb(124, 58, 237)" />
+						<CartesianGrid className="stroke-border/25" />
+						<XAxis dataKey="day" />
+						<YAxis />
+						<Tooltip />
+					</LineChart>
 				</div>
 			</div>
 			<div className="xl:flex-2 grid grid-cols-1 justify-items-center gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
