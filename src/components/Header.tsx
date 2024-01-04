@@ -4,7 +4,7 @@ import { FaGlobeEurope } from 'react-icons/fa'
 import { motion } from 'framer-motion'
 import AboutModal from './AboutModal'
 import CountryModal from './CountryModal'
-import SliderToggle from './SliderToggle'
+import ThemeToggle from './ThemeToggle'
 import { GITHUB } from '../constants/links'
 
 export default function Header() {
@@ -82,7 +82,7 @@ export default function Header() {
 							Contribute <FaGithub />
 						</motion.a>
 					</motion.div>
-					<SliderToggle theme={theme} handleThemeChange={handleThemeChange} />
+					<ThemeToggle theme={theme} handleThemeChange={handleThemeChange} />
 
 					<motion.button
 						className="text-copy border-b-[1px] border-transparent hover:text-primary"
