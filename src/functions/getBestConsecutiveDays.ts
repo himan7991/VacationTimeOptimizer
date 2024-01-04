@@ -1,4 +1,6 @@
-export const getBestConsecutiveDays = (workingDays: number[], maxDays: number, weekends: number[], publicHolidays: number[]): number[] => {
+import { BestDay } from '../types/BestDays'
+
+export const getBestConsecutiveDays = (workingDays: number[], maxDays: number, weekends: number[], publicHolidays: number[]): BestDay[] => {
 	// Helper function to check if a day is a weekend or a holiday
 	const isWeekendOrHoliday = (day: number): boolean => weekends.includes(day) || publicHolidays.includes(day)
 
@@ -25,7 +27,7 @@ export const getBestConsecutiveDays = (workingDays: number[], maxDays: number, w
 
 	// Initialize the window of size maxDays
 	let windowStart = 0
-	let windowEnd = maxDays
+	let windowEnd = maxDays - 1
 
 	// Calculate the initial points for the window
 	let windowPoints = 0
@@ -54,6 +56,10 @@ export const getBestConsecutiveDays = (workingDays: number[], maxDays: number, w
 		}
 	}
 
-	// Return the best window as the result
-	return workingDays.slice(bestWindowStart, bestWindowEnd)
+	// Return the best window as an array of objects
+	const bestWindow: BestDay[] = []
+	for (let i = bestWindowStart; i <= bestWindowEnd; i++) {
+		bestWindow.push({ day: workingDays[i], points: calculatePoints(workingDays[i]) })
+	}
+	return bestWindow
 }

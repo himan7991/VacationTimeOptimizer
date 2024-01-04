@@ -1,4 +1,6 @@
-export const getBestDaysToTakeOff = (workingDays: number[], maxDays: number, weekends: number[], publicHolidays: number[]): number[] => {
+import { BestDay } from '../types/BestDays'
+
+export const getBestDaysToTakeOff = (workingDays: number[], maxDays: number, weekends: number[], publicHolidays: number[]): BestDay[] => {
 	let currentVacation: { day: number; points: number }[] = []
 
 	const isWeekendOrHoliday = (day: number): boolean => weekends.includes(day) || publicHolidays.includes(day)
@@ -33,5 +35,5 @@ export const getBestDaysToTakeOff = (workingDays: number[], maxDays: number, wee
 	}
 
 	currentVacation = currentVacation.sort((a, b) => b.points - a.points).slice(0, maxDays)
-	return currentVacation.map((dayObj) => dayObj.day)
+	return currentVacation
 }

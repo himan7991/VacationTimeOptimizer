@@ -7,6 +7,7 @@ import { supportedCountries } from '../constants/SupportedCountries'
 import { getBestDaysToTakeOff } from '../functions/getBestDays'
 import { getBestConsecutiveDays } from '../functions/getBestConsecutiveDays'
 import ModeToggle from '../components/ModeToggle'
+import { BestDay } from '../types/BestDays'
 
 export default function Page3() {
 	let count = 0
@@ -27,7 +28,7 @@ export default function Page3() {
 		(day) => !weekends.includes(day) && !publicHolidays.includes(day) && day > daysIntoYear(new Date())
 	)
 
-	const bestDays: number[] =
+	const bestDays: BestDay[] =
 		mode === 'best'
 			? getBestDaysToTakeOff(workingDays, range, weekends, publicHolidays)
 			: getBestConsecutiveDays(workingDays, range, weekends, publicHolidays)
@@ -45,19 +46,15 @@ export default function Page3() {
 			<div className="relative mb-6 flex w-full flex-col items-center justify-center gap-1 md:flex-row md:justify-around md:gap-8 xl:mb-0 xl:flex-1 xl:flex-col">
 				<div className="mb-4 flex flex-col items-center xl:mb-0">
 					<h2 className="mb-4 text-center text-6xl font-bold text-copy">Overview</h2>
-					{/* <p className="max-w-[40ch] text-center text-copy">
-						Days in <span className="text-primary font-semibold">purple</span> are the public holidays in {year}, while days in{' '}
-						<span className="text-error font-semibold">red</span> are the weekends.
-					</p> */}
 					<p className="text-center text-copy">
 						We found <span className="font-semibold text-primary">{publicHolidays.length} public holidays</span> in{' '}
-						{supportedCountries.filter((c) => c.countryCode === countryCode)[0].name},{' '}
+						{supportedCountries.filter((c) => c.countryCode === countryCode)[0].name},<br />
 						<span className="font-semibold text-error">{Math.floor(weekends.length / 2)} weekends</span> and <br />
 						<span className="font-semibold">{workingDays.length - 1} working days</span> ahead
 					</p>
 				</div>
-				<div className="right-4 top-4 flex flex-col items-center">
-					<div className="mb-2 flex items-center gap-2">
+				<div className="right-4 top-4 flex flex-col items-center gap-2">
+					<div className=" flex items-center gap-2">
 						<input
 							type="range"
 							min={1}
@@ -69,6 +66,12 @@ export default function Page3() {
 						<span className="text-copy">{range}</span>
 					</div>
 					<ModeToggle mode={mode} handleModeChange={handleThemeChange} />
+					<p className="text-center text-copy">
+						You're getting{' '}
+						<span className="font-semibold">{bestDays.reduce((total, dayObj) => total + dayObj.points, 0) + bestDays.length} days</span>{' '}
+						of vacation <br />
+						with just <span className="border-b border-primary font-semibold">{bestDays.length} days of PTO</span>!
+					</p>
 				</div>
 			</div>
 			<div className="xl:flex-2 grid grid-cols-1 justify-items-center gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
@@ -103,7 +106,7 @@ export default function Page3() {
 											inDisplay={j + 1 + daysInMonth - count}
 											isWeekend={weekends.includes(j + 1)}
 											isPublicHoliday={publicHolidays.includes(j + 1)}
-											isBestDay={bestDays.includes(j + 1)}
+											isBestDay={bestDays.map((obj) => obj.day).includes(j + 1)}
 											key={j}
 										/>
 									)
