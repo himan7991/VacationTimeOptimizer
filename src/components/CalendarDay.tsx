@@ -23,10 +23,6 @@ export default function CalendarDay({
 		if (isPublicHoliday) return 'text-primary'
 		if (isWeekend) return 'text-red-500'
 		if (isBestDay) return 'text-emerald-500 border-emerald-500'
-		// if (index >= 79 && index <= 83) return 'text-emerald-500' // 10 days in march, 4 pto
-		// if (index >= 86 && index <= 90) return 'text-emerald-500' // 8 days in may, 3 pto
-		// if (index >= 120 && index <= 126) return 'text-emerald-500' // 9 days in march, 4 pto
-		// if (index >= 358 && index <= 362) return 'text-emerald-500' // 9 days in december, 3 pto
 		return 'text-copy'
 	}
 
