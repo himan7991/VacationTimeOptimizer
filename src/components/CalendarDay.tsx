@@ -28,7 +28,7 @@ export default function CalendarDay({
 
 	return (
 		<p
-			className={twMerge('text-center border-b-[1px] border-transparent', textColor())}
+			className={twMerge('border-b-[1px] border-transparent text-center', textColor())}
 			key={index}
 			title={index.toString()}
 			onMouseOver={() => setDisplay(index)}

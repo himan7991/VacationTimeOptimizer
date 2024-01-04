@@ -39,12 +39,12 @@ export default function Header() {
 
 	return (
 		<>
-			<header className="py-4 px-[5%] z-10 flex justify-between items-center absolute top-0 inset-x-0">
-				<h2 className="text-copy font-bold text-2xl">HS.</h2>
-				<div className="flex gap-4 items-center">
-					<motion.div className="overflow-hidden flex flex-col h-6" whileHover="hover">
+			<header className="absolute inset-x-0 top-0 z-10 flex items-center justify-between px-[5%] py-4">
+				<h2 className="text-2xl font-bold text-copy">HS.</h2>
+				<div className="flex items-center gap-4">
+					<motion.div className="flex h-6 flex-col overflow-hidden" whileHover="hover">
 						<motion.button
-							className="text-copy font-semibold"
+							className="font-semibold text-copy"
 							onClick={() => setIsAboutOpen(true)}
 							key={1}
 							variants={buttonVariant}
@@ -53,7 +53,7 @@ export default function Header() {
 							About
 						</motion.button>
 						<motion.button
-							className="text-primary font-semibold"
+							className="font-semibold text-primary"
 							onClick={() => setIsAboutOpen(true)}
 							key={2}
 							variants={buttonVariant}
@@ -62,10 +62,10 @@ export default function Header() {
 							About
 						</motion.button>
 					</motion.div>
-					<motion.div className="overflow-hidden flex flex-col h-6" whileHover="hover">
+					<motion.div className="flex h-6 flex-col overflow-hidden" whileHover="hover">
 						<motion.a
 							href={GITHUB}
-							className="text-copy flex items-center gap-2 font-semibold"
+							className="flex items-center gap-2 font-semibold text-copy"
 							key={3}
 							variants={buttonVariant}
 							transition={buttonTransition}
@@ -75,7 +75,7 @@ export default function Header() {
 						</motion.a>
 						<motion.a
 							href={GITHUB}
-							className="text-primary flex items-center gap-2 font-semibold"
+							className="flex items-center gap-2 font-semibold text-primary"
 							key={4}
 							variants={buttonVariant}
 							transition={buttonTransition}
@@ -87,7 +87,7 @@ export default function Header() {
 					<ThemeToggle theme={theme} handleThemeChange={handleThemeChange} />
 
 					<motion.button
-						className="text-copy border-b-[1px] border-transparent hover:text-primary"
+						className="border-b-[1px] border-transparent text-copy hover:text-primary"
 						onClick={() => setIsCountryOpen(true)}
 						key={1}
 						variants={buttonVariant}

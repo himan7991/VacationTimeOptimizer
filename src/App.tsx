@@ -1,10 +1,9 @@
 import Header from './components/Header'
 import BlurBackground from './components/BlurBackground'
 import Content from './components/Content'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import AppContext from './context/AppContext'
 import { getDaysInYear, getPublicHolidays, getWeekends } from './functions/functions'
-import { IpApi } from './types/IpApi'
 
 export default function App() {
 	// context
@@ -53,7 +52,7 @@ export default function App() {
 
 	return (
 		<AppContext.Provider value={passedAppContext}>
-			<main className="min-h-screen bg-background relative overflow-hidden">
+			<main className="relative min-h-screen overflow-hidden bg-background">
 				<Header />
 				<Content />
 				<BlurBackground />
