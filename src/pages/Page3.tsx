@@ -4,8 +4,6 @@ import CalendarDay from '../components/CalendarDay'
 import AppContext from '../context/AppContext'
 import { daysIntoYear } from '../functions/functions'
 import { supportedCountries } from '../constants/SupportedCountries'
-import ReactSlider from 'react-slider'
-import '../styles/Slider.module.css'
 import { getBestDaysToTakeOff } from '../functions/getBestDays'
 import { getBestConsecutiveDays } from '../functions/getBestConsecutiveDays'
 import ModeToggle from '../components/ModeToggle'
@@ -13,6 +11,7 @@ import ModeToggle from '../components/ModeToggle'
 export default function Page3() {
 	let count = 0
 	const [mode, setMode] = useState('best')
+	const [range, setRange] = useState<number>(3)
 
 	const handleThemeChange = (_mode: string) => {
 		localStorage.setItem('mode', _mode)
@@ -28,15 +27,14 @@ export default function Page3() {
 		(day) => !weekends.includes(day) && !publicHolidays.includes(day) && day > daysIntoYear(new Date())
 	)
 
-	const maxVacationDays = 3
 	const bestDays: number[] =
 		mode === 'best'
-			? getBestDaysToTakeOff(workingDays, maxVacationDays, weekends, publicHolidays)
-			: getBestConsecutiveDays(workingDays, maxVacationDays, weekends, publicHolidays)
+			? getBestDaysToTakeOff(workingDays, range, weekends, publicHolidays)
+			: getBestConsecutiveDays(workingDays, range, weekends, publicHolidays)
 
 	return (
-		<motion.div id="page3" className="w-full p-4 flex flex-col justify-center items-center h-full xl:flex-row" layoutId="pages">
-			<div className="flex items-center justify-center relative w-full">
+		<motion.div id="page3" className="w-full p-4 flex flex-col justify-center items-center h-full xl:flex-row xl:gap-4" layoutId="pages">
+			<div className="flex items-center justify-center relative w-full xl:flex-1 xl:flex-col xl:gap-8">
 				<div className="flex flex-col items-center mb-4 xl:mb-0">
 					<h2 className="text-6xl text-center font-bold text-copy mb-4">Overview</h2>
 					{/* <p className="max-w-[40ch] text-center text-copy">
@@ -49,24 +47,23 @@ export default function Page3() {
 						<span className="font-semibold text-error">{Math.floor(weekends.length / 2)} weekends</span> and <br />
 						<span className="font-semibold">{workingDays.length - 1} working days</span> ahead
 					</p>
-
-					{/* todo: fix the slider or get a new one */}
 				</div>
-				{/* <ReactSlider
-					renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
-					min={0}
-					max={25}
-					defaultValue={3}
-					className="bg-red-200"
-					onChange={() => console.log('a')}
-					orientation="horizontal"
-					withTracks
-				/> */}
-				<div className="absolute top-4 right-4">
+				<div className="absolute top-4 right-4 flex flex-col items-end xl:static">
+					<div className="flex items-center gap-2 mb-2">
+						<input
+							type="range"
+							min={1}
+							max={30}
+							value={range}
+							className="accent-primary w-32"
+							onChange={(event) => setRange(Number(event.target.value))}
+						/>
+						<span className="text-copy">{range}</span>
+					</div>
 					<ModeToggle mode={mode} handleModeChange={handleThemeChange} />
 				</div>
 			</div>
-			<div className="grid grid-cols-4 gap-4">
+			<div className="grid grid-cols-4 gap-4 xl:flex-2">
 				{months.map((month, m) => {
 					const monthIndex = m + 1
 					const daysInMonth = new Date(year, monthIndex, 0).getDate()

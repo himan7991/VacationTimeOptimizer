@@ -69,6 +69,7 @@ export default function Header() {
 							key={3}
 							variants={buttonVariant}
 							transition={buttonTransition}
+							target="_blank"
 						>
 							Contribute <FaGithub />
 						</motion.a>
@@ -78,6 +79,7 @@ export default function Header() {
 							key={4}
 							variants={buttonVariant}
 							transition={buttonTransition}
+							target="_blank"
 						>
 							Contribute <FaGithub />
 						</motion.a>
