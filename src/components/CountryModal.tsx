@@ -6,7 +6,8 @@ import AppContext from '../context/AppContext'
 import { GITHUB } from '../constants/links'
 
 export default function CountryModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (arg: boolean) => void }) {
-	const { countryCode } = useContext(AppContext)
+	const { countryCode, setCountryCode } = useContext(AppContext)
+
 	return (
 		<AnimatePresence>
 			{isOpen && (
@@ -42,6 +43,10 @@ export default function CountryModal({ isOpen, setIsOpen }: { isOpen: boolean; s
 												c.countryCode === countryCode ? 'underline' : ''
 											}`}
 											key={i}
+											onClick={() => {
+												setCountryCode(c.countryCode)
+												localStorage.setItem('countryCode', c.countryCode)
+											}}
 										>
 											{c.name}
 										</p>

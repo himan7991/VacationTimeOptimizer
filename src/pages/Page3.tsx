@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import CalendarDay from '../components/CalendarDay'
 import AppContext from '../context/AppContext'
 import { daysIntoYear } from '../functions/functions'
@@ -31,6 +31,10 @@ export default function Page3() {
 		mode === 'best'
 			? getBestDaysToTakeOff(workingDays, range, weekends, publicHolidays)
 			: getBestConsecutiveDays(workingDays, range, weekends, publicHolidays)
+
+	useEffect(() => {
+		console.log('update')
+	}, [countryCode])
 
 	return (
 		<motion.div
