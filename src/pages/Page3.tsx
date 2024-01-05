@@ -56,7 +56,7 @@ export default function Page3() {
 				<div className="mb-4 flex flex-col items-center xl:mb-0">
 					<h2 className="mb-4 text-center text-6xl font-bold text-copy">Overview</h2>
 					<p className="text-center text-copy">
-						We found <span className="font-semibold text-primary">{publicHolidays.length} public holidays</span> in{' '}
+						We found <span className="font-semibold text-primary">{publicHolidays.length - 1} public holidays</span> in{' '}
 						{supportedCountries.filter((c) => c.countryCode === countryCode)[0].name},<br />
 						<span className="font-semibold text-error">{Math.floor(weekends.length / 2)} weekends</span> and <br />
 						<span className="font-semibold">{workingDays.length - 1} working days</span> ahead

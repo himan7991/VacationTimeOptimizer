@@ -12,7 +12,9 @@ export function getWeekends(year: number) {
 		const dayOfWeek = currentDate.getDay()
 
 		if (dayOfWeek === 0 || dayOfWeek === 6) {
-			weekends.push(day)
+			if (currentDate > new Date()) {
+				weekends.push(day)
+			}
 		}
 	}
 
@@ -27,10 +29,19 @@ export function getPublicHolidays(holidays: PublicHoliday[]) {
 	const _holidays: number[] = []
 
 	holidays.map((h) => {
-		_holidays.push(daysIntoYear(new Date(h.date)))
+		const holidayDate = new Date(h.date)
+		const daysIntoYear =
+			(Date.UTC(holidayDate.getFullYear(), holidayDate.getMonth(), holidayDate.getDate()) - Date.UTC(holidayDate.getFullYear(), 0, 0)) /
+			24 /
+			60 /
+			60 /
+			1000
+		if (holidayDate.setHours(0, 0, 0, 0) > new Date().setHours(0, 0, 0, 0)) {
+			_holidays.push(daysIntoYear)
+		}
 	})
 
-	_holidays.push(getDaysInYear(new Date().getFullYear()) + 1) // add 1/1/year+1 to the holidays
+	_holidays.push(getDaysInYear(new Date().getFullYear()) + 1) // add 1-Jan-(year+1) to the holidays
 	return _holidays.filter((h, index) => _holidays.indexOf(h) === index)
 }
 
