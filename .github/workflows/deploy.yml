@@ -20,8 +20,8 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
-    build:
-        name: Build
+    prebuild:
+        name: Pre-build
         runs-on: ubuntu-latest
 
         steps:
@@ -31,12 +31,22 @@ jobs:
             - name: Setup Node
               uses: actions/setup-node@v3
 
+    build:
+        name: Build
+        needs: prebuild
+        runs-on: ubuntu-latest
+        steps:
             - name: Install dependencies
               run: yarn install
 
             - name: Build project
               run: yarn build
 
+    setup-pages:
+        name: Setup pages
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
             - name: Setup Pages
               uses: actions/configure-pages@v3
 
@@ -45,14 +55,13 @@ jobs:
               with:
                   # Upload dist repository
                   path: './dist'
-
     deploy:
         name: Deploy
+        needs: setup-pages
         runs-on: ubuntu-latest
         steps:
             - name: Deploy to GitHub Pages
               id: deployment
-              uses:
-                  actions/deploy-pages@v2
+              uses: actions/deploy-pages@v2
 
-                  # don't forget to set base to /repo-name/ in vite.config.ts
+              # don't forget to set base to /repo-name/ in vite.config.ts
