@@ -1,16 +1,19 @@
 import { useEffect, useState } from 'react'
 import { FaGithub } from 'react-icons/fa'
 import { FaGlobeEurope } from 'react-icons/fa'
+import { IoMenu, IoClose } from 'react-icons/io5'
 import { motion } from 'framer-motion'
 import AboutModal from './modals/ModalAbout'
 import CountryModal from './modals/ModalCountry'
 import ThemeToggle from './toggles/ToggleTheme'
 import { GITHUB } from '../constants/links'
+import { twMerge } from 'tailwind-merge'
 
 export default function Header() {
 	const [isAboutOpen, setIsAboutOpen] = useState<boolean>(false)
 	const [isCountryOpen, setIsCountryOpen] = useState<boolean>(false)
 	const [theme, setTheme] = useState('light')
+	const [isMobileNavOpen, setIsMobileNavOpen] = useState<boolean>(false)
 
 	const handleThemeChange = (_theme: string) => {
 		document.body.classList.remove('dark', 'light')
@@ -39,9 +42,29 @@ export default function Header() {
 
 	return (
 		<>
-			<header className="absolute inset-x-0 top-0 z-10 flex items-center justify-between px-[5%] py-4">
-				<h2 className="text-2xl font-bold text-copy">HS.</h2>
-				<div className="flex items-center gap-4">
+			<header className="absolute inset-x-0 top-0 z-10 grid grid-cols-2 py-4">
+				<h2 className="ml-[10%] text-2xl font-bold text-copy">HS.</h2>
+				{isMobileNavOpen ? (
+					<IoClose
+						className="mr-[10%] block cursor-pointer place-self-end text-copy md:hidden"
+						size={32}
+						onClick={() => setIsMobileNavOpen(false)}
+					/>
+				) : (
+					<IoMenu
+						className="mr-[10%] block cursor-pointer place-self-end text-copy md:hidden"
+						size={32}
+						onClick={() => setIsMobileNavOpen(true)}
+					/>
+				)}
+
+				<div
+					className={twMerge(
+						'col-span-2 flex w-screen flex-col items-end gap-4 overflow-hidden bg-background pr-[7.5%] pt-4 transition-all duration-500',
+						'md:col-span-1 md:ml-0 md:w-fit md:flex-row md:items-center md:place-self-end md:overflow-visible md:bg-transparent md:p-0 md:pr-[10%]',
+						isMobileNavOpen ? 'h-screen' : 'h-0 md:h-fit'
+					)}
+				>
 					<motion.div className="flex h-6 flex-col overflow-hidden" whileHover="hover">
 						<motion.button
 							className="font-semibold text-copy"
@@ -87,19 +110,19 @@ export default function Header() {
 					<ThemeToggle theme={theme} handleThemeChange={handleThemeChange} />
 
 					<motion.button
-						className="border-b-[1px] border-transparent text-copy hover:text-primary"
+						className="flex items-center gap-2 border-b-[1px] border-transparent font-semibold text-copy hover:text-primary"
 						onClick={() => setIsCountryOpen(true)}
 						key={1}
 						variants={buttonVariant}
 						transition={buttonTransition}
 					>
-						<FaGlobeEurope />
+						<p className="md:hidden">Select a country</p> <FaGlobeEurope />
 					</motion.button>
+
+					<AboutModal isOpen={isAboutOpen} setIsOpen={setIsAboutOpen} />
+					<CountryModal isOpen={isCountryOpen} setIsOpen={setIsCountryOpen} />
 				</div>
 			</header>
-
-			<AboutModal isOpen={isAboutOpen} setIsOpen={setIsAboutOpen} />
-			<CountryModal isOpen={isCountryOpen} setIsOpen={setIsCountryOpen} />
 		</>
 	)
 }

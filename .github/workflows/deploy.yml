@@ -50,21 +50,4 @@ jobs:
               id: deployment
               uses: actions/deploy-pages@v2
 
-    # deploy:
-    #     name: Deploy
-    #     needs: build
-    #     runs-on: ubuntu-latest
-    #     if: github.ref == 'refs/heads/main'
-
-    #     steps:
-    #         - name: Download artifact
-    #           uses: actions/download-artifact@v3
-    #           with:
-    #               name: production-files
-    #               path: ./dist
-
-    #         - name: Deploy to GitHub Pages
-    #           uses: peaceiris/actions-gh-pages@v3
-    #           with:
-    #               github_token: ${{ secrets.GITHUB_TOKEN }}
-    #               publish_dir: ./dist
+              # don't forget to set base to /repo-name/ in vite.config.ts
