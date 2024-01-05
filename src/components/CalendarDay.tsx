@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { daysIntoYear } from '../functions/functions'
 import { twMerge } from 'tailwind-merge'
+import { TESTING } from '../constants/values'
 
 export default function CalendarDay({
 	inDisplay,
@@ -31,8 +32,8 @@ export default function CalendarDay({
 			className={twMerge('border-b-[1px] border-transparent text-center', textColor())}
 			key={index}
 			title={index.toString()}
-			onMouseOver={() => setDisplay(index)}
-			onMouseOut={() => setDisplay(inDisplay)}
+			onMouseOver={() => TESTING && setDisplay(index)}
+			onMouseOut={() => TESTING && setDisplay(inDisplay)}
 		>
 			{display}
 		</p>
