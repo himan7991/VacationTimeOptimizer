@@ -9,7 +9,6 @@ import { getBestConsecutiveDays } from '../functions/getBestConsecutiveDays'
 import ModeToggle from '../components/toggles/ToggleMode'
 import { BestDay } from '../types/BestDays'
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts'
-import { TESTING } from '../constants/values'
 
 export default function Page3() {
 	let count = 0
@@ -74,7 +73,7 @@ export default function Page3() {
 						/>
 						<span className="text-copy">{range}</span>
 					</div>
-					{TESTING && <ModeToggle mode={mode} handleModeChange={handleThemeChange} />}
+					{process.env.NODE_ENV === 'development' && <ModeToggle mode={mode} handleModeChange={handleThemeChange} />}
 					<p className="text-center text-copy">
 						You're getting{' '}
 						<span className="font-semibold">{bestDays.reduce((total, dayObj) => total + dayObj.points, 0) + bestDays.length} days</span>{' '}
