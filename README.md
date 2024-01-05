@@ -19,6 +19,7 @@ time off (PTO), ensuring you make the most of your leisure days.
 
 ## Technologies Used
 
+[![Deploy](https://github.com/himan7991/VacationTimeOptimizer/actions/workflows/main.yml/badge.svg)](https://github.com/himan7991/VacationTimeOptimizer/actions/workflows/main.yml)
 ![React](https://img.shields.io/badge/frontend-React-61DBFB?style=flat&logo=react)
 ![TypeScript](https://img.shields.io/badge/frontend-TypeScript-3979c3?style=flat&logo=typescript)
 ![Tailwind](https://img.shields.io/badge/styling-Tailwind-41b3d3?style=flat&logo=tailwindcss)
