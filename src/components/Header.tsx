@@ -28,6 +28,18 @@ export default function Header() {
 		setTheme(selectedTheme)
 	}, [])
 
+	useEffect(() => {
+		const handleResize = () => {
+			setIsMobileNavOpen(false)
+		}
+
+		window.addEventListener('resize', handleResize)
+
+		return () => {
+			window.removeEventListener('resize', handleResize)
+		}
+	}, [])
+
 	const buttonVariant = {
 		initial: { y: 0, opacity: 0 },
 		hover: { y: -25, opacity: 1 }
