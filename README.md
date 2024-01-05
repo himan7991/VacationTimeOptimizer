@@ -1,37 +1,34 @@
 # VacationTimeOptimizer
 
-## Overview
+<!-- ## Overview -->
 
-VacationTimeOptimizer is a web application that helps users determine the optimal time to take their vacation or paid time off (PTO) based on their preferences.
+Vacation Time Optimizer is a user-friendly web application that helps you determine the optimal time to use your paid
+time off (PTO), ensuring you make the most of your leisure days.
 
-## Technologies
-
-![React](https://img.shields.io/badge/frontend-react-61DBFB?style=flat&logo=react)
-![TypeScript](https://img.shields.io/badge/frontend-ts-blue?style=flat&logo=typescript)
-![Tailwind](https://img.shields.io/badge/frontend-tailwind-00C4C4?style=flat&logo=tailwindcss)
-
-## Features
+<!-- ## Features
 
 -   Input the desired number of vacation days or available PTO.
--   Receive personalized recommendations for the best time to take time off.
--   View a calendar highlighting recommended vacation periods.
-
-## Getting Started
-
-1. Clone the repository: `git clone https://github.com/himan7991/VacationTimeOptimizer.git`
-2. Open `index.html` in your web browser.
+-   Receive the best days overall or best consecutive period to take time off.
+-   View a calendar with highlighting recommended vacation periods. -->
 
 ## Usage
 
 1. Enter the number of vacation days or PTO available.
-2. Click "Find Best Time."
+2. Select between "best days" or "best consecutive period"
 3. Review the suggested vacation periods on the calendar.
 
 ## Technologies Used
 
--   HTML
--   CSS, SCSS, Tailwind CSS
--   TypeScript, React TS
+![React](https://img.shields.io/badge/frontend-React-61DBFB?style=flat&logo=react)
+![TypeScript](https://img.shields.io/badge/frontend-TypeScript-3979c3?style=flat&logo=typescript)
+![Tailwind](https://img.shields.io/badge/styling-Tailwind-41b3d3?style=flat&logo=tailwindcss)
+
+<!-- ![css3](https://img.shields.io/badge/frontend-CSS-white?style=flat&logo=css3) -->
+<!-- ![html5](https://img.shields.io/badge/frontend-HTML-d85d2a?style=flat&logo=html5) -->
+
+<!-- -   HTML -->
+<!-- -   Tailwind CSS -->
+<!-- -   TypeScript, React -->
 
 ## Contributing
 
