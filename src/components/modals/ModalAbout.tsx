@@ -17,7 +17,7 @@ export default function AboutModal({ isOpen, setIsOpen }: { isOpen: boolean; set
 						animate={{ scale: 1, rotate: '0deg' }}
 						exit={{ scale: 0, rotate: '0deg' }}
 						onClick={(e) => e.stopPropagation()}
-						className="relative w-full max-w-lg cursor-default overflow-hidden rounded-lg bg-gradient-to-br from-primary to-primary-dark p-6 text-white shadow-xl"
+						className="relative w-full max-w-xl cursor-default overflow-hidden rounded-lg bg-gradient-to-br from-primary to-primary-dark p-6 text-white shadow-xl"
 					>
 						<TbBeach className="absolute -left-24 -top-24 z-0 rotate-12 text-[250px] text-white/10" />
 						<div className="relative z-10 flex flex-col justify-center gap-2">
@@ -37,13 +37,14 @@ export default function AboutModal({ isOpen, setIsOpen }: { isOpen: boolean; set
 								</p>
 								<ul className="list-disc pl-6 marker:text-secondary-light">
 									<li>
-										<span className="font-bold">Best overall days</span> for maximizing vacation days throughout the year
+										<span className="font-bold">Best overall days</span>, for maximizing vacation days throughout the year
 									</li>
 									<li>
-										<span className="font-bold">Best consecutive period</span> for optimal consecutive time off
+										<span className="font-bold">Best consecutive period</span>, for optimal consecutive time off
 									</li>
 								</ul>
 							</div>
+
 							<div className="flex gap-2">
 								<button
 									onClick={() => setIsOpen(false)}
