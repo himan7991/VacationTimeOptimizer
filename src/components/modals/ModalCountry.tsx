@@ -16,14 +16,14 @@ export default function CountryModal({ isOpen, setIsOpen }: { isOpen: boolean; s
 					animate={{ opacity: 1 }}
 					exit={{ opacity: 0 }}
 					onClick={() => setIsOpen(false)}
-					className="fixed inset-0 z-50 grid cursor-pointer place-items-center overflow-y-scroll bg-background/30 p-8 backdrop-blur"
+					className="fixed inset-0 z-50 grid cursor-pointer overflow-y-scroll bg-background/30 p-8 backdrop-blur lg:place-items-center"
 				>
 					<motion.div
 						initial={{ scale: 0, rotate: '12.5deg' }}
 						animate={{ scale: 1, rotate: '0deg' }}
 						exit={{ scale: 0, rotate: '0deg' }}
 						onClick={(e) => e.stopPropagation()}
-						className="relative w-full max-w-6xl cursor-default overflow-hidden rounded-lg bg-gradient-to-br from-primary to-primary-dark p-6 text-white shadow-xl"
+						className="relative w-full max-w-6xl cursor-default rounded-lg bg-gradient-to-br from-primary to-primary-dark p-6 text-white shadow-xl lg:overflow-hidden"
 					>
 						<FaGlobeEurope className="absolute -left-24 -top-24 z-0 rotate-12 text-[250px] text-white/10" />
 						<div className="relative z-10 flex flex-col gap-4">
@@ -34,12 +34,12 @@ export default function CountryModal({ isOpen, setIsOpen }: { isOpen: boolean; s
 							<p className="text-center font-semibold">
 								Vacation Time Optimizer supports over 100 countries! Choose yours below. <br />
 							</p>
-							<div className="mb-4 grid grid-cols-10 items-center gap-2">
+							<div className="mb-4 grid grid-cols-1 place-items-center items-center gap-2 md:grid-cols-3 lg:grid-cols-10">
 								{supportedCountries
 									.sort((a, b) => a.name.localeCompare(b.name))
 									.map((c, i) => (
 										<p
-											className={`cursor-pointer text-center hover:underline ${
+											className={`w-fit cursor-pointer text-center hover:underline ${
 												c.countryCode === countryCode ? 'underline' : ''
 											}`}
 											key={i}
