@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { FaGithub } from 'react-icons/fa'
 import { FaGlobeEurope } from 'react-icons/fa'
 import { motion } from 'framer-motion'
-import AboutModal from './AboutModal'
-import CountryModal from './CountryModal'
-import ThemeToggle from './ThemeToggle'
+import AboutModal from './modals/ModalAbout'
+import CountryModal from './modals/ModalCountry'
+import ThemeToggle from './toggles/ToggleTheme'
 import { GITHUB } from '../constants/links'
 
 export default function Header() {

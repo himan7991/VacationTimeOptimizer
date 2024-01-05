@@ -20,22 +20,31 @@ export default function AboutModal({ isOpen, setIsOpen }: { isOpen: boolean; set
 						className="relative w-full max-w-lg cursor-default overflow-hidden rounded-lg bg-gradient-to-br from-primary to-primary-dark p-6 text-white shadow-xl"
 					>
 						<TbBeach className="absolute -left-24 -top-24 z-0 rotate-12 text-[250px] text-white/10" />
-						<div className="relative z-10">
-							<div className="mx-auto mb-2 grid h-16 w-16 place-items-center rounded-full bg-white text-3xl text-primary">
+						<div className="relative z-10 flex flex-col justify-center gap-2">
+							<div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-white text-3xl text-primary">
 								<TbBeach />
 							</div>
-							<h3 className="mb-2 text-center text-3xl font-bold">What's this all about?</h3>
-							<p className="mb-6 text-center">
-								Vacation Time Optimizer is a web application that helps you determine the optimal time to use your paid time off (PTO)
+							<h3 className="text-center text-3xl font-bold">What is this all about?</h3>
+							{/* <p className="text-center">Vacation Time Optimizer helps you find the perfect time to use your paid time off (PTO).</p> */}
+							<p className="text-center">
+								Vacation Time Optimizer is a user-friendly web application that helps you determine the optimal time to use your paid
+								time off (PTO), ensuring you make the most of your leisure days.
 							</p>
+
+							<div className="mb-2">
+								<p>
+									Choose from <span className="font-bold">two modes</span>:
+								</p>
+								<ul className="list-disc pl-6 marker:text-secondary-light">
+									<li>
+										<span className="font-bold">Best overall days</span> for maximizing vacation days throughout the year
+									</li>
+									<li>
+										<span className="font-bold">Best consecutive period</span> for optimal consecutive time off
+									</li>
+								</ul>
+							</div>
 							<div className="flex gap-2">
-								{/* todo: show the "tutorial" again -- reset local storage "tutorial" from 'passed' and show the first two screens again */}
-								<button
-									onClick={() => setIsOpen(false)}
-									className="w-full rounded bg-transparent py-2 font-semibold text-white transition-colors hover:bg-white/10"
-								>
-									Show tutorial again
-								</button>
 								<button
 									onClick={() => setIsOpen(false)}
 									className="w-full rounded bg-white py-2 font-semibold text-primary transition-opacity hover:opacity-90"

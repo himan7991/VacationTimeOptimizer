@@ -1,9 +1,9 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { FaGlobeEurope } from 'react-icons/fa'
-import { supportedCountries } from '../constants/SupportedCountries'
+import { supportedCountries } from '../../constants/SupportedCountries'
 import { useContext } from 'react'
-import AppContext from '../context/AppContext'
-import { GITHUB } from '../constants/links'
+import AppContext from '../../context/AppContext'
+import { GITHUB } from '../../constants/links'
 
 export default function CountryModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (arg: boolean) => void }) {
 	const { countryCode, setCountryCode } = useContext(AppContext)

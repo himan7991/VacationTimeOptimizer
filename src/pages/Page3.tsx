@@ -6,7 +6,7 @@ import { daysIntoYear } from '../functions/functions'
 import { supportedCountries } from '../constants/SupportedCountries'
 import { getBestDaysToTakeOff } from '../functions/getBestDays'
 import { getBestConsecutiveDays } from '../functions/getBestConsecutiveDays'
-import ModeToggle from '../components/ModeToggle'
+import ModeToggle from '../components/toggles/ToggleMode'
 import { BestDay } from '../types/BestDays'
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts'
 

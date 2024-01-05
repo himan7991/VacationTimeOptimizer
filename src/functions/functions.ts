@@ -30,6 +30,7 @@ export function getPublicHolidays(holidays: PublicHoliday[]) {
 		_holidays.push(daysIntoYear(new Date(h.date)))
 	})
 
+	_holidays.push(getDaysInYear(new Date().getFullYear()) + 1) // add 1/1/year+1 to the holidays
 	return _holidays.filter((h, index) => _holidays.indexOf(h) === index)
 }
 
