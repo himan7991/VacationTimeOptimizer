@@ -10,7 +10,7 @@ export default function AboutModal({ isOpen, setIsOpen }: { isOpen: boolean; set
 					animate={{ opacity: 1 }}
 					exit={{ opacity: 0 }}
 					onClick={() => setIsOpen(false)}
-					className="fixed inset-0 z-50 grid cursor-pointer place-items-center overflow-y-scroll bg-background/30 p-8 backdrop-blur"
+					className="fixed inset-0 z-50 grid cursor-pointer place-items-center bg-background/30 p-8 backdrop-blur"
 				>
 					<motion.div
 						initial={{ scale: 0, rotate: '12.5deg' }}

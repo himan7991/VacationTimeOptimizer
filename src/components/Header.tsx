@@ -34,9 +34,11 @@ export default function Header() {
 		}
 
 		window.addEventListener('resize', handleResize)
+		window.addEventListener('scroll', handleResize)
 
 		return () => {
 			window.removeEventListener('resize', handleResize)
+			window.removeEventListener('scroll', handleResize)
 		}
 	}, [])
 
@@ -54,7 +56,7 @@ export default function Header() {
 
 	return (
 		<>
-			<header className="absolute inset-x-0 top-0 z-10 grid grid-cols-2 py-4">
+			<header className="grid grid-cols-2 py-4">
 				<h2 className="ml-[10%] text-2xl font-bold text-copy">HS.</h2>
 				{isMobileNavOpen ? (
 					<IoClose

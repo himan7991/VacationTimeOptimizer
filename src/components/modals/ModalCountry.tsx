@@ -23,7 +23,7 @@ export default function CountryModal({ isOpen, setIsOpen }: { isOpen: boolean; s
 						animate={{ scale: 1, rotate: '0deg' }}
 						exit={{ scale: 0, rotate: '0deg' }}
 						onClick={(e) => e.stopPropagation()}
-						className="relative w-full max-w-6xl cursor-default rounded-lg bg-gradient-to-br from-primary to-primary-dark p-6 text-white shadow-xl lg:overflow-hidden"
+						className="relative w-full max-w-6xl cursor-default rounded-lg bg-gradient-to-br from-primary to-primary-dark p-6 text-white shadow-xl"
 					>
 						<FaGlobeEurope className="absolute -left-24 -top-24 z-0 rotate-12 text-[250px] text-white/10" />
 						<div className="relative z-10 flex flex-col gap-4">

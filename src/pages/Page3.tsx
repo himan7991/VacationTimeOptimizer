@@ -48,7 +48,7 @@ export default function Page3() {
 	return (
 		<motion.div
 			id="page3"
-			className="flex h-full w-full flex-col items-center justify-start overflow-scroll p-4 xl:flex-row xl:justify-center xl:gap-8 xl:overflow-hidden"
+			className="flex h-full w-full flex-col items-center justify-start p-4 xl:flex-row xl:justify-center xl:gap-8"
 			layoutId="pages"
 		>
 			<div className="relative mb-6 flex w-full flex-col items-center justify-center gap-1 md:flex-row md:justify-around md:gap-8 xl:mb-0 xl:flex-1 xl:flex-col">
