@@ -12,10 +12,10 @@ export default function Page2({ goto }: { goto: (arg: number) => void }) {
 
 	return (
 		<>
-			<motion.div id="page2" layoutId="pages" className="px-[5%]">
+			<motion.div id="page2" layoutId="pages" className="px-[10%]">
 				<div className="flex flex-col text-center">
 					<h1 className="mb-6 text-4xl font-bold tracking-tight text-copy sm:text-6xl">Let's get started</h1>
-					<p className="max-w-[75ch] text-lg leading-8 text-copy-light">
+					<p className="max-w-[75ch] leading-8 text-copy-light md:text-lg">
 						Vacation Time Optimizer defaults to your current location and{' '}
 						<span className="font-semibold">we found {publicHolidays.length - 1} public holidays</span> for{' '}
 						{supportedCountries.find((c) => c.countryCode === countryCode)?.name || 'your country'} in {year}. To check other countries,
