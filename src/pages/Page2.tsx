@@ -28,7 +28,6 @@ export default function Page2({ goto }: { goto: (arg: number) => void }) {
 							onClick={() => goto(3)}
 							disabled={!supportedCountries.find((c) => c.countryCode === countryCode)}
 						>
-							{/* todo: make it so this sets local storage "tutorial" to 'passed' */}
 							Let's go!
 						</button>
 					</div>

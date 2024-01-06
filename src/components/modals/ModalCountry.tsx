@@ -61,7 +61,7 @@ export default function CountryModal({ isOpen, setIsOpen }: { isOpen: boolean; s
 									Awesome!
 								</button>
 							</div>
-							<p className="text-center text-sm">
+							<p className="text-center text-xs md:text-sm">
 								We're sorry if you don't see yours 😔 Feel free to submit a ticket on{' '}
 								<a href={GITHUB} className="text-white underline hover:text-primary-light">
 									GitHub
