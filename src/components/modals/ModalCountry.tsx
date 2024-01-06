@@ -19,9 +19,9 @@ export default function CountryModal({ isOpen, setIsOpen }: { isOpen: boolean; s
 					className="fixed inset-0 z-50 grid cursor-pointer overflow-y-scroll bg-background/30 p-8 backdrop-blur lg:place-items-center"
 				>
 					<motion.div
-						initial={{ scale: 0, rotate: '12.5deg' }}
-						animate={{ scale: 1, rotate: '0deg' }}
-						exit={{ scale: 0, rotate: '0deg' }}
+						// initial={{ scale: 0 }}
+						// animate={{ scale: 1 }}
+						// exit={{ scale: 0, rotate: '0deg' }}
 						onClick={(e) => e.stopPropagation()}
 						className="relative w-full max-w-6xl cursor-default rounded-lg bg-gradient-to-br from-primary to-primary-dark p-6 text-white shadow-xl"
 					>
