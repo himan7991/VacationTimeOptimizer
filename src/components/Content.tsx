@@ -13,7 +13,7 @@ export default function Content() {
 		exit: { opacity: 0, x: '-100vw', transition: { duration: 0.5, ease: [0.83, 0, 0.17, 1] } }
 	}
 	return (
-		<div className=" mx-auto flex h-fit min-h-[calc(100vh-6rem)] w-[calc(100vw-10%)] flex-col items-center justify-center rounded-2xl bg-foreground/75 pb-2 shadow-2xl sm:inset-x-[2.5%]">
+		<div className=" mx-auto flex h-fit min-h-[calc(100vh-7rem)] w-[calc(100vw-10%)] flex-col items-center justify-center rounded-2xl bg-foreground/75 pb-2 shadow-2xl sm:inset-x-[2.5%]">
 			<AnimatePresence mode="wait">
 				{page === 1 && (
 					<motion.div
