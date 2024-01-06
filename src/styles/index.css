@@ -49,3 +49,8 @@
 	--copy-light: 214, 205, 228;
 	--copy-lighter: 159, 139, 193; */
 }
+
+meta[name='theme-color'],
+meta[name='apple-mobile-web-app-status-bar-style'] {
+	content: var(--background);
+}
