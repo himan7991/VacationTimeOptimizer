@@ -17,8 +17,8 @@ export default function Page2({ goto }: { goto: (arg: number) => void }) {
 					<p className="max-w-[75ch] leading-8 text-copy-light md:text-lg">
 						Vacation Time Optimizer defaults to your current location and{' '}
 						<span className="font-semibold">we found {publicHolidays.length - 1} public holidays</span> for{' '}
-						{supportedCountries.find((c) => c.countryCode === countryCode)?.name || 'your country'} in {year}. To check other countries,
-						click the globe icon at the top right.
+						{supportedCountries.find((c) => c.countryCode === countryCode)?.name || 'your country'} left in {year}. To check other
+						countries, click the globe icon at the top right.
 					</p>
 					{/* <p className="text-lg leading-8 text-copy-light font-bold">Enjoy planning!</p> */}
 					<div className="mt-10 flex items-center justify-center gap-x-6">
