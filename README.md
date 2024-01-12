@@ -11,6 +11,16 @@ time off (PTO), ensuring you make the most of your leisure days.
 -   Receive the best days overall or best consecutive period to take time off.
 -   View a calendar with highlighting recommended vacation periods. -->
 
+## Screenshots
+
+![Screenshot 2024-01-12 at 17-30-52 Vacation Time Optimizer](https://github.com/himan7991/VacationTimeOptimizer/assets/20800493/9185e0fd-77f7-472d-8d3e-d9da7356431b)
+
+Tablet             |  Mobile
+:-------------------------:|:-------------------------:
+![](https://github.com/himan7991/VacationTimeOptimizer/assets/20800493/6d853c14-2ed7-49b4-b863-dafe17936766)  |  ![](https://github.com/himan7991/VacationTimeOptimizer/assets/20800493/ce2b7971-3c97-4bef-9f9b-49a8a09dd029)
+
+
+
 ## Usage
 
 1. Enter the number of vacation days or PTO available.
