@@ -1,12 +1,10 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { FaGlobeEurope } from 'react-icons/fa'
-import { supportedCountries } from '../../constants/SupportedCountries'
 import { useContext } from 'react'
 import AppContext from '../../context/AppContext'
-import { GITHUB } from '../../constants/links'
 
 export default function CountryModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (arg: boolean) => void }) {
-	const { countryCode, setCountryCode } = useContext(AppContext)
+	const { supportedCountries, countryCode, setCountryCode } = useContext(AppContext)
 
 	return (
 		<AnimatePresence>
@@ -16,7 +14,7 @@ export default function CountryModal({ isOpen, setIsOpen }: { isOpen: boolean; s
 					animate={{ opacity: 1 }}
 					exit={{ opacity: 0 }}
 					onClick={() => setIsOpen(false)}
-					className="fixed inset-0 z-50 grid cursor-pointer overflow-y-scroll bg-background/30 p-8 backdrop-blur lg:place-items-center"
+					className="fixed inset-0 z-50 grid cursor-pointer overflow-y-scroll bg-background/30 backdrop-blur lg:place-items-center"
 				>
 					<motion.div
 						// initial={{ scale: 0 }}
@@ -34,7 +32,7 @@ export default function CountryModal({ isOpen, setIsOpen }: { isOpen: boolean; s
 							<p className="text-center font-semibold">
 								Vacation Time Optimizer supports over 100 countries! Choose yours below. <br />
 							</p>
-							<div className="mb-4 grid grid-cols-1 place-items-center items-center gap-2 md:grid-cols-3 lg:grid-cols-10">
+							<div className="mb-4 grid grid-cols-1 place-items-center items-center gap-2 md:grid-cols-3 lg:grid-cols-6">
 								{supportedCountries
 									.sort((a, b) => a.name.localeCompare(b.name))
 									.map((c, i) => (
@@ -62,11 +60,11 @@ export default function CountryModal({ isOpen, setIsOpen }: { isOpen: boolean; s
 								</button>
 							</div>
 							<p className="text-center text-xs md:text-sm">
-								We're sorry if you don't see yours 😔 Feel free to submit a ticket on{' '}
-								<a href={GITHUB} className="text-white underline hover:text-primary-light">
-									GitHub
+								We're sorry if you don't see your country on the list 😔 Vacation Time Optimizer is powered by{' '}
+								<a href="https://date.nager.at/Country/Coverage" className="text-white underline hover:text-primary-light">
+									date.nager
 								</a>{' '}
-								and we'll get right on it
+								and their API
 							</p>
 						</div>
 					</motion.div>

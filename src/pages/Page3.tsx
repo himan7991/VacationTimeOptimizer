@@ -3,7 +3,6 @@ import { useContext, useEffect, useState } from 'react'
 import CalendarDay from '../components/CalendarDay'
 import AppContext from '../context/AppContext'
 import { daysIntoYear } from '../functions/functions'
-import { supportedCountries } from '../constants/SupportedCountries'
 import { getBestDaysToTakeOff } from '../functions/getBestDays'
 import { getBestConsecutiveDays } from '../functions/getBestConsecutiveDays'
 import ModeToggle from '../components/toggles/ToggleMode'
@@ -23,7 +22,7 @@ export default function Page3() {
 	const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 	const weekdays = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
 
-	const { countryCode, daysInYear, weekends, publicHolidays, year } = useContext(AppContext)
+	const { supportedCountries, countryCode, daysInYear, weekends, publicHolidays, year } = useContext(AppContext)
 	const daysInYearArr: number[] = Array.from({ length: daysInYear }, (_, index) => index + 1)
 	const workingDays: number[] = daysInYearArr.filter(
 		(day) => !weekends.includes(day) && !publicHolidays.includes(day) && day > daysIntoYear(new Date())

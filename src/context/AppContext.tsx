@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { Country } from '../types/SupportedCountries'
 // set the defaults
 const AppContext = React.createContext({
 	year: 2024,
@@ -10,6 +10,8 @@ const AppContext = React.createContext({
 	setDaysInYear: (arg: number) => {},
 	weekends: [1, 2, 3],
 	setWeekends: (arg: number[]) => {},
+	supportedCountries: [{ countryCode: 'string', name: 'string' }],
+	setSupportedCountries: (arg: Country[]) => {},
 	publicHolidays: [1, 2, 3],
 	setPublicHolidays: (arg: number[]) => {}
 })

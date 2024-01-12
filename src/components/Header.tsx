@@ -57,7 +57,7 @@ export default function Header() {
 	return (
 		<>
 			<header className="grid grid-cols-2 py-4">
-				<h2 className="ml-[10%] text-2xl font-bold text-copy">HS.</h2>
+				<h2 className="ml-[10%] select-none text-2xl font-bold text-copy">HS.</h2>
 				{isMobileNavOpen ? (
 					<IoClose
 						className="mr-[10%] block cursor-pointer place-self-end text-copy md:hidden"

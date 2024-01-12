@@ -1,10 +1,9 @@
 import { motion } from 'framer-motion'
 import { useContext, useEffect } from 'react'
 import AppContext from '../context/AppContext'
-import { supportedCountries } from '../constants/SupportedCountries'
 
 export default function Page2({ goto }: { goto: (arg: number) => void }) {
-	const { countryCode, publicHolidays, year } = useContext(AppContext)
+	const { supportedCountries, countryCode, publicHolidays, year } = useContext(AppContext)
 
 	useEffect(() => {
 		console.log('update')

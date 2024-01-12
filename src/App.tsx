@@ -4,10 +4,12 @@ import Content from './components/Content'
 import { useEffect, useState } from 'react'
 import AppContext from './context/AppContext'
 import { getDaysInYear, getPublicHolidays, getWeekends } from './functions/functions'
+import { Country } from './types/SupportedCountries'
 
 export default function App() {
 	// context
 	const [year, setYear] = useState<number>(new Date().getFullYear())
+	const [supportedCountries, setSupportedCountries] = useState<Country[]>([{ countryCode: 'US', name: 'United States' }])
 	const [countryCode, setCountryCode] = useState<string>('US')
 	const [daysInYear, setDaysInYear] = useState<number>(365)
 	const [weekends, setWeekends] = useState<number[]>([])
@@ -23,12 +25,19 @@ export default function App() {
 		setDaysInYear,
 		weekends,
 		setWeekends,
+		supportedCountries,
+		setSupportedCountries,
 		publicHolidays,
 		setPublicHolidays
 	}
 
 	useEffect(() => {
 		let countryCode = localStorage.getItem('countryCode')
+
+		fetch('https://date.nager.at/api/v3/AvailableCountries')
+			.then((res) => res.json())
+			.then((data) => setSupportedCountries(data))
+			.catch((error) => console.error(error))
 
 		if (countryCode) {
 			setCountryCode(countryCode)
