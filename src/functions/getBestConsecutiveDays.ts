@@ -1,38 +1,41 @@
 import { BestDay } from '../types/BestDays'
+import { createPointDays } from './createPointDays'
 
 export const getBestConsecutiveDays = (workingDays: number[], maxDays: number, weekends: number[], publicHolidays: number[]): BestDay[] => {
-	// Helper function to check if a day is a weekend or a holiday
-	const isWeekendOrHoliday = (day: number): boolean => weekends.includes(day) || publicHolidays.includes(day)
+	let workingDaysWithPoints: { day: number; pointDays: number[] }[] = []
 
-	// Helper function to calculate the points for a single day
-	const calculatePoints = (day: number): number => {
-		let points = 0
+	for (let i = 0; i < workingDays.length; i++) {
+		const currentDay = workingDays[i]
+		const currentPointDays = createPointDays(weekends, publicHolidays, currentDay)
 
-		// Check days before
-		let consecutiveDaysBefore = 1
-		while (isWeekendOrHoliday(day - consecutiveDaysBefore)) {
-			points += 1
-			consecutiveDaysBefore++
-		}
-
-		// Check days after
-		let consecutiveDaysAfter = 1
-		while (isWeekendOrHoliday(day + consecutiveDaysAfter)) {
-			points += 1
-			consecutiveDaysAfter++
-		}
-
-		return points
+		workingDaysWithPoints.push({ day: currentDay, pointDays: currentPointDays })
 	}
 
-	// Initialize the window of size maxDays
+	workingDaysWithPoints
+		// sort by points, highest to lowest
+		.sort((a, b) => b.pointDays.length - a.pointDays.length)
+		// check other days if they have the same point days and remove it
+		.forEach((obj) => {
+			const currentDay = obj.day
+			const otherObjects = workingDaysWithPoints.filter((o) => o.day !== currentDay)
+			obj.pointDays.forEach((pointDay) => {
+				otherObjects.forEach((otherObj) => {
+					const index = otherObj.pointDays.indexOf(pointDay)
+					if (index !== -1) otherObj.pointDays.splice(index, 1)
+				})
+			})
+		})
+
+	// sort the array back by day number
+	workingDaysWithPoints.sort((a, b) => a.day - b.day)
+
 	let windowStart = 0
 	let windowEnd = maxDays - 1
 
 	// Calculate the initial points for the window
 	let windowPoints = 0
 	for (let i = windowStart; i <= windowEnd; i++) {
-		windowPoints += calculatePoints(workingDays[i])
+		windowPoints += workingDaysWithPoints[i].pointDays.length
 	}
 
 	// Keep track of the best window and its points
@@ -43,10 +46,10 @@ export const getBestConsecutiveDays = (workingDays: number[], maxDays: number, w
 	// Slide the window to the right until the end
 	while (windowEnd < workingDays.length - 1) {
 		// Remove the first day and add the next day
-		windowPoints -= calculatePoints(workingDays[windowStart])
+		windowPoints -= workingDaysWithPoints[windowStart]?.pointDays.length
 		windowStart++
 		windowEnd++
-		windowPoints += calculatePoints(workingDays[windowEnd])
+		windowPoints += workingDaysWithPoints[windowEnd]?.pointDays.length
 
 		// Update the best window if needed
 		if (windowPoints > bestWindowPoints) {
@@ -59,7 +62,7 @@ export const getBestConsecutiveDays = (workingDays: number[], maxDays: number, w
 	// Return the best window as an array of objects
 	const bestWindow: BestDay[] = []
 	for (let i = bestWindowStart; i <= bestWindowEnd; i++) {
-		bestWindow.push({ day: workingDays[i], points: calculatePoints(workingDays[i]) })
+		bestWindow.push({ day: workingDays[i], points: workingDaysWithPoints[i].pointDays.length })
 	}
 	return bestWindow
 }

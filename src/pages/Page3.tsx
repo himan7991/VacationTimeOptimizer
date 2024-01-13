@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from 'react'
 import CalendarDay from '../components/CalendarDay'
 import AppContext from '../context/AppContext'
 import { daysIntoYear } from '../functions/functions'
-import { getBestDaysToTakeOff } from '../functions/getBestDays'
+import { getBestOverallDays } from '../functions/getBestDays'
 import { getBestConsecutiveDays } from '../functions/getBestConsecutiveDays'
 import ModeToggle from '../components/toggles/ToggleMode'
 import { BestDay } from '../types/BestDays'
@@ -29,11 +29,11 @@ export default function Page3() {
 		(day) => !weekends.includes(day) && !publicHolidaysNumbers.includes(day) && day > daysIntoYear(new Date())
 	)
 
-	getBestDaysToTakeOff(workingDays, range, weekends, publicHolidaysNumbers)
+	getBestOverallDays(workingDays, range, weekends, publicHolidaysNumbers)
 
 	const bestDays: BestDay[] =
 		mode === 'best'
-			? getBestDaysToTakeOff(workingDays, range, weekends, publicHolidaysNumbers)
+			? getBestOverallDays(workingDays, range, weekends, publicHolidaysNumbers)
 			: getBestConsecutiveDays(workingDays, range, weekends, publicHolidaysNumbers)
 
 	const graphData = bestDays.map((item, index) => ({
@@ -73,7 +73,7 @@ export default function Page3() {
 						/>
 						<span className="text-copy">{range}</span>
 					</div>
-					{process.env.NODE_ENV === 'development' && <ModeToggle mode={mode} handleModeChange={handleThemeChange} />}
+					<ModeToggle mode={mode} handleModeChange={handleThemeChange} />
 					<p className="text-center text-copy">
 						You're getting{' '}
 						<span className="font-semibold">{bestDays.reduce((total, dayObj) => total + dayObj.points, 0) + bestDays.length} days</span>{' '}
@@ -81,7 +81,7 @@ export default function Page3() {
 						with just <span className="border-b border-primary font-semibold">{bestDays.length} days of PTO</span>!
 					</p>
 				</div>
-				<div className="hidden xl:block">
+				{/* <div className="hidden xl:block">
 					<LineChart width={600} height={300} data={graphData}>
 						<Line type="monotone" dataKey="vacations" stroke="rgb(124, 58, 237)" />
 						<CartesianGrid className="stroke-border/25" />
@@ -89,7 +89,7 @@ export default function Page3() {
 						<YAxis />
 						<Tooltip />
 					</LineChart>
-				</div>
+				</div> */}
 			</div>
 			<div className="xl:flex-2 grid grid-cols-1 justify-items-center gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
 				{months.map((month, m) => {

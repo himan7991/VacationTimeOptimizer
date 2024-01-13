@@ -124,7 +124,7 @@ export default function Header() {
 					<ThemeToggle theme={theme} handleThemeChange={handleThemeChange} />
 
 					<motion.button
-						className="flex items-center gap-2 border-b-[1px] border-transparent font-semibold text-copy hover:text-primary"
+						className="flex items-center gap-2 border-b border-transparent font-semibold text-copy hover:text-primary"
 						onClick={() => setIsCountryOpen(true)}
 						key={1}
 						variants={buttonVariant}

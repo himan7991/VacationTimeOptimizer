@@ -30,7 +30,7 @@ export default function CalendarDay({
 
 	return (
 		<p
-			className={twMerge('border-b-[1px] border-transparent text-center', textColor())}
+			className={twMerge('border-b border-transparent text-center', textColor())}
 			key={index}
 			title={title && title}
 			onMouseOver={() => process.env.NODE_ENV === 'development' && setDisplay(index)}

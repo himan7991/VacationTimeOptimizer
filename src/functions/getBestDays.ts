@@ -1,32 +1,13 @@
 import { BestDay } from '../types/BestDays'
+import { createPointDays } from './createPointDays'
 
-export const getBestDaysToTakeOff = (workingDays: number[], maxDays: number, weekends: number[], publicHolidays: number[]): BestDay[] => {
+export const getBestOverallDays = (workingDays: number[], maxDays: number, weekends: number[], publicHolidays: number[]): BestDay[] => {
 	let bestDays: BestDay[] = []
 	let workingDaysWithPoints: { day: number; pointDays: number[] }[] = []
 
-	const isWeekendOrHoliday = (day: number): boolean => weekends.includes(day) || publicHolidays.includes(day)
-
-	const createPointDays = (day: number): number[] => {
-		const pointDays: number[] = []
-
-		let consecutiveDaysBefore = 1
-		while (isWeekendOrHoliday(day - consecutiveDaysBefore)) {
-			pointDays.push(day - consecutiveDaysBefore)
-			consecutiveDaysBefore++
-		}
-
-		let consecutiveDaysAfter = 1
-		while (isWeekendOrHoliday(day + consecutiveDaysAfter)) {
-			pointDays.push(day + consecutiveDaysAfter)
-			consecutiveDaysAfter++
-		}
-
-		return pointDays
-	}
-
 	for (let i = 0; i < workingDays.length; i++) {
 		const currentDay = workingDays[i]
-		const currentPointDays = createPointDays(currentDay)
+		const currentPointDays = createPointDays(weekends, publicHolidays, currentDay)
 
 		if (currentPointDays.length > 0) {
 			workingDaysWithPoints.push({ day: currentDay, pointDays: currentPointDays })
@@ -34,7 +15,9 @@ export const getBestDaysToTakeOff = (workingDays: number[], maxDays: number, wee
 	}
 
 	workingDaysWithPoints
+		// sort by points, highest to lowest
 		.sort((a, b) => b.pointDays.length - a.pointDays.length)
+		// check other days if they have the same point days and remove it
 		.forEach((obj) => {
 			const currentDay = obj.day
 			const otherObjects = workingDaysWithPoints.filter((o) => o.day !== currentDay)
