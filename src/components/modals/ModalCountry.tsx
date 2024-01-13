@@ -6,6 +6,9 @@ import AppContext from '../../context/AppContext'
 export default function CountryModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (arg: boolean) => void }) {
 	const { supportedCountries, countryCode, setCountryCode } = useContext(AppContext)
 
+	const handleKeyPress = (e: KeyboardEvent) => e.key === 'Escape' && setIsOpen(false)
+	window.addEventListener('keydown', handleKeyPress)
+
 	return (
 		<AnimatePresence>
 			{isOpen && (
