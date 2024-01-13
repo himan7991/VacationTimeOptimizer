@@ -2,7 +2,7 @@
   "name": "vacation-time-optimizer",
   "description": "Maximize your getaways",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "scripts": {
     "test": "vitest --run --reporter verbose",
