@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import AppContext from './context/AppContext'
 import { getDaysInYear, getPublicHolidays, getWeekends } from './functions/functions'
 import { Country } from './types/SupportedCountries'
+import { PublicHolidaySlice } from './types/PublicHoliday'
 
 export default function App() {
 	// context
@@ -13,7 +14,7 @@ export default function App() {
 	const [countryCode, setCountryCode] = useState<string>('US')
 	const [daysInYear, setDaysInYear] = useState<number>(365)
 	const [weekends, setWeekends] = useState<number[]>([])
-	const [publicHolidays, setPublicHolidays] = useState<number[]>([])
+	const [publicHolidays, setPublicHolidays] = useState<PublicHolidaySlice[]>([{ date: 0, name: '', localName: ':)' }])
 	const [userIP, setUserIP] = useState<string>('')
 
 	const passedAppContext = {

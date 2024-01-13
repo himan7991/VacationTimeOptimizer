@@ -10,3 +10,9 @@ export type PublicHoliday = {
 	launchYear: null
 	types: [string]
 }
+
+export type PublicHolidaySlice = {
+	date: number
+	name: string
+	localName: string
+}

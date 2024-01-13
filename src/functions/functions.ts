@@ -1,4 +1,4 @@
-import { PublicHoliday } from '../types/PublicHoliday'
+import { PublicHoliday, PublicHolidaySlice } from '../types/PublicHoliday'
 
 export function getDaysInYear(year: number) {
 	return (year % 4 === 0 && year % 100 > 0) || year % 400 == 0 ? 366 : 365
@@ -25,8 +25,8 @@ export function daysIntoYear(date: Date) {
 	return (Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) - Date.UTC(date.getFullYear(), 0, 0)) / 24 / 60 / 60 / 1000
 }
 
-export function getPublicHolidays(holidays: PublicHoliday[]) {
-	const _holidays: number[] = []
+export function getPublicHolidays(holidays: PublicHoliday[]): PublicHolidaySlice[] {
+	const _holidays: PublicHolidaySlice[] = []
 
 	holidays.map((h) => {
 		const holidayDate = new Date(h.date)
@@ -37,11 +37,11 @@ export function getPublicHolidays(holidays: PublicHoliday[]) {
 			60 /
 			1000
 		if (holidayDate.setHours(0, 0, 0, 0) > new Date().setHours(0, 0, 0, 0)) {
-			_holidays.push(daysIntoYear)
+			_holidays.push({ date: daysIntoYear, name: h.name, localName: h.localName })
 		}
 	})
 
-	_holidays.push(getDaysInYear(new Date().getFullYear()) + 1) // add 1-Jan-(year+1) to the holidays
+	_holidays.push({ date: getDaysInYear(new Date().getFullYear()) + 1, name: "New Year's Day", localName: 'Πρωτοχρονιά' }) // add 1-Jan-(year+1) to the holidays
 	return _holidays.filter((h, index) => _holidays.indexOf(h) === index)
 }
 

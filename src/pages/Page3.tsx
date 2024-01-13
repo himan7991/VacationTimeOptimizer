@@ -23,17 +23,18 @@ export default function Page3() {
 	const weekdays = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
 
 	const { supportedCountries, countryCode, daysInYear, weekends, publicHolidays, year } = useContext(AppContext)
+	const publicHolidaysNumbers: number[] = publicHolidays.map((p) => p.date)
 	const daysInYearArr: number[] = Array.from({ length: daysInYear }, (_, index) => index + 1)
 	const workingDays: number[] = daysInYearArr.filter(
-		(day) => !weekends.includes(day) && !publicHolidays.includes(day) && day > daysIntoYear(new Date())
+		(day) => !weekends.includes(day) && !publicHolidaysNumbers.includes(day) && day > daysIntoYear(new Date())
 	)
 
-	getBestDaysToTakeOff(workingDays, range, weekends, publicHolidays)
+	getBestDaysToTakeOff(workingDays, range, weekends, publicHolidaysNumbers)
 
 	const bestDays: BestDay[] =
 		mode === 'best'
-			? getBestDaysToTakeOff(workingDays, range, weekends, publicHolidays)
-			: getBestConsecutiveDays(workingDays, range, weekends, publicHolidays)
+			? getBestDaysToTakeOff(workingDays, range, weekends, publicHolidaysNumbers)
+			: getBestConsecutiveDays(workingDays, range, weekends, publicHolidaysNumbers)
 
 	const graphData = bestDays.map((item, index) => ({
 		day: index + 1,
@@ -121,8 +122,15 @@ export default function Page3() {
 											index={j + 1}
 											inDisplay={j + 1 + daysInMonth - count}
 											isWeekend={weekends.includes(j + 1)}
-											isPublicHoliday={publicHolidays.includes(j + 1)}
+											isPublicHoliday={publicHolidaysNumbers.includes(j + 1)}
 											isBestDay={bestDays.map((obj) => obj.day).includes(j + 1)}
+											title={
+												publicHolidaysNumbers.includes(j + 1)
+													? `${publicHolidays[publicHolidaysNumbers.indexOf(j + 1)].localName} (${
+															publicHolidays[publicHolidaysNumbers.indexOf(j + 1)].name
+														})`
+													: ''
+											}
 											key={j}
 										/>
 									)
