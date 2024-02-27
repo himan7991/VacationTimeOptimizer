@@ -17,7 +17,7 @@ export default function CountryModal({ isOpen, setIsOpen }: { isOpen: boolean; s
 					animate={{ opacity: 1 }}
 					exit={{ opacity: 0 }}
 					onClick={() => setIsOpen(false)}
-					className="fixed inset-0 z-50 grid cursor-pointer overflow-y-scroll bg-background/30 backdrop-blur lg:place-items-center"
+					className="fixed inset-0 z-50 grid cursor-pointer overflow-y-scroll bg-background/30 p-8 backdrop-blur lg:place-items-center"
 				>
 					<motion.div
 						// initial={{ scale: 0 }}
