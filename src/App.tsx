@@ -72,7 +72,7 @@ export default function App() {
 
 	return (
 		<AppContext.Provider value={passedAppContext}>
-			<main className="relative min-h-screen bg-background pb-6">
+			<main className="relative min-h-screen overflow-hidden bg-background pb-6">
 				<Header />
 				<Content />
 				<BlurBackground />
