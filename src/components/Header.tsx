@@ -19,7 +19,7 @@ export default function Header() {
 		document.body.classList.remove('dark', 'light')
 		document.body.classList.add(_theme)
 		if (document.querySelector("meta[name='theme-color']")) {
-			document.querySelector("meta[name='theme-color']")!.setAttribute('content', theme === 'light' ? 'rgb(240, 240, 240)' : 'rgb(26, 26, 26)')
+			document.querySelector("meta[name='theme-color']")!.setAttribute('content', _theme === 'light' ? 'rgb(240, 240, 240)' : 'rgb(26, 26, 26)')
 		}
 		localStorage.setItem('theme', _theme)
 		setTheme(_theme)
