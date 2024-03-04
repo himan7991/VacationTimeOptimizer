@@ -1,13 +1,27 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { FaGlobeEurope } from 'react-icons/fa'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import AppContext from '../../context/AppContext'
+
+/**
+ * Renders a modal for selecting a country.
+ *
+ * @param {boolean} isOpen - Indicates whether the modal is open
+ * @param {function} setIsOpen - Function to set the open state of the modal
+ * @return {JSX.Element} The modal component
+ */
 
 export default function CountryModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (arg: boolean) => void }) {
 	const { supportedCountries, countryCode, setCountryCode } = useContext(AppContext)
 
-	const handleKeyPress = (e: KeyboardEvent) => e.key === 'Escape' && setIsOpen(false)
-	window.addEventListener('keydown', handleKeyPress)
+	useEffect(() => {
+		const handleKeyPress = (e: KeyboardEvent) => e.key === 'Escape' && setIsOpen(false)
+		window.addEventListener('keydown', handleKeyPress)
+
+		return () => {
+			window.removeEventListener('keydown', handleKeyPress)
+		}
+	}, [setIsOpen])
 
 	return (
 		<AnimatePresence>

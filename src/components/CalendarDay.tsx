@@ -2,6 +2,18 @@ import { useState } from 'react'
 import { daysIntoYear } from '../functions/functions'
 import { twMerge } from 'tailwind-merge'
 
+/**
+ * Renders a calendar day component with various visual styles based on the day's properties.
+ *
+ * @param {number} inDisplay - The number to display for the day
+ * @param {boolean} [isWeekend] - Indicates if the day is a weekend
+ * @param {boolean} [isPublicHoliday] - Indicates if the day is a public holiday
+ * @param {boolean} isBestDay - Indicates if the day is the best day
+ * @param {number} index - The index of the day
+ * @param {string} [title] - The title to display for the day
+ * @return {JSX.Element} The rendered calendar day component
+ */
+
 export default function CalendarDay({
 	inDisplay,
 	isWeekend,
@@ -19,6 +31,11 @@ export default function CalendarDay({
 }) {
 	const [display, setDisplay] = useState<number>(inDisplay)
 
+	/**
+	 * Returns the appropriate text color based on the current date and other conditions.
+	 *
+	 * @return {string} The appropriate text color class name.
+	 */
 	const textColor = () => {
 		if (index < daysIntoYear(new Date())) return 'text-copy-lighter'
 		if (index === daysIntoYear(new Date())) return 'text-copy-lighter border-b-copy-lighter'

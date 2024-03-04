@@ -1,6 +1,14 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { TbBeach } from 'react-icons/tb'
 
+/**
+ * Renders the AboutModal component based on the isOpen prop.
+ *
+ * @param {boolean} isOpen - Specifies whether the modal is open or closed
+ * @param {Function} setIsOpen - Function to set the isOpen state
+ * @return {JSX.Element} The AboutModal component
+ */
+
 export default function AboutModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (arg: boolean) => void }) {
 	const handleKeyPress = (e: KeyboardEvent) => e.key === 'Escape' && setIsOpen(false)
 	window.addEventListener('keydown', handleKeyPress)
