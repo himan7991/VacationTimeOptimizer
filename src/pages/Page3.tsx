@@ -9,6 +9,8 @@ import ModeToggle from '../components/toggles/ToggleMode'
 import { BestDay } from '../types/BestDays'
 import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts'
 
+// todo: should probably figure out how to handle degenerate cases ¯\_(ツ)_/¯
+
 export default function Page3() {
 	let count = 0
 	const [mode, setMode] = useState('best')

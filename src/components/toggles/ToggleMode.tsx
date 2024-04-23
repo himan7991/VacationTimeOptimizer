@@ -13,7 +13,7 @@ export default function ModeToggle({ mode, handleModeChange }: { mode: string; h
 				}}
 			>
 				{/* <FiMoon className="relative z-10 text-lg md:text-sm" /> */}
-				<span className="relative z-10">Best</span>
+				<span className="relative z-10">Best overall</span>
 			</button>
 			<button
 				className={`${TOGGLE_CLASSES} ${mode === 'consecutive' ? 'text-white' : 'text-copy'}`}
@@ -28,7 +28,7 @@ export default function ModeToggle({ mode, handleModeChange }: { mode: string; h
 				<motion.span
 					layout
 					transition={{ type: 'spring', damping: 15, stiffness: 250 }}
-					className={twMerge('h-full rounded-full bg-gradient-to-r from-primary to-primary-dark', mode === 'best' ? 'w-[34%]' : 'w-[69%]')}
+					className={twMerge('h-full rounded-full bg-gradient-to-r from-primary to-primary-dark', mode === 'best' ? 'w-[50%]' : 'w-[52%]')}
 				/>
 			</div>
 		</div>
