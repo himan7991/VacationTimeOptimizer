@@ -14,11 +14,11 @@ export default function Page2({ goto }: { goto: (arg: number) => void }) {
 			<motion.div id="page2" layoutId="pages" className="px-[10%]">
 				<div className="flex flex-col text-center">
 					<h1 className="mb-6 text-4xl font-bold tracking-tight text-copy sm:text-6xl">Let's get started</h1>
-					<p className="max-w-[75ch] leading-8 text-copy-light md:text-lg">
-						Vacation Time Optimizer defaults to your current location and{' '}
-						<span className="font-semibold">we found {publicHolidays.length - 1} public holidays</span> for{' '}
-						{supportedCountries.find((c) => c.countryCode === countryCode)?.name || 'your country'} left in {year}. To check other
-						countries, click the globe icon at the top right.
+					<p className="max-w-[85ch] leading-8 text-copy-light md:text-lg">
+						Vacation Time Optimizer helps you find the ideal time to use your paid time off (PTO) from work.
+						<br />
+						By default, it uses your current location, and <span className="font-semibold">we found {publicHolidays.length - 1} remaining public holidays</span> for{' '}
+						{supportedCountries.find((c) => c.countryCode === countryCode)?.name || 'your country'} in {year}.
 					</p>
 					{/* <p className="text-lg leading-8 text-copy-light font-bold">Enjoy planning!</p> */}
 					<div className="mt-10 flex items-center justify-center gap-x-6">
@@ -38,6 +38,10 @@ export default function Page2({ goto }: { goto: (arg: number) => void }) {
 					nager.date
 				</a>
 				.
+				<br />
+				<span className="text-xs">
+					To check a different country, click the globe icon at the top right.
+				</span>
 			</p>
 			<div className="absolute right-0 top-0 h-32 w-32 rotate-90">
 				<svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 300 300">
