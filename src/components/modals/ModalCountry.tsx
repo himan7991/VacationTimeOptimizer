@@ -5,14 +5,14 @@ import AppContext from '../../context/AppContext'
 
 /**
  * Renders a modal for selecting a country.
- *
- * @param {boolean} isOpen - Indicates whether the modal is open
- * @param {function} setIsOpen - Function to set the open state of the modal
- * @return {JSX.Element} The modal component
  */
 
 export default function CountryModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (arg: boolean) => void }) {
 	const { supportedCountries, countryCode, setCountryCode } = useContext(AppContext)
+
+	const COLUMNS = 6
+	const GROUPS = Math.ceil(supportedCountries.length / COLUMNS)
+	const countryGroups = [...Array(COLUMNS)].map((_, i) => supportedCountries.slice(i * GROUPS, (i + 1) * GROUPS))
 
 	useEffect(() => {
 		const handleKeyPress = (e: KeyboardEvent) => e.key === 'Escape' && setIsOpen(false)
@@ -38,7 +38,7 @@ export default function CountryModal({ isOpen, setIsOpen }: { isOpen: boolean; s
 						// animate={{ scale: 1 }}
 						// exit={{ scale: 0, rotate: '0deg' }}
 						onClick={(e) => e.stopPropagation()}
-						className="relative w-full max-w-6xl cursor-default rounded-lg bg-gradient-to-br from-primary to-primary-dark p-6 text-white shadow-xl"
+						className="relative w-full max-w-7xl cursor-default rounded-lg bg-gradient-to-br from-primary to-primary-dark p-6 text-white shadow-xl"
 					>
 						<FaGlobeEurope className="absolute -left-24 -top-24 z-0 rotate-12 text-[250px] text-white/10" />
 						<div className="relative z-10 flex flex-col gap-4">
@@ -46,17 +46,14 @@ export default function CountryModal({ isOpen, setIsOpen }: { isOpen: boolean; s
 								<FaGlobeEurope />
 							</div>
 							<h3 className="text-center text-3xl font-bold">Select your country</h3>
-							<p className="text-center font-semibold">
-								Vacation Time Optimizer supports over 100 countries! Choose yours below. <br />
-							</p>
-							<div className="mb-4 grid grid-cols-1 place-items-center items-center gap-2 md:grid-cols-3 lg:grid-cols-6">
-								{supportedCountries
+							<p className="text-center font-semibold"> Vacation Time Optimizer supports over 100 countries! Choose yours below </p>
+							<div className="mb-4 grid grid-cols-1 place-items-center md:place-items-start items-center gap-2 md:grid-cols-3 lg:grid-cols-6">
+								{/* <div className="mb-4 max-h-40 grid-flow-col-dense"> */}
+								{/* {supportedCountries
 									.sort((a, b) => a.name.localeCompare(b.name))
 									.map((c, i) => (
 										<p
-											className={`w-fit cursor-pointer text-center hover:underline ${
-												c.countryCode === countryCode ? 'underline' : ''
-											}`}
+											className={`w-fit cursor-pointer text-center hover:underline ${c.countryCode === countryCode ? 'underline' : ''}`}
 											key={i}
 											onClick={() => {
 												setCountryCode(c.countryCode)
@@ -65,7 +62,23 @@ export default function CountryModal({ isOpen, setIsOpen }: { isOpen: boolean; s
 										>
 											{c.name}
 										</p>
-									))}
+									))} */}
+								{countryGroups.map((group, i) => (
+									<div className="flex flex-col gap-2 items-center md:items-start" key={i}>
+										{group.map((c, j) => (
+											<p
+												className={`w-fit cursor-pointer hover:underline ${c.countryCode === countryCode ? 'underline' : ''}`}
+												key={j}
+												onClick={() => {
+													setCountryCode(c.countryCode)
+													localStorage.setItem('countryCode', c.countryCode)
+												}}
+											>
+												{c.name}
+											</p>
+										))}
+									</div>
+								))}
 							</div>
 
 							<div className="flex gap-2">
