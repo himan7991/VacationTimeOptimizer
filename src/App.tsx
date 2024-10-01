@@ -11,7 +11,7 @@ export default function App() {
 	// context
 	const [year, setYear] = useState<number>(new Date().getFullYear())
 	const [supportedCountries, setSupportedCountries] = useState<Country[]>([{ countryCode: 'US', name: 'United States' }])
-	const [countryCode, setCountryCode] = useState<string>('US')
+	const [countryCode, setCountryCode] = useState<string>('')
 	const [daysInYear, setDaysInYear] = useState<number>(365)
 	const [weekends, setWeekends] = useState<number[]>([])
 	const [publicHolidays, setPublicHolidays] = useState<PublicHolidaySlice[]>([{ date: 0, name: '', localName: ':)' }])
