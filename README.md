@@ -5,6 +5,8 @@
 Vacation Time Optimizer is a user-friendly web application that helps you determine the optimal time to use your paid
 time off (PTO), ensuring you make the most of your leisure days.
 
+You can find it at [VacationTimeOptimizer](https://himan7991.github.io/VacationTimeOptimizer)
+
 <!-- ## Features
 
 -   Input the desired number of vacation days or available PTO.
