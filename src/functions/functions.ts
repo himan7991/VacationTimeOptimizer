@@ -45,7 +45,7 @@ export function daysIntoYear(date: Date) {
  * @param holidays Array of public holidays
  * @returns Formatted array of upcoming public holidays
  */
-export function getPublicHolidays(holidays: PublicHoliday[]): PublicHolidaySlice[] {
+export function formatPublicHolidays(holidays: PublicHoliday[]): PublicHolidaySlice[] {
 	const _holidays: PublicHolidaySlice[] = []
 
 	holidays.map((h) => {

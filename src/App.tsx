@@ -3,7 +3,7 @@ import BlurBackground from './components/BlurBackground'
 import Content from './components/Content'
 import { useEffect, useState } from 'react'
 import AppContext from './context/AppContext'
-import { getDaysInYear, getPublicHolidays, getWeekends } from './functions/functions'
+import { getDaysInYear, formatPublicHolidays, getWeekends } from './functions/functions'
 import { Country } from './types/SupportedCountries'
 import { PublicHolidaySlice } from './types/PublicHoliday'
 
@@ -11,7 +11,7 @@ export default function App() {
 	// context
 	const [year, setYear] = useState<number>(new Date().getFullYear())
 	const [supportedCountries, setSupportedCountries] = useState<Country[]>([{ countryCode: 'US', name: 'United States' }])
-	const [countryCode, setCountryCode] = useState<string>('US')
+	const [countryCode, setCountryCode] = useState<string>('')
 	const [daysInYear, setDaysInYear] = useState<number>(365)
 	const [weekends, setWeekends] = useState<number[]>([])
 	const [publicHolidays, setPublicHolidays] = useState<PublicHolidaySlice[]>([{ date: 0, name: '', localName: ':)' }])
@@ -44,7 +44,7 @@ export default function App() {
 			setCountryCode(countryCode)
 			fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/${countryCode}`)
 				.then((holidaysResponse) => holidaysResponse.json())
-				.then((holidaysData) => setPublicHolidays(getPublicHolidays(holidaysData)))
+				.then((holidaysData) => setPublicHolidays(formatPublicHolidays(holidaysData)))
 				.catch((error) => console.error('Error fetching data:', error))
 		} else {
 			// get the user's ip
@@ -62,7 +62,7 @@ export default function App() {
 					return fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/${countryData.country_code}`)
 				})
 				.then((holidaysResponse) => holidaysResponse.json())
-				.then((holidaysData) => setPublicHolidays(getPublicHolidays(holidaysData)))
+				.then((holidaysData) => setPublicHolidays(formatPublicHolidays(holidaysData)))
 				.catch((error) => console.error('Error fetching data:', error))
 		}
 

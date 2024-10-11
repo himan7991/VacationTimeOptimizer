@@ -21,7 +21,7 @@ export default function Page2({ goto }: { goto: (arg: number) => void }) {
 						{supportedCountries.find((c) => c.countryCode === countryCode)?.name || 'your country'} in {year}.
 					</p>
 					{/* <p className="text-lg leading-8 text-copy-light font-bold">Enjoy planning!</p> */}
-					<div className="mt-10 flex items-center justify-center gap-x-6">
+					<div className="mt-10 flex items-center justify-center gap-x-6 flex-col space-y-2">
 						<button
 							className="rounded-md bg-primary px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:bg-border"
 							onClick={() => goto(3)}
@@ -29,6 +29,9 @@ export default function Page2({ goto }: { goto: (arg: number) => void }) {
 						>
 							Let's go!
 						</button>
+						<p className='text-copy-light text-sm' style={{ display: !supportedCountries.find((c) => c.countryCode === countryCode) ? 'block' : 'none' }}>
+							It seems we couldn't identify your country. <br /> Please select one using the globe icon at the top right.
+						</p>
 					</div>
 				</div>
 			</motion.div>
