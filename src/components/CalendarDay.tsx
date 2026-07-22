@@ -50,8 +50,8 @@ export default function CalendarDay({
 			className={twMerge('border-b border-transparent text-center', textColor())}
 			key={index}
 			title={title && title}
-			onMouseOver={() => process.env.NODE_ENV === 'development' && setDisplay(index)}
-			onMouseOut={() => process.env.NODE_ENV === 'development' && setDisplay(inDisplay)}
+			onMouseOver={() => import.meta.env.DEV && setDisplay(index)}
+			onMouseOut={() => import.meta.env.DEV && setDisplay(inDisplay)}
 			onClick={() => {
 				isPublicHoliday && alert(title)
 			}}
