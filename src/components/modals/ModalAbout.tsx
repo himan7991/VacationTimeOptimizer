@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
+import { useEffect } from 'react'
 import { TbBeach } from 'react-icons/tb'
 
 /**
@@ -10,8 +11,14 @@ import { TbBeach } from 'react-icons/tb'
  */
 
 export default function AboutModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (arg: boolean) => void }) {
-	const handleKeyPress = (e: KeyboardEvent) => e.key === 'Escape' && setIsOpen(false)
-	window.addEventListener('keydown', handleKeyPress)
+	useEffect(() => {
+		const handleKeyPress = (e: KeyboardEvent) => e.key === 'Escape' && setIsOpen(false)
+		window.addEventListener('keydown', handleKeyPress)
+
+		return () => {
+			window.removeEventListener('keydown', handleKeyPress)
+		}
+	}, [setIsOpen])
 
 	return (
 		<AnimatePresence>
