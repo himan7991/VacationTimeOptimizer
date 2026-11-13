@@ -2,19 +2,20 @@ import { createContext, useContext } from 'react'
 import { Country } from '../types/SupportedCountries'
 import { PublicHolidaySlice } from '../types/PublicHoliday'
 
+export type HolidayStatus = 'idle' | 'loading' | 'ready' | 'error'
+
 export type AppContextValue = {
 	year: number
-	setYear: (arg: number) => void
 	countryCode: string
 	setCountryCode: (arg: string) => void
 	daysInYear: number
-	setDaysInYear: (arg: number) => void
 	weekends: number[]
-	setWeekends: (arg: number[]) => void
 	supportedCountries: Country[]
-	setSupportedCountries: (arg: Country[]) => void
 	publicHolidays: PublicHolidaySlice[]
-	setPublicHolidays: (arg: PublicHolidaySlice[]) => void
+	/** Progress of the holiday request for the current country */
+	holidayStatus: HolidayStatus
+	/** Human-readable message when any request failed, otherwise null */
+	loadError: string | null
 }
 
 const AppContext = createContext<AppContextValue | undefined>(undefined)

@@ -2,46 +2,59 @@ import { motion } from 'framer-motion'
 import { useAppContext } from '../context/AppContext'
 
 export default function Page2({ goto }: { goto: (arg: number) => void }) {
-	const { supportedCountries, countryCode, publicHolidays, year, daysInYear } = useAppContext()
+	const { supportedCountries, countryCode, publicHolidays, year, daysInYear, holidayStatus, loadError } = useAppContext()
 	const holidaysThisYear = publicHolidays.filter((p) => p.date <= daysInYear).length
+	const countryKnown = supportedCountries.some((c) => c.countryCode === countryCode)
+	const canStart = countryKnown && holidayStatus === 'ready'
 
 	return (
 		<>
 			<motion.div id="page2" layoutId="pages" className="px-[10%]">
 				<div className="flex flex-col text-center">
 					<h1 className="mb-6 text-4xl font-bold tracking-tight text-copy sm:text-6xl">Let&apos;s get started</h1>
-					<p className="max-w-[85ch] leading-8 text-copy-light md:text-lg">
+					<p className="max-w-[85ch] text-copy-light md:text-lg">
 						Vacation Time Optimizer helps you find the ideal time to use your paid time off (PTO) from work.
-						<br />
-						By default, it uses your current location, and <span className="font-semibold">we found {holidaysThisYear} remaining public holidays</span> for{' '}
+					</p>
+					<p className="mt-1 max-w-[85ch] text-copy-light md:text-lg">
+						<span className="font-semibold">We found {holidaysThisYear} remaining public holidays</span> for{' '}
 						{supportedCountries.find((c) => c.countryCode === countryCode)?.name || 'your country'} in {year}.
 					</p>
-					{/* <p className="text-lg leading-8 text-copy-light font-bold">Enjoy planning!</p> */}
-					<div className="mt-10 flex items-center justify-center gap-x-6 flex-col space-y-2">
+					<div className="mt-10 flex flex-col items-center justify-center gap-x-6 space-y-2">
 						<button
 							className="rounded-md bg-primary px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:bg-border"
 							onClick={() => goto(3)}
-							disabled={!supportedCountries.find((c) => c.countryCode === countryCode)}
+							disabled={!canStart}
 						>
-							Let&apos;s go!
+							{holidayStatus === 'loading' ? 'Loading holidays…' : "Let's go!"}
 						</button>
-						<p className='text-copy-light text-sm' style={{ display: !supportedCountries.find((c) => c.countryCode === countryCode) ? 'block' : 'none' }}>
-							It seems we couldn&apos;t identify your country. <br /> Please select one using the globe icon at the top right.
-						</p>
+						{loadError ? (
+							<p className="text-sm text-error" role="alert">
+								{loadError}
+							</p>
+						) : (
+							!countryKnown &&
+							holidayStatus !== 'loading' && (
+								<p className="text-sm text-copy-light">
+									It seems we couldn&apos;t identify your country. <br /> Please select one using the globe icon at the top right.
+								</p>
+							)
+						)}
 					</div>
 				</div>
 			</motion.div>
-			<p className="absolute bottom-4 px-[5%] text-center text-sm leading-8 text-copy-light">
-				Vacation Time Optimizer supports over 100 countries thanks to{' '}
-				<a href="https://date.nager.at/" className="text-primary-light hover:text-primary">
-					nager.date
-				</a>
-				.
-				<br />
-				<span className="text-xs">
-					To check a different country, click the globe icon at the top right.
-				</span>
-			</p>
+			<div className="absolute bottom-4 text-center text-sm text-copy-light">
+				<p className="mb-1">
+					Vacation Time Optimizer supports over 100 countries thanks to{' '}
+					<a href="https://date.nager.at/" className="text-primary-light hover:text-primary">
+						nager.date
+					</a>
+					.
+				</p>
+				<p className="w-[80ch] text-xs">
+					By default, we use your current location to show you public holidays. To check a different country, click the globe icon at the
+					top right.
+				</p>
+			</div>
 			<div className="absolute right-0 top-0 h-32 w-32 rotate-90">
 				<svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" viewBox="0 0 300 300">
 					<path
