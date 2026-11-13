@@ -43,16 +43,16 @@ export default function Page2({ goto }: { goto: (arg: number) => void }) {
 				</div>
 			</motion.div>
 			<div className="absolute bottom-4 text-center text-sm text-copy-light">
-				<p className="mb-1">
+				<p className="mb-2">
 					Vacation Time Optimizer supports over 100 countries thanks to{' '}
 					<a href="https://date.nager.at/" className="text-primary-light hover:text-primary">
 						nager.date
 					</a>
 					.
 				</p>
-				<p className="w-[80ch] text-xs">
-					By default, we use your current location to show you public holidays. To check a different country, click the globe icon at the
-					top right.
+				<p className="w-[80ch] text-xs leading-5">
+					We guess your country from your IP address so we can show the right public holidays. Did we get it wrong? Pick your country from
+					the globe icon at the top right.
 				</p>
 			</div>
 			<div className="absolute right-0 top-0 h-32 w-32 rotate-90">

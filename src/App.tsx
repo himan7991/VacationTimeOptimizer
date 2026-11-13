@@ -20,12 +20,31 @@ async function fetchJson<T>(url: string): Promise<T> {
 }
 
 /**
- * Looks up the visitor's country from their IP address.
+ * Looks up the visitor's country from their IP address via two third-party services.
  */
 async function detectCountryByIp(): Promise<string> {
 	const { ip } = await fetchJson<{ ip: string }>('https://api.ipify.org?format=json')
 	const location = await fetchJson<IpApi>(`https://ipapi.co/${ip}/json/`)
 	return location.country_code
+}
+
+/**
+ * Guesses the visitor's country from the browser's language settings, e.g. "el-GR" gives "GR".
+ * Only a fallback: many people run an English (US) system outside the US.
+ */
+export function detectCountryFromLocale(): string | null {
+	const tags = [...(navigator.languages ?? []), navigator.language, Intl.DateTimeFormat().resolvedOptions().locale]
+
+	for (const tag of tags) {
+		if (!tag) continue
+		try {
+			const region = new Intl.Locale(tag).region
+			if (region && /^[A-Z]{2}$/.test(region)) return region
+		} catch {
+			// malformed tag, try the next one
+		}
+	}
+	return null
 }
 
 export default function App() {
@@ -53,17 +72,18 @@ export default function App() {
 				if (!ignore) setLoadError('We could not load the list of supported countries. Please try again later.')
 			})
 
+		// Stored choice first, then IP geolocation, then the browser locale; otherwise the user picks manually
 		const storedCountryCode = localStorage.getItem('countryCode')
 		if (storedCountryCode) {
 			setCountryCode(storedCountryCode)
 		} else {
 			detectCountryByIp()
-				.then((code) => {
-					if (!ignore) setCountryCode(code)
-				})
 				.catch((error: unknown) => {
-					// Not fatal: the user can still pick a country manually
 					console.error(error)
+					return detectCountryFromLocale()
+				})
+				.then((code) => {
+					if (!ignore && code) setCountryCode(code)
 				})
 		}
 
