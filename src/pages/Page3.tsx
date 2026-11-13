@@ -26,6 +26,7 @@ export default function Page3() {
 	const publicHolidaysNumbers: number[] = publicHolidays.map((p) => p.date)
 	// Holidays inside this year; the list may also carry next year's 1 January for bridging
 	const holidaysThisYear = publicHolidays.filter((p) => p.date <= daysInYear).length
+	const weekendsThisYear = Math.floor(weekends.filter((d) => d <= daysInYear).length / 2)
 	const daysInYearArr: number[] = Array.from({ length: daysInYear }, (_, index) => index + 1)
 	const workingDays: number[] = daysInYearArr.filter(
 		(day) => !weekends.includes(day) && !publicHolidaysNumbers.includes(day) && day > daysIntoYear(new Date())
@@ -58,7 +59,7 @@ export default function Page3() {
 					<p className="text-center text-copy">
 						We found <span className="font-semibold text-primary">{holidaysThisYear} public holidays</span> in{' '}
 						{countryName},<br />
-						<span className="font-semibold text-error">{Math.floor(weekends.length / 2)} weekends</span> and <br />
+						<span className="font-semibold text-error">{weekendsThisYear} weekends</span> and <br />
 						<span className="font-semibold">{workingDays.length} working days</span> ahead
 					</p>
 				</div>

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import AppContext from './context/AppContext'
 import { getDaysInYear, formatPublicHolidays, getWeekends } from './functions/functions'
 import { Country } from './types/SupportedCountries'
-import { PublicHolidaySlice } from './types/PublicHoliday'
+import { PublicHoliday, PublicHolidaySlice } from './types/PublicHoliday'
 
 export default function App() {
 	// context
@@ -14,7 +14,7 @@ export default function App() {
 	const [countryCode, setCountryCode] = useState<string>('')
 	const [daysInYear, setDaysInYear] = useState<number>(365)
 	const [weekends, setWeekends] = useState<number[]>([])
-	const [publicHolidays, setPublicHolidays] = useState<PublicHolidaySlice[]>([{ date: 0, name: '', localName: ':)' }])
+	const [publicHolidays, setPublicHolidays] = useState<PublicHolidaySlice[]>([])
 
 	const passedAppContext = {
 		year,
@@ -31,6 +31,16 @@ export default function App() {
 		setPublicHolidays
 	}
 
+	/**
+	 * Loads this year's holidays plus next year's, so 1 January can bridge the year end.
+	 */
+	const loadPublicHolidays = (code: string) =>
+		Promise.all(
+			[year, year + 1].map((y) =>
+				fetch(`https://date.nager.at/api/v3/PublicHolidays/${y}/${code}`).then((res) => res.json() as Promise<PublicHoliday[]>)
+			)
+		).then((perYear) => setPublicHolidays(formatPublicHolidays(perYear.flat(), year)))
+
 	useEffect(() => {
 		const countryCode = localStorage.getItem('countryCode')
 
@@ -41,10 +51,7 @@ export default function App() {
 
 		if (countryCode) {
 			setCountryCode(countryCode)
-			fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/${countryCode}`)
-				.then((holidaysResponse) => holidaysResponse.json())
-				.then((holidaysData) => setPublicHolidays(formatPublicHolidays(holidaysData)))
-				.catch((error) => console.error('Error fetching data:', error))
+			loadPublicHolidays(countryCode).catch((error) => console.error('Error fetching data:', error))
 		} else {
 			// get the user's ip
 			fetch('https://api.ipify.org?format=json')
@@ -57,10 +64,8 @@ export default function App() {
 				.then((countryData) => {
 					setCountryCode(countryData.country_code)
 					// use the user country to retrieve the holidays in that country
-					return fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/${countryData.country_code}`)
+					return loadPublicHolidays(countryData.country_code)
 				})
-				.then((holidaysResponse) => holidaysResponse.json())
-				.then((holidaysData) => setPublicHolidays(formatPublicHolidays(holidaysData)))
 				.catch((error) => console.error('Error fetching data:', error))
 		}
 
