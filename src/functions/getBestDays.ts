@@ -1,49 +1,72 @@
-import { BestDay } from '../types/BestDays'
-import { createPointDays } from './createPointDays'
+import { VacationPlan, EMPTY_PLAN } from '../types/VacationPlan'
 
 /**
- * Retrieves the best overall days based on the provided working days, max days, weekends, and public holidays
- * @param workingDays - Array of working days
- * @param maxDays - Maximum number of days to retrieve
- * @param weekends - Array of weekend days
- * @param publicHolidays - Array of public holidays
- * @returns Array of BestDay objects representing the best overall days
+ * Picks the PTO days that give the most days off overall, spreading them across the year.
+ *
+ * Greedy: each round chooses the working day that adds the most days off, where a day
+ * adds itself plus every weekend/holiday day it newly connects to. Once every free run is
+ * claimed, extra days extend existing blocks (ties go to the longer block, then the earlier date).
+ *
+ * @param workingDays - Bookable working days (day-of-year numbers)
+ * @param maxDays - Number of PTO days available
+ * @param weekends - Weekend days (day-of-year numbers)
+ * @param publicHolidays - Public holiday days (day-of-year numbers)
+ * @returns The chosen PTO days and the total days off they produce
  */
+export const getBestOverallDays = (workingDays: number[], maxDays: number, weekends: number[], publicHolidays: number[]): VacationPlan => {
+	if (workingDays.length === 0 || maxDays <= 0 || !Number.isInteger(maxDays)) return EMPTY_PLAN
 
-export const getBestOverallDays = (workingDays: number[], maxDays: number, weekends: number[], publicHolidays: number[]): BestDay[] => {
-	// Input validation
-	if (workingDays.length === 0 || maxDays <= 0 || !Number.isInteger(maxDays)) {
-		return []
+	const free = new Set<number>([...weekends, ...publicHolidays])
+	const chosen = new Set<number>()
+	const attached = new Set<number>() // free days already counted in some block
+	const remaining = new Set<number>(workingDays)
+	const budget = Math.min(maxDays, workingDays.length)
+
+	const isInBlock = (day: number) => free.has(day) || chosen.has(day)
+
+	/** Free days reachable from `day` walking in `step` direction through free and chosen days */
+	const reachableFree = (day: number, step: 1 | -1): number[] => {
+		const found: number[] = []
+		for (let d = day + step; isInBlock(d); d += step) {
+			if (free.has(d)) found.push(d)
+		}
+		return found
 	}
 
-	// Create an object to store the point days for each working day
-	const workingDaysWithPoints: { [key: number]: number[] } = {}
-
-	// Iterate through each working day to create an array of point days for each day
-	for (let i = 0; i < workingDays.length; i++) {
-		const currentDay: number = workingDays[i]
-		workingDaysWithPoints[currentDay] = createPointDays(weekends, publicHolidays, currentDay)
+	/** Length of the block that would contain `day` if it were chosen */
+	const blockLengthWith = (day: number) => {
+		let length = 1
+		for (let d = day - 1; isInBlock(d); d--) length++
+		for (let d = day + 1; isInBlock(d); d++) length++
+		return length
 	}
 
-	// Create an array of objects containing the working day and the number of point days
-	const workingDaysWithPointCounts: { day: number; pointCount: number }[] = Object.entries(workingDaysWithPoints)
-		.filter(([, pointDays]) => pointDays.length > 0)
-		.map(([day, pointDays]) => ({ day: parseInt(day), pointCount: pointDays.length }))
+	let daysOff = 0
 
-	// Sort the working days by the number of point days, from highest to lowest
-	workingDaysWithPointCounts.sort((a, b) => b.pointCount - a.pointCount)
+	for (let round = 0; round < budget; round++) {
+		let best: { day: number; gain: number; blockLength: number } | undefined
 
-	// Remove duplicate point days
-	const uniquePointDays: Set<number> = new Set()
-	const nonOverlapWorkingDaysWithPointCounts: { day: number; pointCount: number }[] = workingDaysWithPointCounts.filter((obj) => {
-		const pointDays = workingDaysWithPoints[obj.day]
-		const overlap = pointDays.some((day) => uniquePointDays.has(day))
-		pointDays.forEach((day) => uniquePointDays.add(day))
-		return !overlap
-	})
+		for (const day of remaining) {
+			const newlyAttached = [...reachableFree(day, -1), ...reachableFree(day, 1)].filter((d) => !attached.has(d))
+			const gain = 1 + newlyAttached.length
+			const blockLength = blockLengthWith(day)
 
-	// Select the top maxDays and map them to BestDay objects
-	const bestDays: BestDay[] = nonOverlapWorkingDaysWithPointCounts.slice(0, maxDays).map((obj) => ({ day: obj.day, points: obj.pointCount }))
+			const better =
+				!best ||
+				gain > best.gain ||
+				(gain === best.gain && blockLength > best.blockLength) ||
+				(gain === best.gain && blockLength === best.blockLength && day < best.day)
 
-	return bestDays
+			if (better) best = { day, gain, blockLength }
+		}
+
+		if (!best) break
+
+		chosen.add(best.day)
+		remaining.delete(best.day)
+		daysOff += best.gain
+		for (const d of [...reachableFree(best.day, -1), ...reachableFree(best.day, 1)]) attached.add(d)
+	}
+
+	return { ptoDays: [...chosen].sort((a, b) => a - b), daysOff }
 }

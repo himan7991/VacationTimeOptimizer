@@ -1,78 +1,44 @@
-import { BestDay } from '../types/BestDays'
-import { createPointDays } from './createPointDays'
+import { VacationPlan, EMPTY_PLAN } from '../types/VacationPlan'
 
 /**
- * Calculates the best consecutive days based on working days, maximum days, weekends, and public holidays.
- * @param workingDays - Array of working days
- * @param maxDays - Maximum number of consecutive days
- * @param weekends - Array of weekends
- * @param publicHolidays - Array of public holidays
- * @returns Array of objects representing the best consecutive days with their points
+ * Finds the single longest uninterrupted break obtainable with exactly `maxDays` PTO days.
+ *
+ * Every window of `maxDays` consecutive working days is considered. The break it produces runs
+ * from the first free day touching the window's start to the last free day touching its end.
+ * The longest break wins; ties go to the earliest start. If fewer working days remain than
+ * `maxDays`, the window shrinks to fit.
+ *
+ * @param workingDays - Bookable working days (day-of-year numbers), sorted ascending
+ * @param maxDays - Number of PTO days available
+ * @param weekends - Weekend days (day-of-year numbers)
+ * @param publicHolidays - Public holiday days (day-of-year numbers)
+ * @returns The chosen PTO days and the total length of the resulting break
  */
-export const getBestConsecutiveDays = (workingDays: number[], maxDays: number, weekends: number[], publicHolidays: number[]): BestDay[] => {
-	// Create an array of objects to store each working day along with its associated point days
-	const workingDaysWithPoints: { day: number; pointDays: number[] }[] = []
+export const getBestConsecutiveDays = (workingDays: number[], maxDays: number, weekends: number[], publicHolidays: number[]): VacationPlan => {
+	if (workingDays.length === 0 || maxDays <= 0 || !Number.isInteger(maxDays)) return EMPTY_PLAN
 
-	// Calculate and store the point days for each working day
-	for (let i = 0; i < workingDays.length; i++) {
-		const currentDay = workingDays[i]
-		const currentPointDays = createPointDays(weekends, publicHolidays, currentDay)
+	const free = new Set<number>([...weekends, ...publicHolidays])
+	const sorted = [...workingDays].sort((a, b) => a - b)
+	const windowSize = Math.min(maxDays, sorted.length)
 
-		workingDaysWithPoints.push({ day: currentDay, pointDays: currentPointDays })
+	/** Number of consecutive free days immediately before/after `day` */
+	const freeRun = (day: number, step: 1 | -1) => {
+		let count = 0
+		for (let d = day + step; free.has(d); d += step) count++
+		return count
 	}
 
-	// Sort the workingDaysWithPoints array by the number of point days in descending order
-	workingDaysWithPoints
-		.sort((a, b) => b.pointDays.length - a.pointDays.length)
-		.forEach((obj) => {
-			const currentDay = obj.day
-			const otherObjects = workingDaysWithPoints.filter((o) => o.day !== currentDay)
-			obj.pointDays.forEach((pointDay) => {
-				otherObjects.forEach((otherObj) => {
-					const index = otherObj.pointDays.indexOf(pointDay)
-					if (index !== -1) otherObj.pointDays.splice(index, 1)
-				})
-			})
-		})
+	let best = { start: 0, daysOff: 0 }
 
-	// Sort the workingDaysWithPoints array back by the day number
-	workingDaysWithPoints.sort((a, b) => a.day - b.day)
+	for (let i = 0; i + windowSize <= sorted.length; i++) {
+		const first = sorted[i]
+		const last = sorted[i + windowSize - 1]
+		const breakStart = first - freeRun(first, -1)
+		const breakEnd = last + freeRun(last, 1)
+		const daysOff = breakEnd - breakStart + 1
 
-	// Initialize the window start and end index
-	let windowStart = 0
-	let windowEnd = maxDays - 1
-
-	// Calculate the initial points for the window
-	let windowPoints = 0
-	for (let i = windowStart; i <= windowEnd; i++) {
-		windowPoints += workingDaysWithPoints[i].pointDays.length
+		if (daysOff > best.daysOff) best = { start: i, daysOff }
 	}
 
-	// Initialize variables to keep track of the best window and its points
-	let bestWindowStart = windowStart
-	let bestWindowEnd = windowEnd
-	let bestWindowPoints = windowPoints
-
-	// Slide the window to the right until the end
-	while (windowEnd < workingDays.length - 1) {
-		// Remove the first day and add the next day to the window
-		windowPoints -= workingDaysWithPoints[windowStart]?.pointDays.length
-		windowStart++
-		windowEnd++
-		windowPoints += workingDaysWithPoints[windowEnd]?.pointDays.length
-
-		// Update the best window if needed
-		if (windowPoints > bestWindowPoints) {
-			bestWindowStart = windowStart
-			bestWindowEnd = windowEnd
-			bestWindowPoints = windowPoints
-		}
-	}
-
-	// Return the best window as an array of objects
-	const bestWindow: BestDay[] = []
-	for (let i = bestWindowStart; i <= bestWindowEnd; i++) {
-		bestWindow.push({ day: workingDays[i], points: workingDaysWithPoints[i].pointDays.length })
-	}
-	return bestWindow
+	return { ptoDays: sorted.slice(best.start, best.start + windowSize), daysOff: best.daysOff }
 }

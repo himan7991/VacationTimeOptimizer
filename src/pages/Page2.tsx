@@ -2,7 +2,8 @@ import { motion } from 'framer-motion'
 import { useAppContext } from '../context/AppContext'
 
 export default function Page2({ goto }: { goto: (arg: number) => void }) {
-	const { supportedCountries, countryCode, publicHolidays, year } = useAppContext()
+	const { supportedCountries, countryCode, publicHolidays, year, daysInYear } = useAppContext()
+	const holidaysThisYear = publicHolidays.filter((p) => p.date <= daysInYear).length
 
 	return (
 		<>
@@ -12,7 +13,7 @@ export default function Page2({ goto }: { goto: (arg: number) => void }) {
 					<p className="max-w-[85ch] leading-8 text-copy-light md:text-lg">
 						Vacation Time Optimizer helps you find the ideal time to use your paid time off (PTO) from work.
 						<br />
-						By default, it uses your current location, and <span className="font-semibold">we found {publicHolidays.length - 1} remaining public holidays</span> for{' '}
+						By default, it uses your current location, and <span className="font-semibold">we found {holidaysThisYear} remaining public holidays</span> for{' '}
 						{supportedCountries.find((c) => c.countryCode === countryCode)?.name || 'your country'} in {year}.
 					</p>
 					{/* <p className="text-lg leading-8 text-copy-light font-bold">Enjoy planning!</p> */}

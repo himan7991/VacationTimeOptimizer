@@ -6,14 +6,12 @@ import { daysIntoYear } from '../functions/functions'
 import { getBestOverallDays } from '../functions/getBestDays'
 import { getBestConsecutiveDays } from '../functions/getBestConsecutiveDays'
 import ModeToggle from '../components/toggles/ToggleMode'
-import { BestDay } from '../types/BestDays'
-
-// todo: should probably figure out how to handle degenerate cases ¯\_(ツ)_/¯
+import { VacationPlan } from '../types/VacationPlan'
 
 export default function Page3() {
 	let count = 0
 	const [mode, setMode] = useState('best')
-	const [range, setRange] = useState<number>(3)
+	const [ptoDays, setPtoDays] = useState<number>(3)
 
 	const handleThemeChange = (_mode: string) => {
 		localStorage.setItem('mode', _mode)
@@ -24,16 +22,29 @@ export default function Page3() {
 	const weekdays = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
 
 	const { supportedCountries, countryCode, daysInYear, weekends, publicHolidays, year } = useAppContext()
+	const countryName = supportedCountries.find((c) => c.countryCode === countryCode)?.name ?? 'your country'
 	const publicHolidaysNumbers: number[] = publicHolidays.map((p) => p.date)
+	// Holidays inside this year; the list may also carry next year's 1 January for bridging
+	const holidaysThisYear = publicHolidays.filter((p) => p.date <= daysInYear).length
 	const daysInYearArr: number[] = Array.from({ length: daysInYear }, (_, index) => index + 1)
 	const workingDays: number[] = daysInYearArr.filter(
 		(day) => !weekends.includes(day) && !publicHolidaysNumbers.includes(day) && day > daysIntoYear(new Date())
 	)
 
-	const bestDays: BestDay[] =
+	const maxPtoDays = Math.max(1, workingDays.length)
+	const requestedDays = Math.min(ptoDays, maxPtoDays)
+
+	const plan: VacationPlan =
 		mode === 'best'
-			? getBestOverallDays(workingDays, range, weekends, publicHolidaysNumbers)
-			: getBestConsecutiveDays(workingDays, range, weekends, publicHolidaysNumbers)
+			? getBestOverallDays(workingDays, requestedDays, weekends, publicHolidaysNumbers)
+			: getBestConsecutiveDays(workingDays, requestedDays, weekends, publicHolidaysNumbers)
+	const bestDaySet = new Set(plan.ptoDays)
+
+	const handlePtoDaysChange = (value: string) => {
+		const parsed = parseInt(value, 10)
+		if (Number.isNaN(parsed)) return
+		setPtoDays(Math.min(Math.max(1, parsed), maxPtoDays))
+	}
 
 	return (
 		<motion.div
@@ -45,30 +56,30 @@ export default function Page3() {
 				<div className="mb-4 flex flex-col items-center xl:mb-0">
 					<h2 className="mb-4 text-center text-6xl font-bold text-copy">Overview</h2>
 					<p className="text-center text-copy">
-						We found <span className="font-semibold text-primary">{publicHolidays.length - 1} public holidays</span> in{' '}
-						{supportedCountries.filter((c) => c.countryCode === countryCode)[0].name},<br />
+						We found <span className="font-semibold text-primary">{holidaysThisYear} public holidays</span> in{' '}
+						{countryName},<br />
 						<span className="font-semibold text-error">{Math.floor(weekends.length / 2)} weekends</span> and <br />
-						<span className="font-semibold">{workingDays.length - 1} working days</span> ahead
+						<span className="font-semibold">{workingDays.length} working days</span> ahead
 					</p>
 				</div>
 				<div className="right-4 top-4 flex flex-col items-center gap-2">
-					<div className=" flex items-center gap-2">
+					<label className="flex items-center gap-2 text-copy">
+						PTO days
 						<input
-							type="range"
+							type="number"
 							min={1}
-							max={30}
-							value={range}
-							className="w-32 accent-primary"
-							onChange={(event) => setRange(Number(event.target.value))}
+							max={maxPtoDays}
+							value={requestedDays}
+							className="w-20 rounded-md border border-border bg-foreground px-2 py-1 text-center text-copy accent-primary"
+							onChange={(event) => handlePtoDaysChange(event.target.value)}
 						/>
-						<span className="text-copy">{range}</span>
-					</div>
+					</label>
 					<ModeToggle mode={mode} handleModeChange={handleThemeChange} />
 					<p className="text-center text-copy">
 						You&apos;re getting{' '}
-						<span className="font-semibold">{bestDays.reduce((total, dayObj) => total + dayObj.points, 0) + bestDays.length} days</span>{' '}
+						<span className="font-semibold">{plan.daysOff} days</span>{' '}
 						of vacation <br />
-						with just <span className="border-b border-primary font-semibold">{bestDays.length} days of PTO</span>!
+						with just <span className="border-b border-primary font-semibold">{plan.ptoDays.length} days of PTO</span>!
 					</p>
 				</div>
 			</div>
@@ -104,7 +115,7 @@ export default function Page3() {
 											inDisplay={j + 1 + daysInMonth - count}
 											isWeekend={weekends.includes(j + 1)}
 											isPublicHoliday={publicHolidaysNumbers.includes(j + 1)}
-											isBestDay={bestDays.map((obj) => obj.day).includes(j + 1)}
+											isBestDay={bestDaySet.has(j + 1)}
 											title={
 												publicHolidaysNumbers.includes(j + 1)
 													? `${publicHolidays[publicHolidaysNumbers.indexOf(j + 1)].localName} (${
