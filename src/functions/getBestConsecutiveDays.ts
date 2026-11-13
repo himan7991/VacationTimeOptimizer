@@ -11,7 +11,7 @@ import { createPointDays } from './createPointDays'
  */
 export const getBestConsecutiveDays = (workingDays: number[], maxDays: number, weekends: number[], publicHolidays: number[]): BestDay[] => {
 	// Create an array of objects to store each working day along with its associated point days
-	let workingDaysWithPoints: { day: number; pointDays: number[] }[] = []
+	const workingDaysWithPoints: { day: number; pointDays: number[] }[] = []
 
 	// Calculate and store the point days for each working day
 	for (let i = 0; i < workingDays.length; i++) {

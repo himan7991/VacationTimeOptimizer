@@ -1,19 +1,14 @@
 import { motion } from 'framer-motion'
-import { useContext, useEffect } from 'react'
-import AppContext from '../context/AppContext'
+import { useAppContext } from '../context/AppContext'
 
 export default function Page2({ goto }: { goto: (arg: number) => void }) {
-	const { supportedCountries, countryCode, publicHolidays, year } = useContext(AppContext)
-
-	useEffect(() => {
-		console.log('update')
-	}, [countryCode])
+	const { supportedCountries, countryCode, publicHolidays, year } = useAppContext()
 
 	return (
 		<>
 			<motion.div id="page2" layoutId="pages" className="px-[10%]">
 				<div className="flex flex-col text-center">
-					<h1 className="mb-6 text-4xl font-bold tracking-tight text-copy sm:text-6xl">Let's get started</h1>
+					<h1 className="mb-6 text-4xl font-bold tracking-tight text-copy sm:text-6xl">Let&apos;s get started</h1>
 					<p className="max-w-[85ch] leading-8 text-copy-light md:text-lg">
 						Vacation Time Optimizer helps you find the ideal time to use your paid time off (PTO) from work.
 						<br />
@@ -27,10 +22,10 @@ export default function Page2({ goto }: { goto: (arg: number) => void }) {
 							onClick={() => goto(3)}
 							disabled={!supportedCountries.find((c) => c.countryCode === countryCode)}
 						>
-							Let's go!
+							Let&apos;s go!
 						</button>
 						<p className='text-copy-light text-sm' style={{ display: !supportedCountries.find((c) => c.countryCode === countryCode) ? 'block' : 'none' }}>
-							It seems we couldn't identify your country. <br /> Please select one using the globe icon at the top right.
+							It seems we couldn&apos;t identify your country. <br /> Please select one using the globe icon at the top right.
 						</p>
 					</div>
 				</div>

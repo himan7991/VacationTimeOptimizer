@@ -1,13 +1,12 @@
 import { motion } from 'framer-motion'
-import { useContext, useEffect, useState } from 'react'
+import { useState } from 'react'
 import CalendarDay from '../components/CalendarDay'
-import AppContext from '../context/AppContext'
+import { useAppContext } from '../context/AppContext'
 import { daysIntoYear } from '../functions/functions'
 import { getBestOverallDays } from '../functions/getBestDays'
 import { getBestConsecutiveDays } from '../functions/getBestConsecutiveDays'
 import ModeToggle from '../components/toggles/ToggleMode'
 import { BestDay } from '../types/BestDays'
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts'
 
 // todo: should probably figure out how to handle degenerate cases ¯\_(ツ)_/¯
 
@@ -24,28 +23,17 @@ export default function Page3() {
 	const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 	const weekdays = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
 
-	const { supportedCountries, countryCode, daysInYear, weekends, publicHolidays, year } = useContext(AppContext)
+	const { supportedCountries, countryCode, daysInYear, weekends, publicHolidays, year } = useAppContext()
 	const publicHolidaysNumbers: number[] = publicHolidays.map((p) => p.date)
 	const daysInYearArr: number[] = Array.from({ length: daysInYear }, (_, index) => index + 1)
 	const workingDays: number[] = daysInYearArr.filter(
 		(day) => !weekends.includes(day) && !publicHolidaysNumbers.includes(day) && day > daysIntoYear(new Date())
 	)
 
-	getBestOverallDays(workingDays, range, weekends, publicHolidaysNumbers)
-
 	const bestDays: BestDay[] =
 		mode === 'best'
 			? getBestOverallDays(workingDays, range, weekends, publicHolidaysNumbers)
 			: getBestConsecutiveDays(workingDays, range, weekends, publicHolidaysNumbers)
-
-	const graphData = bestDays.map((item, index) => ({
-		day: index + 1,
-		vacations: item.points + bestDays.slice(0, index).reduce((acc, curr) => acc + curr.points, 0) + index + 1
-	}))
-
-	useEffect(() => {
-		console.log('update')
-	}, [countryCode])
 
 	return (
 		<motion.div
@@ -77,21 +65,12 @@ export default function Page3() {
 					</div>
 					<ModeToggle mode={mode} handleModeChange={handleThemeChange} />
 					<p className="text-center text-copy">
-						You're getting{' '}
+						You&apos;re getting{' '}
 						<span className="font-semibold">{bestDays.reduce((total, dayObj) => total + dayObj.points, 0) + bestDays.length} days</span>{' '}
 						of vacation <br />
 						with just <span className="border-b border-primary font-semibold">{bestDays.length} days of PTO</span>!
 					</p>
 				</div>
-				{/* <div className="hidden xl:block">
-					<LineChart width={600} height={300} data={graphData}>
-						<Line type="monotone" dataKey="vacations" stroke="rgb(124, 58, 237)" />
-						<CartesianGrid className="stroke-border/25" />
-						<XAxis dataKey="day" />
-						<YAxis />
-						<Tooltip />
-					</LineChart>
-				</div> */}
 			</div>
 			<div className="xl:flex-2 grid grid-cols-1 justify-items-center gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
 				{months.map((month, m) => {

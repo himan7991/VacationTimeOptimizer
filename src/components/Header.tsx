@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import { FaGithub } from 'react-icons/fa'
-import { FaGlobeEurope } from 'react-icons/fa'
+import { FaGithub, FaGlobeEurope } from 'react-icons/fa'
 import { IoMenu, IoClose } from 'react-icons/io5'
 import { motion } from 'framer-motion'
 import AboutModal from './modals/ModalAbout'
@@ -18,7 +17,7 @@ export default function Header() {
 	const handleThemeChange = (_theme: string) => {
 		document.body.classList.remove('dark', 'light')
 		document.body.classList.add(_theme)
-		document.querySelector("meta[name='theme-color']")!.setAttribute('content', _theme === 'light' ? 'rgb(240, 240, 240)' : 'rgb(26, 26, 26)')
+		document.querySelector("meta[name='theme-color']")?.setAttribute('content', _theme === 'light' ? 'rgb(240, 240, 240)' : 'rgb(26, 26, 26)')
 		localStorage.setItem('theme', _theme)
 		setTheme(_theme)
 	}
@@ -27,8 +26,8 @@ export default function Header() {
 		const selectedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
 		document.body.classList.add(selectedTheme)
 		document
-			.querySelector("meta[name='theme-color']")!
-			.setAttribute('content', selectedTheme === 'light' ? 'rgb(240, 240, 240)' : 'rgb(26, 26, 26)')
+			.querySelector("meta[name='theme-color']")
+			?.setAttribute('content', selectedTheme === 'light' ? 'rgb(240, 240, 240)' : 'rgb(26, 26, 26)')
 		setTheme(selectedTheme)
 	}, [])
 

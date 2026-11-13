@@ -15,7 +15,6 @@ export default function App() {
 	const [daysInYear, setDaysInYear] = useState<number>(365)
 	const [weekends, setWeekends] = useState<number[]>([])
 	const [publicHolidays, setPublicHolidays] = useState<PublicHolidaySlice[]>([{ date: 0, name: '', localName: ':)' }])
-	const [userIP, setUserIP] = useState<string>('')
 
 	const passedAppContext = {
 		year,
@@ -33,7 +32,7 @@ export default function App() {
 	}
 
 	useEffect(() => {
-		let countryCode = localStorage.getItem('countryCode')
+		const countryCode = localStorage.getItem('countryCode')
 
 		fetch('https://date.nager.at/api/v3/AvailableCountries')
 			.then((res) => res.json())
@@ -51,7 +50,6 @@ export default function App() {
 			fetch('https://api.ipify.org?format=json')
 				.then((ipResponse) => ipResponse.json())
 				.then((ipData) => {
-					setUserIP(ipData.ip)
 					// use the ip to retrieve the user's location
 					return fetch(`https://ipapi.co/${ipData.ip}/json/`)
 				})

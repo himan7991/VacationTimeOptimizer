@@ -27,7 +27,7 @@ export const getBestOverallDays = (workingDays: number[], maxDays: number, weeke
 
 	// Create an array of objects containing the working day and the number of point days
 	const workingDaysWithPointCounts: { day: number; pointCount: number }[] = Object.entries(workingDaysWithPoints)
-		.filter(([_, pointDays]) => pointDays.length > 0)
+		.filter(([, pointDays]) => pointDays.length > 0)
 		.map(([day, pointDays]) => ({ day: parseInt(day), pointCount: pointDays.length }))
 
 	// Sort the working days by the number of point days, from highest to lowest

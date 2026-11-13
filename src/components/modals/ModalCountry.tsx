@@ -1,14 +1,14 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { FaGlobeEurope } from 'react-icons/fa'
-import { useContext, useEffect } from 'react'
-import AppContext from '../../context/AppContext'
+import { useEffect } from 'react'
+import { useAppContext } from '../../context/AppContext'
 
 /**
  * Renders a modal for selecting a country.
  */
 
 export default function CountryModal({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (arg: boolean) => void }) {
-	const { supportedCountries, countryCode, setCountryCode } = useContext(AppContext)
+	const { supportedCountries, countryCode, setCountryCode } = useAppContext()
 
 	const COLUMNS = 6
 	const GROUPS = Math.ceil(supportedCountries.length / COLUMNS)
@@ -90,7 +90,7 @@ export default function CountryModal({ isOpen, setIsOpen }: { isOpen: boolean; s
 								</button>
 							</div>
 							<p className="text-center text-xs md:text-sm">
-								We're sorry if you don't see your country on the list 😔 Vacation Time Optimizer is powered by{' '}
+								We&apos;re sorry if you don&apos;t see your country on the list 😔 Vacation Time Optimizer is powered by{' '}
 								<a href="https://date.nager.at/Country/Coverage" className="text-white underline hover:text-primary-light">
 									date.nager
 								</a>{' '}
