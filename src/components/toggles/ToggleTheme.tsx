@@ -7,21 +7,25 @@ export default function SliderToggle({ theme, handleThemeChange }: { theme: stri
 	return (
 		<div className="relative flex w-fit items-center rounded-full border border-border">
 			<button
+				type="button"
+				aria-pressed={theme === 'light'}
 				className={`${TOGGLE_CLASSES} ${theme === 'light' ? 'text-white' : 'text-slate-300'}`}
 				onClick={() => {
 					handleThemeChange('light')
 				}}
 			>
-				<FiMoon className="relative z-10 text-lg md:text-sm" />
+				<FiMoon className="relative z-10 text-lg md:text-sm" aria-hidden="true" />
 				<span className="relative z-10">Light</span>
 			</button>
 			<button
+				type="button"
+				aria-pressed={theme === 'dark'}
 				className={`${TOGGLE_CLASSES} ${theme === 'dark' ? 'text-white' : 'text-copy'}`}
 				onClick={() => {
 					handleThemeChange('dark')
 				}}
 			>
-				<FiSun className="relative z-10 text-lg md:text-sm" />
+				<FiSun className="relative z-10 text-lg md:text-sm" aria-hidden="true" />
 				<span className="relative z-10">Dark</span>
 			</button>
 			<div className={`absolute inset-0 z-0 flex ${theme === 'dark' ? 'justify-end' : 'justify-start'}`}>

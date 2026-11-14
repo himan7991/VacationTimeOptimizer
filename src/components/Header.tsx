@@ -61,21 +61,20 @@ export default function Header() {
 		<>
 			<header className="grid grid-cols-2 py-4">
 				<h2 className="ml-[10%] select-none text-2xl font-bold text-copy">HS.</h2>
-				{isMobileNavOpen ? (
-					<IoClose
-						className="mr-[10%] block cursor-pointer place-self-end text-copy md:hidden"
-						size={32}
-						onClick={() => setIsMobileNavOpen(false)}
-					/>
-				) : (
-					<IoMenu
-						className="mr-[10%] block cursor-pointer place-self-end text-copy md:hidden"
-						size={32}
-						onClick={() => setIsMobileNavOpen(true)}
-					/>
-				)}
+				<button
+					type="button"
+					className="mr-[10%] block cursor-pointer place-self-end text-copy md:hidden"
+					aria-label={isMobileNavOpen ? 'Close menu' : 'Open menu'}
+					aria-expanded={isMobileNavOpen}
+					aria-controls="site-nav"
+					onClick={() => setIsMobileNavOpen((open) => !open)}
+				>
+					{isMobileNavOpen ? <IoClose size={32} aria-hidden="true" /> : <IoMenu size={32} aria-hidden="true" />}
+				</button>
 
-				<div
+				<nav
+					id="site-nav"
+					aria-label="Site"
 					className={twMerge(
 						'col-span-2 flex w-screen flex-col items-end gap-4 overflow-hidden bg-background pr-[7.5%] pt-4 transition-all duration-500',
 						'md:col-span-1 md:ml-0 md:w-fit md:flex-row md:items-center md:place-self-end md:overflow-visible md:bg-transparent md:p-0 md:pr-[10%]',
@@ -96,6 +95,8 @@ export default function Header() {
 							className="font-semibold text-primary"
 							onClick={() => setIsAboutOpen(true)}
 							key={2}
+							aria-hidden="true"
+							tabIndex={-1}
 							variants={buttonVariant}
 							transition={buttonTransition}
 						>
@@ -117,6 +118,8 @@ export default function Header() {
 							href={GITHUB}
 							className="flex items-center gap-2 font-semibold text-primary"
 							key={4}
+							aria-hidden="true"
+							tabIndex={-1}
 							variants={buttonVariant}
 							transition={buttonTransition}
 							target="_blank"
@@ -130,15 +133,16 @@ export default function Header() {
 						className="flex items-center gap-2 border-b border-transparent font-semibold text-copy hover:text-primary"
 						onClick={() => setIsCountryOpen(true)}
 						key={1}
+						aria-label="Select a country"
 						variants={buttonVariant}
 						transition={buttonTransition}
 					>
-						<p className="md:hidden">Select a country</p> <FaGlobeEurope />
+						<p className="md:hidden">Select a country</p> <FaGlobeEurope aria-hidden="true" />
 					</motion.button>
 
 					<AboutModal isOpen={isAboutOpen} setIsOpen={setIsAboutOpen} />
 					<CountryModal isOpen={isCountryOpen} setIsOpen={setIsCountryOpen} />
-				</div>
+				</nav>
 			</header>
 		</>
 	)

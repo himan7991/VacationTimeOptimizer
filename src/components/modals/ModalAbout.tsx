@@ -35,14 +35,19 @@ export default function AboutModal({ isOpen, setIsOpen }: { isOpen: boolean; set
 						animate={{ scale: 1, rotate: '0deg' }}
 						exit={{ scale: 0, rotate: '0deg' }}
 						onClick={(e) => e.stopPropagation()}
+						role="dialog"
+						aria-modal="true"
+						aria-labelledby="about-modal-title"
 						className="relative w-full max-w-xl cursor-default overflow-hidden rounded-lg bg-gradient-to-br from-primary to-primary-dark p-6 text-white shadow-xl"
 					>
 						<TbBeach className="absolute -left-24 -top-24 z-0 rotate-12 text-[250px] text-white/10" />
-						<div className="relative z-10 flex flex-col justify-center gap-2">
+						<div className="relative z-10 flex flex-col justify-center gap-6">
 							<div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-white text-3xl text-primary">
 								<TbBeach />
 							</div>
-							<h3 className="text-center text-3xl font-bold">What is this all about?</h3>
+							<h3 id="about-modal-title" className="text-center text-3xl font-bold">
+								What is this all about?
+							</h3>
 							{/* <p className="text-center">Vacation Time Optimizer helps you find the perfect time to use your paid time off (PTO).</p> */}
 							<p className="text-center">
 								Vacation Time Optimizer is a user-friendly web application that helps you determine the optimal time to use your paid

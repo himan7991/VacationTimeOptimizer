@@ -26,6 +26,16 @@ export default function Page3() {
 	const publicHolidaysNumbers: number[] = publicHolidays.map((p) => p.date)
 	// Holidays inside this year; the list may also carry next year's 1 January for bridging
 	const holidaysThisYear = publicHolidays.filter((p) => p.date <= daysInYear).length
+
+	/**
+	 * Label for a holiday: the local name, plus the English name when it differs ("Πρωτοχρονιά (New Year's Day)").
+	 */
+	const holidayLabel = (day: number) => {
+		const holiday = publicHolidays.find((p) => p.date === day)
+		if (!holiday) return ''
+		const sameName = holiday.localName.trim().toLowerCase() === holiday.name.trim().toLowerCase()
+		return sameName ? holiday.localName : `${holiday.localName} (${holiday.name})`
+	}
 	const weekendsThisYear = Math.floor(weekends.filter((d) => d <= daysInYear).length / 2)
 	const daysInYearArr: number[] = Array.from({ length: daysInYear }, (_, index) => index + 1)
 	const workingDays: number[] = daysInYearArr.filter(
@@ -50,15 +60,14 @@ export default function Page3() {
 	return (
 		<motion.div
 			id="page3"
-			className="flex h-full w-full flex-col items-center justify-start p-4 xl:flex-row xl:justify-center xl:gap-8"
+			className="grid h-full w-full grid-cols-[1fr_2fr] items-center justify-center p-4 xl:gap-8"
 			layoutId="pages"
 		>
 			<div className="relative mb-6 flex w-full flex-col items-center justify-center gap-1 md:flex-row md:justify-around md:gap-8 xl:mb-0 xl:flex-1 xl:flex-col">
 				<div className="mb-4 flex flex-col items-center xl:mb-0">
 					<h2 className="mb-4 text-center text-6xl font-bold text-copy">Overview</h2>
 					<p className="text-center text-copy">
-						We found <span className="font-semibold text-primary">{holidaysThisYear} public holidays</span> in{' '}
-						{countryName},<br />
+						We found <span className="font-semibold text-primary">{holidaysThisYear} public holidays</span> in {countryName},<br />
 						<span className="font-semibold text-error">{weekendsThisYear} weekends</span> and <br />
 						<span className="font-semibold">{workingDays.length} working days</span> ahead
 					</p>
@@ -77,14 +86,13 @@ export default function Page3() {
 					</label>
 					<ModeToggle mode={mode} handleModeChange={handleThemeChange} />
 					<p className="text-center text-copy">
-						You&apos;re getting{' '}
-						<span className="font-semibold">{plan.daysOff} days</span>{' '}
-						of vacation <br />
+						You&apos;re getting <span className="font-semibold">{plan.daysOff} days</span> of vacation <br />
 						with just <span className="border-b border-primary font-semibold">{plan.ptoDays.length} days of PTO</span>!
 					</p>
 				</div>
 			</div>
-			<div className="xl:flex-2 grid grid-cols-1 justify-items-center gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+
+			<div className="xl:flex-2 grid grid-cols-1 justify-self-center gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[64rem]">
 				{months.map((month, m) => {
 					const monthIndex = m + 1
 					const daysInMonth = new Date(year, monthIndex, 0).getDate()
@@ -117,13 +125,7 @@ export default function Page3() {
 											isWeekend={weekends.includes(j + 1)}
 											isPublicHoliday={publicHolidaysNumbers.includes(j + 1)}
 											isBestDay={bestDaySet.has(j + 1)}
-											title={
-												publicHolidaysNumbers.includes(j + 1)
-													? `${publicHolidays[publicHolidaysNumbers.indexOf(j + 1)].localName} (${
-															publicHolidays[publicHolidaysNumbers.indexOf(j + 1)].name
-														})`
-													: ''
-											}
+											title={holidayLabel(j + 1)}
 											key={j}
 										/>
 									)

@@ -7,6 +7,8 @@ export default function ModeToggle({ mode, handleModeChange }: { mode: string; h
 	return (
 		<div className="relative flex w-fit items-center rounded-full border border-border">
 			<button
+				type="button"
+				aria-pressed={mode === 'best'}
 				className={`${TOGGLE_CLASSES} ${mode === 'best' ? 'text-white' : 'text-copy'}`}
 				onClick={() => {
 					handleModeChange('best')
@@ -16,6 +18,8 @@ export default function ModeToggle({ mode, handleModeChange }: { mode: string; h
 				<span className="relative z-10">Best overall</span>
 			</button>
 			<button
+				type="button"
+				aria-pressed={mode === 'consecutive'}
 				className={`${TOGGLE_CLASSES} ${mode === 'consecutive' ? 'text-white' : 'text-copy'}`}
 				onClick={() => {
 					handleModeChange('consecutive')
