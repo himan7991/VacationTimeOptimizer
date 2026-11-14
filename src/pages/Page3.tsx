@@ -10,7 +10,8 @@ import ModeToggle from '../components/toggles/ToggleMode'
 import { VacationPlan } from '../types/VacationPlan'
 
 export default function Page3() {
-	const [mode, setMode] = useState('consecutive') // 'consecutive' or 'best'
+	// 'consecutive' or 'best'; the last choice is remembered across visits
+	const [mode, setMode] = useState(() => (localStorage.getItem('mode') === 'best' ? 'best' : 'consecutive'))
 	const [ptoDays, setPtoDays] = useState<number>(3)
 	// Working days the user insists on taking off; day numbers are window-relative, so they reset with the window
 	const [pinnedDays, setPinnedDays] = useState<number[]>([])
@@ -77,7 +78,7 @@ export default function Page3() {
 	return (
 		<motion.div id="page3" className="grid h-full w-full grid-cols-[1fr_2.5fr] items-center justify-center p-4 xl:gap-8" layoutId="pages">
 			<div className="relative flex w-full flex-col items-center justify-center gap-1 md:flex-row md:justify-around md:gap-4 xl:flex-1 xl:flex-col">
-				<h2 className="text-center text-6xl font-bold text-copy">Overview</h2>
+				<h1 className="text-center text-6xl font-bold text-copy">Overview</h1>
 				<div className="text-center">
 					<p className="text-copy">
 						In{' '}

@@ -58,9 +58,9 @@ export default function CalendarDay({
 	const dayDecoration = () => {
 		if (isPast)          return 'text-copy-lighter'
 		if (isToday)         return 'text-copy-lighter border-b-copy-lighter'
-		if (isPublicHoliday) return 'bg-primary-light font-semibold text-white shadow-md shadow-primary/50'
-		if (isWeekend)       return 'text-red-500'
-		if (isBestDay)       return 'bg-green-400/90 font-semibold text-white shadow-md shadow-green-300/50'
+		if (isPublicHoliday) return 'bg-primary font-semibold text-white shadow-md shadow-primary/50'
+		if (isWeekend)       return 'text-error'
+		if (isBestDay)       return 'bg-green-400 font-semibold text-green-950 shadow-md shadow-green-300/50'
 		return 'text-copy'
 	}
 

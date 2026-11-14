@@ -45,9 +45,9 @@ export default function AboutModal({ isOpen, setIsOpen }: { isOpen: boolean; set
 							<div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-white text-3xl text-primary">
 								<TbBeach />
 							</div>
-							<h3 id="about-modal-title" className="text-center text-3xl font-bold">
+							<h2 id="about-modal-title" className="text-center text-3xl font-bold">
 								What is this all about?
-							</h3>
+							</h2>
 							{/* <p className="text-center">Vacation Time Optimizer helps you find the perfect time to use your paid time off (PTO).</p> */}
 							<p className="text-center">
 								Vacation Time Optimizer is a user-friendly web application that helps you determine the optimal time to use your paid

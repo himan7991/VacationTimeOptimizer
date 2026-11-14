@@ -26,7 +26,7 @@
 
 	--success: 58, 237, 58;
 	--warning: 237, 237, 58;
-	--error: 237, 58, 58;
+	--error: 220, 38, 38; /* red-600: 4.7:1 on the light foreground */
 
 	--success-content: 3, 37, 3;
 	--warning-content: 37, 37, 3;
@@ -40,7 +40,7 @@
 
 	--copy: 38, 38, 38;
 	--copy-light: 102, 102, 102;
-	--copy-lighter: 140, 140, 140;
+	--copy-lighter: 115, 115, 115; /* 4.6:1 on the light foreground */
 }
 
 .dark {
@@ -51,6 +51,8 @@
 	--copy: 251, 251, 251;
 	--copy-light: 217, 217, 217;
 	--copy-lighter: 166, 166, 166;
+
+	--error: 248, 113, 113; /* red-400: 5.3:1 on the dark foreground */
 
 	/* --background: 23, 18, 33;
 	--foreground: 35, 27, 50;

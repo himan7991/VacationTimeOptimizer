@@ -50,9 +50,9 @@ export default function CountryModal({ isOpen, setIsOpen }: { isOpen: boolean; s
 							<div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-white text-3xl text-primary">
 								<FaGlobeEurope />
 							</div>
-							<h3 id="country-modal-title" className="text-center text-3xl font-bold">
+							<h2 id="country-modal-title" className="text-center text-3xl font-bold">
 								Select your country
-							</h3>
+							</h2>
 							<p className="text-center font-semibold"> Vacation Time Optimizer supports over 100 countries! Choose yours below </p>
 							<div className="mb-4 grid grid-cols-1 place-items-center items-center gap-2 md:grid-cols-3 md:place-items-start lg:grid-cols-6">
 								{countryGroups.map((group, i) => (
