@@ -46,6 +46,7 @@ export default function CalendarDay({
 	 *
 	 * @return {string} Tailwind class names.
 	 */
+	// prettier-ignore
 	const dayDecoration = () => {
 		if (isPast)          return 'text-copy-lighter'
 		if (isToday)         return 'text-copy-lighter border-b-copy-lighter'

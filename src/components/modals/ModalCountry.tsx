@@ -45,7 +45,7 @@ export default function CountryModal({ isOpen, setIsOpen }: { isOpen: boolean; s
 						aria-labelledby="country-modal-title"
 						className="relative w-full max-w-7xl cursor-default rounded-lg bg-gradient-to-br from-primary to-primary-dark p-6 text-white shadow-xl"
 					>
-						<FaGlobeEurope className="absolute -left-24 -top-24 z-0 rotate-12 text-[250px] text-white/10" />
+						<FaGlobeEurope className="absolute rotate-12 text-[600px] text-white/5" />
 						<div className="relative z-10 flex flex-col gap-4">
 							<div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-white text-3xl text-primary">
 								<FaGlobeEurope />
@@ -62,7 +62,7 @@ export default function CountryModal({ isOpen, setIsOpen }: { isOpen: boolean; s
 												type="button"
 												className={`w-fit p-2 text-start leading-5 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-white ${
 													c.countryCode === countryCode
-														? 'w-full rounded-md outline-2 outline-primary-light outline-double bg-background text-primary-dark'
+														? 'w-full rounded-md bg-white text-primary-dark outline-double outline-2 outline-primary-light'
 														: ''
 												}`}
 												key={j}

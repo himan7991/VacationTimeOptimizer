@@ -17,6 +17,8 @@ export type AppContextValue = {
 	canShiftWindowStart: (deltaMonths: number) => boolean
 	countryCode: string
 	setCountryCode: (arg: string) => void
+	/** Opens the country picker from anywhere in the app */
+	openCountryModal: () => void
 	weekends: number[]
 	supportedCountries: Country[]
 	publicHolidays: PublicHolidaySlice[]

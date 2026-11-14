@@ -20,7 +20,8 @@ export default function Page3() {
 
 	const weekdays = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
 
-	const { supportedCountries, countryCode, weekends, publicHolidays, window, shiftWindowStart, canShiftWindowStart } = useAppContext()
+	const { supportedCountries, countryCode, weekends, publicHolidays, window, shiftWindowStart, canShiftWindowStart, openCountryModal } =
+		useAppContext()
 	const todayNumber = dayNumber(window, new Date())
 	const countryName = supportedCountries.find((c) => c.countryCode === countryCode)?.name ?? 'your country'
 	const publicHolidaysNumbers: number[] = publicHolidays.map((p) => p.date)
@@ -56,49 +57,19 @@ export default function Page3() {
 	}
 
 	return (
-		<motion.div id="page3" className="grid h-full w-full grid-cols-[1fr_2fr] items-center justify-center p-4 xl:gap-8" layoutId="pages">
-			<div className="relative mb-6 flex w-full flex-col items-center justify-center gap-1 md:flex-row md:justify-around md:gap-8 xl:mb-0 xl:flex-1 xl:flex-col">
-				<div className="mb-4 flex flex-col items-center xl:mb-0">
-					<h2 className="mb-4 text-center text-6xl font-bold text-copy">Overview</h2>
-					<p className="text-center text-copy">
-						We found <span className="font-semibold text-primary">{holidaysInWindow} public holidays</span> in {countryName},<br />
-						<span className="font-semibold text-error">{weekendsInWindow} weekends</span> and <br />
-						<span className="font-semibold">{workingDays.length} working days</span> ahead
-					</p>
-				</div>
-				<div className="right-4 top-4 flex flex-col items-center gap-2">
-					<label className="flex items-center gap-2 text-copy">
-						PTO days
-						<input
-							type="number"
-							min={1}
-							max={maxPtoDays}
-							value={requestedDays}
-							className="w-20 rounded-md border border-border bg-foreground px-2 py-1 text-center text-copy accent-primary"
-							onChange={(event) => handlePtoDaysChange(event.target.value)}
-						/>
-					</label>
-					<div className="flex items-center gap-2 text-copy" role="group" aria-label="Planning period">
+		<motion.div id="page3" className="grid h-full w-full grid-cols-[1fr_2.5fr] items-center justify-center p-4 xl:gap-8" layoutId="pages">
+			<div className="relative flex w-full flex-col items-center justify-center gap-1 md:flex-row md:justify-around md:gap-4 xl:flex-1 xl:flex-col">
+				<h2 className="text-center text-6xl font-bold text-copy">Overview</h2>
+				<div className="text-center">
+					<p className='text-copy'>
+						In{' '}
 						<button
 							type="button"
-							className="rounded-md border border-border bg-foreground p-1 text-copy hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
-							aria-label="Start one month earlier"
-							disabled={!canShiftWindowStart(-1)}
-							onClick={() => shiftWindowStart(-1)}
+							className="rounded-sm underline hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+							aria-label={`Change country, currently ${countryName}`}
+							onClick={openCountryModal}
 						>
-							<IoChevronBack aria-hidden="true" />
-						</button>
-						<span className="min-w-[11rem] text-center font-semibold" aria-live="polite">
-							{window.label}
-						</span>
-						<button
-							type="button"
-							className="rounded-md border border-border bg-foreground p-1 text-copy hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
-							aria-label="Start one month later"
-							disabled={!canShiftWindowStart(1)}
-							onClick={() => shiftWindowStart(1)}
-						>
-							<IoChevronForward aria-hidden="true" />
+							{countryName}
 						</button>
 						, we found:
 					</p>

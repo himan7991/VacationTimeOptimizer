@@ -3,14 +3,14 @@ import { FaGithub, FaGlobeEurope } from 'react-icons/fa'
 import { IoMenu, IoClose } from 'react-icons/io5'
 import { motion } from 'framer-motion'
 import AboutModal from './modals/ModalAbout'
-import CountryModal from './modals/ModalCountry'
 import ThemeToggle from './toggles/ToggleTheme'
 import { GITHUB } from '../constants/links'
 import { twMerge } from 'tailwind-merge'
+import { useAppContext } from '../context/AppContext'
 
 export default function Header() {
+	const { openCountryModal } = useAppContext()
 	const [isAboutOpen, setIsAboutOpen] = useState<boolean>(false)
-	const [isCountryOpen, setIsCountryOpen] = useState<boolean>(false)
 	const [theme, setTheme] = useState('light')
 	const [isMobileNavOpen, setIsMobileNavOpen] = useState<boolean>(false)
 
@@ -131,7 +131,7 @@ export default function Header() {
 
 					<motion.button
 						className="flex items-center gap-2 border-b border-transparent font-semibold text-copy hover:text-primary"
-						onClick={() => setIsCountryOpen(true)}
+						onClick={openCountryModal}
 						key={1}
 						aria-label="Select a country"
 						variants={buttonVariant}
@@ -141,7 +141,6 @@ export default function Header() {
 					</motion.button>
 
 					<AboutModal isOpen={isAboutOpen} setIsOpen={setIsAboutOpen} />
-					<CountryModal isOpen={isCountryOpen} setIsOpen={setIsCountryOpen} />
 				</nav>
 			</header>
 		</>
