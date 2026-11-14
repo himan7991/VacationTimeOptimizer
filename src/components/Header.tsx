@@ -81,52 +81,33 @@ export default function Header() {
 						isMobileNavOpen ? 'h-screen' : 'h-0 md:h-fit'
 					)}
 				>
-					<motion.div className="flex h-6 flex-col overflow-hidden" whileHover="hover">
-						<motion.button
-							className="font-semibold text-copy"
-							onClick={() => setIsAboutOpen(true)}
-							key={1}
-							variants={buttonVariant}
-							transition={buttonTransition}
-						>
+					<motion.button
+						type="button"
+						className="relative flex h-6 flex-col overflow-hidden font-semibold text-copy"
+						whileHover="hover"
+						onClick={() => setIsAboutOpen(true)}
+					>
+						<motion.span variants={buttonVariant} transition={buttonTransition}>
 							About
-						</motion.button>
-						<motion.button
-							className="font-semibold text-primary"
-							onClick={() => setIsAboutOpen(true)}
-							key={2}
-							aria-hidden="true"
-							tabIndex={-1}
-							variants={buttonVariant}
-							transition={buttonTransition}
-						>
+						</motion.span>
+						<motion.span className="text-primary" variants={buttonVariant} transition={buttonTransition} aria-hidden="true">
 							About
-						</motion.button>
-					</motion.div>
-					<motion.div className="flex h-6 flex-col overflow-hidden" whileHover="hover">
-						<motion.a
-							href={GITHUB}
-							className="flex items-center gap-2 font-semibold text-copy"
-							key={3}
-							variants={buttonVariant}
-							transition={buttonTransition}
-							target="_blank"
-						>
-							Contribute <FaGithub />
-						</motion.a>
-						<motion.a
-							href={GITHUB}
-							className="flex items-center gap-2 font-semibold text-primary"
-							key={4}
-							aria-hidden="true"
-							tabIndex={-1}
-							variants={buttonVariant}
-							transition={buttonTransition}
-							target="_blank"
-						>
-							Contribute <FaGithub />
-						</motion.a>
-					</motion.div>
+						</motion.span>
+					</motion.button>
+					<motion.a
+						href={GITHUB}
+						className="relative flex h-6 flex-col overflow-hidden font-semibold text-copy"
+						whileHover="hover"
+						target="_blank"
+						rel="noreferrer"
+					>
+						<motion.span className="flex items-center gap-2" variants={buttonVariant} transition={buttonTransition}>
+							Contribute <FaGithub aria-hidden="true" />
+						</motion.span>
+						<motion.span className="flex items-center gap-2 text-primary" variants={buttonVariant} transition={buttonTransition} aria-hidden="true">
+							Contribute <FaGithub aria-hidden="true" />
+						</motion.span>
+					</motion.a>
 					<ThemeToggle theme={theme} handleThemeChange={handleThemeChange} />
 
 					<motion.button

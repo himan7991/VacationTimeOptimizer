@@ -6,9 +6,11 @@
   "type": "module",
   "scripts": {
     "lint": "eslint .",
-    "prettier-format": "prettier --config .prettierrc --write src/**/*.ts src/**/*.tsx spec/**/*.ts",
-    "prettier-watch": "onchange src/**/*.ts src/**/*.tsx spec/**/*.ts -- prettier --write {{changed}}",
+    "prettier-format": "prettier --config .prettierrc --write src/**/*.ts src/**/*.tsx",
+    "prettier-watch": "onchange src/**/*.ts src/**/*.tsx -- prettier --write {{changed}}",
     "dev": "vite",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
@@ -43,6 +45,7 @@
     "tailwindcss": "^3.4.19",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.72.2",
-    "vite": "^7.3.8"
+    "vite": "^7.3.8",
+    "vitest": "^5.1.0"
   }
 }
