@@ -2,6 +2,7 @@ import Header from './components/Header'
 import BlurBackground from './components/BlurBackground'
 import Content from './components/Content'
 import CountryModal from './components/modals/ModalCountry'
+import ConsentNotice from './components/ConsentNotice'
 import { useEffect, useMemo, useState } from 'react'
 import AppContext, { AppContextValue, HolidayStatus } from './context/AppContext'
 import {
@@ -172,6 +173,7 @@ export default function App() {
 				<Content />
 				<BlurBackground />
 				<CountryModal isOpen={isCountryOpen} setIsOpen={setIsCountryOpen} />
+				<ConsentNotice />
 			</main>
 		</AppContext.Provider>
 	)
