@@ -2,7 +2,8 @@ import { motion } from 'framer-motion'
 import { useState } from 'react'
 import CalendarDay from '../components/CalendarDay'
 import { useAppContext } from '../context/AppContext'
-import { daysIntoYear } from '../functions/functions'
+import { addDays, dayNumber, MONTH_NAMES } from '../functions/functions'
+import { IoChevronBack, IoChevronForward } from 'react-icons/io5'
 import { getBestOverallDays } from '../functions/getBestDays'
 import { getBestConsecutiveDays } from '../functions/getBestConsecutiveDays'
 import ModeToggle from '../components/toggles/ToggleMode'
@@ -17,14 +18,14 @@ export default function Page3() {
 		setMode(_mode)
 	}
 
-	const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 	const weekdays = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
 
-	const { supportedCountries, countryCode, daysInYear, weekends, publicHolidays, year } = useAppContext()
+	const { supportedCountries, countryCode, weekends, publicHolidays, window, shiftWindowStart, canShiftWindowStart } = useAppContext()
+	const todayNumber = dayNumber(window, new Date())
 	const countryName = supportedCountries.find((c) => c.countryCode === countryCode)?.name ?? 'your country'
 	const publicHolidaysNumbers: number[] = publicHolidays.map((p) => p.date)
-	// Holidays inside this year; the list may also carry next year's 1 January for bridging
-	const holidaysThisYear = publicHolidays.filter((p) => p.date <= daysInYear).length
+	// Holidays inside the window; the list may also carry a few days past its end for bridging
+	const holidaysInWindow = publicHolidays.filter((p) => p.date <= window.length).length
 
 	/**
 	 * Label for a holiday: the local name, plus the English name when it differs ("Πρωτοχρονιά (New Year's Day)").
@@ -35,11 +36,9 @@ export default function Page3() {
 		const sameName = holiday.localName.trim().toLowerCase() === holiday.name.trim().toLowerCase()
 		return sameName ? holiday.localName : `${holiday.localName} (${holiday.name})`
 	}
-	const weekendsThisYear = Math.floor(weekends.filter((d) => d <= daysInYear).length / 2)
-	const daysInYearArr: number[] = Array.from({ length: daysInYear }, (_, index) => index + 1)
-	const workingDays: number[] = daysInYearArr.filter(
-		(day) => !weekends.includes(day) && !publicHolidaysNumbers.includes(day) && day > daysIntoYear(new Date())
-	)
+	const weekendsInWindow = Math.floor(weekends.filter((d) => d <= window.length).length / 2)
+	const windowDays: number[] = Array.from({ length: window.length }, (_, index) => index + 1)
+	const workingDays: number[] = windowDays.filter((day) => !weekends.includes(day) && !publicHolidaysNumbers.includes(day) && day > todayNumber)
 
 	const maxPtoDays = Math.max(1, workingDays.length)
 	const requestedDays = Math.min(ptoDays, maxPtoDays)
@@ -57,17 +56,13 @@ export default function Page3() {
 	}
 
 	return (
-		<motion.div
-			id="page3"
-			className="grid h-full w-full grid-cols-[1fr_2fr] items-center justify-center p-4 xl:gap-8"
-			layoutId="pages"
-		>
+		<motion.div id="page3" className="grid h-full w-full grid-cols-[1fr_2fr] items-center justify-center p-4 xl:gap-8" layoutId="pages">
 			<div className="relative mb-6 flex w-full flex-col items-center justify-center gap-1 md:flex-row md:justify-around md:gap-8 xl:mb-0 xl:flex-1 xl:flex-col">
 				<div className="mb-4 flex flex-col items-center xl:mb-0">
 					<h2 className="mb-4 text-center text-6xl font-bold text-copy">Overview</h2>
 					<p className="text-center text-copy">
-						We found <span className="font-semibold text-primary">{holidaysThisYear} public holidays</span> in {countryName},<br />
-						<span className="font-semibold text-error">{weekendsThisYear} weekends</span> and <br />
+						We found <span className="font-semibold text-primary">{holidaysInWindow} public holidays</span> in {countryName},<br />
+						<span className="font-semibold text-error">{weekendsInWindow} weekends</span> and <br />
 						<span className="font-semibold">{workingDays.length} working days</span> ahead
 					</p>
 				</div>
@@ -83,6 +78,29 @@ export default function Page3() {
 							onChange={(event) => handlePtoDaysChange(event.target.value)}
 						/>
 					</label>
+					<div className="flex items-center gap-2 text-copy" role="group" aria-label="Planning period">
+						<button
+							type="button"
+							className="rounded-md border border-border bg-foreground p-1 text-copy hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
+							aria-label="Start one month earlier"
+							disabled={!canShiftWindowStart(-1)}
+							onClick={() => shiftWindowStart(-1)}
+						>
+							<IoChevronBack aria-hidden="true" />
+						</button>
+						<span className="min-w-[11rem] text-center font-semibold" aria-live="polite">
+							{window.label}
+						</span>
+						<button
+							type="button"
+							className="rounded-md border border-border bg-foreground p-1 text-copy hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
+							aria-label="Start one month later"
+							disabled={!canShiftWindowStart(1)}
+							onClick={() => shiftWindowStart(1)}
+						>
+							<IoChevronForward aria-hidden="true" />
+						</button>
+					</div>
 					<ModeToggle mode={mode} handleModeChange={handleThemeChange} />
 					<p className="text-center text-copy">
 						You&apos;re getting <span className="font-semibold">{plan.daysOff} days</span> of vacation <br />
@@ -91,17 +109,25 @@ export default function Page3() {
 				</div>
 			</div>
 
-			<div className="xl:flex-2 grid grid-cols-1 justify-self-center gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 max-w-[64rem]">
-				{months.map((month, m) => {
-					const monthIndex = m + 1
-					const daysInMonth = new Date(year, monthIndex, 0).getDate()
-					count += daysInMonth
-
-					const emptyDays = Array(new Date(year, m, 0).getDay()).fill(null)
+			<div className="xl:flex-2 grid max-w-[64rem] grid-cols-1 gap-4 justify-self-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+				{Array.from({ length: 12 }, (_, m) => {
+					const monthStart = new Date(window.startYear, window.startMonth - 1 + m, 1)
+					const daysInMonth = addDays(new Date(monthStart.getFullYear(), monthStart.getMonth() + 1, 1), -1).getDate()
+					const firstDayNumber = dayNumber(window, monthStart)
+					// Monday-first grid: number of blank cells before the 1st
+					const emptyDays = Array((monthStart.getDay() + 6) % 7).fill(null)
+					// Show the year on the first card and whenever a new calendar year begins
+					const showYear = m === 0 || monthStart.getMonth() === 0
+					const monthLabel = showYear
+						? `${MONTH_NAMES[monthStart.getMonth()]} ${monthStart.getFullYear()}`
+						: MONTH_NAMES[monthStart.getMonth()]
 
 					return (
-						<div className="grid h-56 w-56 grid-cols-7 gap-x-1 rounded-xl border border-border bg-foreground p-4" key={monthIndex}>
-							<h2 className="col-span-7 font-semibold text-copy">{month}</h2>
+						<div
+							className="grid h-64 w-64 grid-cols-7 gap-x-1 rounded-xl border border-border bg-foreground p-4 shadow-md"
+							key={firstDayNumber}
+						>
+							<h2 className="col-span-7 mb-2 font-semibold text-copy">{monthLabel}</h2>
 
 							<div className="col-span-7 grid grid-cols-7 text-center">
 								{weekdays.map((day, i) => (
@@ -115,21 +141,22 @@ export default function Page3() {
 								<span className="h-7 w-7" key={`empty-${index}`} aria-hidden="true" />
 							))}
 
-							{daysInYearArr
-								.map((_, j) => {
-									return (
-										<CalendarDay
-											index={j + 1}
-											inDisplay={j + 1 + daysInMonth - count}
-											isWeekend={weekends.includes(j + 1)}
-											isPublicHoliday={publicHolidaysNumbers.includes(j + 1)}
-											isBestDay={bestDaySet.has(j + 1)}
-											title={holidayLabel(j + 1)}
-											key={j}
-										/>
-									)
-								})
-								.slice(monthIndex === 1 ? 0 : count - daysInMonth, count)}
+							{Array.from({ length: daysInMonth }, (_, i) => {
+								const day = firstDayNumber + i
+								return (
+									<CalendarDay
+										index={day}
+										inDisplay={i + 1}
+										isPast={day < todayNumber}
+										isToday={day === todayNumber}
+										isWeekend={weekends.includes(day)}
+										isPublicHoliday={publicHolidaysNumbers.includes(day)}
+										isBestDay={bestDaySet.has(day)}
+										title={holidayLabel(day)}
+										key={day}
+									/>
+								)
+							})}
 						</div>
 					)
 				})}

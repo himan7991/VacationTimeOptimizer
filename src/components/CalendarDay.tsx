@@ -1,16 +1,18 @@
 import { useState } from 'react'
-import { daysIntoYear } from '../functions/functions'
 import { twMerge } from 'tailwind-merge'
 
 /**
- * Renders one day of the calendar. Holidays are buttons that reveal their name on click or focus,
- * so the name is reachable by mouse, touch and keyboard. Other days are plain text.
+ * Renders one day of the calendar. Every day sits in the same fixed-size cell so the numbers line up.
+ * Holidays are buttons that reveal their name on click or focus, so the name is reachable by mouse,
+ * touch and keyboard. Other days are plain text and stay out of the Tab order.
  *
  * @param {number} inDisplay - The day-of-month number to display
+ * @param {boolean} isPast - The day is before today
+ * @param {boolean} isToday - The day is today
  * @param {boolean} [isWeekend] - Indicates if the day is a weekend
  * @param {boolean} [isPublicHoliday] - Indicates if the day is a public holiday
  * @param {boolean} isBestDay - Indicates if the day is a suggested PTO day
- * @param {number} index - The day-of-year number
+ * @param {number} index - The day number within the planning window, used for element ids
  * @param {string} [title] - The holiday name, when the day is a public holiday
  * @return {JSX.Element} The rendered calendar day
  */
@@ -20,6 +22,8 @@ const CELL = 'grid h-7 w-7 place-items-center rounded border-b border-transparen
 
 export default function CalendarDay({
 	inDisplay,
+	isPast,
+	isToday,
 	isWeekend,
 	isPublicHoliday,
 	isBestDay,
@@ -27,6 +31,8 @@ export default function CalendarDay({
 	title
 }: {
 	inDisplay: number
+	isPast: boolean
+	isToday: boolean
 	isWeekend?: boolean
 	isPublicHoliday?: boolean
 	isBestDay: boolean
@@ -34,12 +40,11 @@ export default function CalendarDay({
 	title?: string
 }) {
 	const [showName, setShowName] = useState(false)
-	const today = daysIntoYear(new Date())
 
 	/**
-	 * Returns the appropriate text color based on the current date and other conditions.
+	 * Returns the colour and emphasis for the day based on the current date and other conditions.
 	 *
-	 * @return {string} The appropriate text color class name.
+	 * @return {string} Tailwind class names.
 	 */
 	const dayDecoration = () => {
 		if (isPast)          return 'text-copy-lighter'

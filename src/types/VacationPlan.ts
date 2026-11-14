@@ -1,6 +1,6 @@
 /**
  * The result of an optimisation run.
- * All day values are day-of-year numbers (1 = 1 January).
+ * All day values are day numbers relative to the planning window (1 = first day of the window).
  */
 export type VacationPlan = {
 	/** Working days the user should book as PTO, sorted ascending */

@@ -2,8 +2,8 @@ import { motion } from 'framer-motion'
 import { useAppContext } from '../context/AppContext'
 
 export default function Page2({ goto }: { goto: (arg: number) => void }) {
-	const { supportedCountries, countryCode, publicHolidays, year, daysInYear, holidayStatus, loadError } = useAppContext()
-	const holidaysThisYear = publicHolidays.filter((p) => p.date <= daysInYear).length
+	const { supportedCountries, countryCode, publicHolidays, window, holidayStatus, loadError } = useAppContext()
+	const holidaysInWindow = publicHolidays.filter((p) => p.date <= window.length).length
 	const countryKnown = supportedCountries.some((c) => c.countryCode === countryCode)
 	const canStart = countryKnown && holidayStatus === 'ready'
 
@@ -16,8 +16,8 @@ export default function Page2({ goto }: { goto: (arg: number) => void }) {
 						Vacation Time Optimizer helps you find the ideal time to use your paid time off (PTO) from work.
 					</p>
 					<p className="mt-1 max-w-[85ch] text-copy-light md:text-lg">
-						<span className="font-semibold">We found {holidaysThisYear} remaining public holidays</span> for{' '}
-						{supportedCountries.find((c) => c.countryCode === countryCode)?.name || 'your country'} in {year}.
+						<span className="font-semibold">We found {holidaysInWindow} remaining public holidays</span> for{' '}
+						{supportedCountries.find((c) => c.countryCode === countryCode)?.name || 'your country'} in {window.label}.
 					</p>
 					<div className="mt-10 flex flex-col items-center justify-center gap-x-6 space-y-2">
 						<button

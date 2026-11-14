@@ -3,7 +3,17 @@ import BlurBackground from './components/BlurBackground'
 import Content from './components/Content'
 import { useEffect, useMemo, useState } from 'react'
 import AppContext, { AppContextValue, HolidayStatus } from './context/AppContext'
-import { getDaysInYear, formatPublicHolidays, getWeekends } from './functions/functions'
+import {
+	clampWindowStart,
+	formatPublicHolidays,
+	getPlanningWindow,
+	getWeekends,
+	getYearsCovered,
+	MAX_WINDOW_SHIFT_MONTHS,
+	monthsBetween,
+	shiftYearMonth,
+	YearMonth
+} from './functions/functions'
 import { Country } from './types/SupportedCountries'
 import { PublicHoliday, PublicHolidaySlice } from './types/PublicHoliday'
 import { IpApi } from './types/IpApi'
@@ -48,16 +58,35 @@ export function detectCountryFromLocale(): string | null {
 }
 
 export default function App() {
-	const [year] = useState<number>(new Date().getFullYear())
+	// The window starts in January of the current year unless the user moved it; a stored start is kept within range
+	const [windowStart, setWindowStart] = useState<YearMonth>(() => {
+		const fallback = { year: new Date().getFullYear(), month: 1 }
+		try {
+			const stored = JSON.parse(localStorage.getItem('windowStart') ?? 'null') as YearMonth | null
+			return clampWindowStart(stored && stored.month >= 1 && stored.month <= 12 ? stored : fallback)
+		} catch {
+			return clampWindowStart(fallback)
+		}
+	})
 	const [supportedCountries, setSupportedCountries] = useState<Country[]>([])
 	const [countryCode, setCountryCode] = useState<string>('')
 	const [publicHolidays, setPublicHolidays] = useState<PublicHolidaySlice[]>([])
 	const [holidayStatus, setHolidayStatus] = useState<HolidayStatus>('idle')
 	const [loadError, setLoadError] = useState<string | null>(null)
 
-	// Derived from the year alone, so no state or effect is needed
-	const daysInYear = useMemo(() => getDaysInYear(year), [year])
-	const weekends = useMemo(() => getWeekends(year), [year])
+	const currentMonth: YearMonth = { year: new Date().getFullYear(), month: new Date().getMonth() + 1 }
+	const canShiftWindowStart = (deltaMonths: number) =>
+		Math.abs(monthsBetween(currentMonth, shiftYearMonth(windowStart, deltaMonths))) <= MAX_WINDOW_SHIFT_MONTHS
+	const shiftWindowStart = (deltaMonths: number) => {
+		if (!canShiftWindowStart(deltaMonths)) return
+		const next = shiftYearMonth(windowStart, deltaMonths)
+		localStorage.setItem('windowStart', JSON.stringify(next))
+		setWindowStart(next)
+	}
+
+	// The 12-month window and its weekends follow from the start month alone, so no state or effect is needed
+	const window = useMemo(() => getPlanningWindow(windowStart), [windowStart])
+	const weekends = useMemo(() => getWeekends(window), [window])
 
 	// Bootstrap, once: the country list and the default country
 	useEffect(() => {
@@ -92,7 +121,7 @@ export default function App() {
 		}
 	}, [])
 
-	// Holidays, whenever the country (or year) changes: this year plus next, so 1 January can bridge the year end
+	// Holidays, whenever the country or window changes: every calendar year the window (plus lookahead) touches
 	useEffect(() => {
 		if (!countryCode) return
 		let ignore = false
@@ -100,10 +129,10 @@ export default function App() {
 		setHolidayStatus('loading')
 		setLoadError(null)
 
-		Promise.all([year, year + 1].map((y) => fetchJson<PublicHoliday[]>(`${HOLIDAY_API}/PublicHolidays/${y}/${countryCode}`)))
+		Promise.all(getYearsCovered(window).map((y) => fetchJson<PublicHoliday[]>(`${HOLIDAY_API}/PublicHolidays/${y}/${countryCode}`)))
 			.then((perYear) => {
 				if (ignore) return
-				setPublicHolidays(formatPublicHolidays(perYear.flat(), year))
+				setPublicHolidays(formatPublicHolidays(perYear.flat(), window))
 				setHolidayStatus('ready')
 			})
 			.catch((error: unknown) => {
@@ -117,13 +146,15 @@ export default function App() {
 		return () => {
 			ignore = true
 		}
-	}, [countryCode, year])
+	}, [countryCode, window])
 
 	const contextValue: AppContextValue = {
-		year,
+		window,
+		windowStart,
+		shiftWindowStart,
+		canShiftWindowStart,
 		countryCode,
 		setCountryCode,
-		daysInYear,
 		weekends,
 		supportedCountries,
 		publicHolidays,

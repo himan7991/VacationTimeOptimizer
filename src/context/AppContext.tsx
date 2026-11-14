@@ -1,14 +1,22 @@
 import { createContext, useContext } from 'react'
 import { Country } from '../types/SupportedCountries'
 import { PublicHolidaySlice } from '../types/PublicHoliday'
+import { PlanningWindow } from '../types/PlanningWindow'
+import { YearMonth } from '../functions/functions'
 
 export type HolidayStatus = 'idle' | 'loading' | 'ready' | 'error'
 
 export type AppContextValue = {
-	year: number
+	/** The 12-month period being planned; all day numbers are relative to it */
+	window: PlanningWindow
+	/** First month of the window */
+	windowStart: YearMonth
+	/** Moves the window start by `deltaMonths`, within the allowed range */
+	shiftWindowStart: (deltaMonths: number) => void
+	/** Whether the window start can move by `deltaMonths` without leaving the allowed range */
+	canShiftWindowStart: (deltaMonths: number) => boolean
 	countryCode: string
 	setCountryCode: (arg: string) => void
-	daysInYear: number
 	weekends: number[]
 	supportedCountries: Country[]
 	publicHolidays: PublicHolidaySlice[]
