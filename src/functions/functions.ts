@@ -121,6 +121,29 @@ export function getYearsCovered(window: PlanningWindow): number[] {
 }
 
 /**
+ * Counts weekends (not weekend days) up to and including day `limit`.
+ * Consecutive weekend days form one weekend, so a lone remaining Sunday still counts as one.
+ * @param weekends Sorted weekend day numbers
+ * @param limit Last day number to consider, usually the window length
+ */
+export function countWeekends(weekends: number[], limit: number): number {
+	const set = new Set(weekends)
+	return weekends.filter((day) => day <= limit && !set.has(day - 1)).length
+}
+
+/**
+ * Splits the holidays up to day `limit` into those on working days and those that fall on a weekend
+ * @param holidays Public holidays as day numbers
+ * @param weekends Weekend day numbers
+ * @param limit Last day number to consider, usually the window length
+ */
+export function countHolidays(holidays: PublicHolidaySlice[], weekends: number[], limit: number): { total: number; onWeekdays: number } {
+	const weekendSet = new Set(weekends)
+	const inRange = holidays.filter((h) => h.date <= limit)
+	return { total: inRange.length, onWeekdays: inRange.filter((h) => !weekendSet.has(h.date)).length }
+}
+
+/**
  * Returns the upcoming weekend days of the window as day numbers, sorted ascending.
  * Numbering continues for WINDOW_END_LOOKAHEAD_DAYS past the window so that a break
  * ending on its last day can count the weekend that follows it.

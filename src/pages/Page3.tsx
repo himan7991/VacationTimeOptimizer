@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { useState } from 'react'
 import CalendarDay from '../components/CalendarDay'
 import { useAppContext } from '../context/AppContext'
-import { addDays, dayNumber, MONTH_NAMES } from '../functions/functions'
+import { addDays, countHolidays, countWeekends, dayNumber, MONTH_NAMES } from '../functions/functions'
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5'
 import { getBestOverallDays } from '../functions/getBestDays'
 import { getBestConsecutiveDays } from '../functions/getBestConsecutiveDays'
@@ -24,8 +24,8 @@ export default function Page3() {
 	const todayNumber = dayNumber(window, new Date())
 	const countryName = supportedCountries.find((c) => c.countryCode === countryCode)?.name ?? 'your country'
 	const publicHolidaysNumbers: number[] = publicHolidays.map((p) => p.date)
-	// Holidays inside the window; the list may also carry a few days past its end for bridging
-	const holidaysInWindow = publicHolidays.filter((p) => p.date <= window.length).length
+	// Counts are limited to the window; the lists also carry a few days past its end for bridging
+	const holidays = countHolidays(publicHolidays, weekends, window.length)
 
 	/**
 	 * Label for a holiday: the local name, plus the English name when it differs ("Πρωτοχρονιά (New Year's Day)").
@@ -36,7 +36,7 @@ export default function Page3() {
 		const sameName = holiday.localName.trim().toLowerCase() === holiday.name.trim().toLowerCase()
 		return sameName ? holiday.localName : `${holiday.localName} (${holiday.name})`
 	}
-	const weekendsInWindow = Math.floor(weekends.filter((d) => d <= window.length).length / 2)
+	const weekendsInWindow = countWeekends(weekends, window.length)
 	const windowDays: number[] = Array.from({ length: window.length }, (_, index) => index + 1)
 	const workingDays: number[] = windowDays.filter((day) => !weekends.includes(day) && !publicHolidaysNumbers.includes(day) && day > todayNumber)
 
@@ -100,16 +100,57 @@ export default function Page3() {
 						>
 							<IoChevronForward aria-hidden="true" />
 						</button>
-					</div>
-					<ModeToggle mode={mode} handleModeChange={handleThemeChange} />
-					<p className="text-center text-copy">
-						You&apos;re getting <span className="font-semibold">{plan.daysOff} days</span> of vacation <br />
-						with just <span className="border-b border-primary font-semibold">{plan.ptoDays.length} days of PTO</span>!
+						, we found:
+					</p>
+					<p className="w-[60ch] text-center text-sm text-copy">
+						<span className="font-semibold text-primary">{holidays.total} public holidays</span>
+						{holidays.total > 0 && <span className="text-copy-light"> ({holidays.onWeekdays} on weekdays)</span>},<br />
+						<span className="font-semibold text-error">{weekendsInWindow} weekends</span> and <br />
+						<span className="font-semibold">{workingDays.length} working days</span> ahead
 					</p>
 				</div>
+				<label className="flex items-center gap-2 text-copy" htmlFor="pto-days">
+					PTO days
+					<input
+						type="number"
+						min={1}
+						max={maxPtoDays}
+						value={requestedDays}
+						className="w-20 rounded-md border border-border bg-foreground px-2 py-1 text-center text-copy accent-primary"
+						onChange={(event) => handlePtoDaysChange(event.target.value)}
+					/>
+				</label>
+				<div className="flex items-center text-copy" role="group" aria-label="Planning period">
+					<button
+						type="button"
+						className="rounded-md border border-border bg-foreground p-1 text-copy hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
+						aria-label="Start one month earlier"
+						disabled={!canShiftWindowStart(-1)}
+						onClick={() => shiftWindowStart(-1)}
+					>
+						<IoChevronBack aria-hidden="true" />
+					</button>
+					<span className="min-w-[11rem] text-center font-semibold" aria-live="polite">
+						{window.label}
+					</span>
+					<button
+						type="button"
+						className="rounded-md border border-border bg-foreground p-1 text-copy hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
+						aria-label="Start one month later"
+						disabled={!canShiftWindowStart(1)}
+						onClick={() => shiftWindowStart(1)}
+					>
+						<IoChevronForward aria-hidden="true" />
+					</button>
+				</div>
+				<ModeToggle mode={mode} handleModeChange={handleThemeChange} />
+				<p className="text-center text-sm text-copy">
+					You&apos;re getting <span className="font-semibold">{plan.daysOff} days</span> of vacation <br />
+					with just <span className="border-b border-primary font-semibold">{plan.ptoDays.length} days of PTO</span>!
+				</p>
 			</div>
 
-			<div className="xl:flex-2 grid max-w-[64rem] grid-cols-1 gap-4 justify-self-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+			<div className="xl:flex-2 grid grid-cols-1 gap-4 justify-self-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
 				{Array.from({ length: 12 }, (_, m) => {
 					const monthStart = new Date(window.startYear, window.startMonth - 1 + m, 1)
 					const daysInMonth = addDays(new Date(monthStart.getFullYear(), monthStart.getMonth() + 1, 1), -1).getDate()

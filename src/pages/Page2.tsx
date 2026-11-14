@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion'
 import { useAppContext } from '../context/AppContext'
+import { countHolidays } from '../functions/functions'
 
 export default function Page2({ goto }: { goto: (arg: number) => void }) {
-	const { supportedCountries, countryCode, publicHolidays, window, holidayStatus, loadError } = useAppContext()
-	const holidaysInWindow = publicHolidays.filter((p) => p.date <= window.length).length
+	const { supportedCountries, countryCode, publicHolidays, weekends, window, holidayStatus, loadError } = useAppContext()
+	const holidays = countHolidays(publicHolidays, weekends, window.length)
 	const countryKnown = supportedCountries.some((c) => c.countryCode === countryCode)
 	const canStart = countryKnown && holidayStatus === 'ready'
 
@@ -12,12 +13,12 @@ export default function Page2({ goto }: { goto: (arg: number) => void }) {
 			<motion.div id="page2" layoutId="pages" className="px-[10%]">
 				<div className="flex flex-col text-center">
 					<h1 className="mb-6 text-4xl font-bold tracking-tight text-copy sm:text-6xl">Let&apos;s get started</h1>
-					<p className="max-w-[85ch] text-copy-light md:text-lg">
-						Vacation Time Optimizer helps you find the ideal time to use your paid time off (PTO) from work.
-					</p>
-					<p className="mt-1 max-w-[85ch] text-copy-light md:text-lg">
-						<span className="font-semibold">We found {holidaysInWindow} remaining public holidays</span> for{' '}
-						{supportedCountries.find((c) => c.countryCode === countryCode)?.name || 'your country'} in {window.label}.
+					<p className="max-w-[70ch] text-copy-light leading-6">
+						Vacation Time Optimizer helps you find the ideal time to use your paid time off (PTO) from work.{' '}
+						<span className="font-semibold">
+							We found {holidays.total} remaining public holidays ({holidays.onWeekdays} on weekdays)
+						</span>{' '}
+						for {supportedCountries.find((c) => c.countryCode === countryCode)?.name || 'your country'} in {window.label}.
 					</p>
 					<div className="mt-10 flex flex-col items-center justify-center gap-x-6 space-y-2">
 						<button
