@@ -15,6 +15,9 @@ import { twMerge } from 'tailwind-merge'
  * @return {JSX.Element} The rendered calendar day
  */
 
+/** Same box for every day, whatever element renders it */
+const CELL = 'grid h-7 w-7 place-items-center rounded border-b border-transparent text-center leading-none'
+
 export default function CalendarDay({
 	inDisplay,
 	isWeekend,
@@ -38,19 +41,25 @@ export default function CalendarDay({
 	 *
 	 * @return {string} The appropriate text color class name.
 	 */
-	const textColor = () => {
-		if (index < today) return 'text-copy-lighter'
-		if (index === today) return 'text-copy-lighter border-b-copy-lighter'
-		if (isPublicHoliday) return 'text-primary'
-		if (isWeekend) return 'text-red-500'
-		if (isBestDay) return 'text-emerald-500 border-emerald-500'
+	const dayDecoration = () => {
+		if (isPast)          return 'text-copy-lighter'
+		if (isToday)         return 'text-copy-lighter border-b-copy-lighter'
+		if (isPublicHoliday) return 'bg-primary-light font-semibold text-white shadow-md shadow-primary/50'
+		if (isWeekend)       return 'text-red-500'
+		if (isBestDay)       return 'bg-green-400/90 font-semibold text-white shadow-md shadow-green-300/50'
 		return 'text-copy'
 	}
 
-	const className = twMerge('border-b border-transparent text-center', textColor())
+	const cellClass = twMerge(CELL, dayDecoration())
 
+	// Holidays are the only interactive days
 	if (!isPublicHoliday || !title) {
-		return <p className={className}>{inDisplay}</p>
+		return (
+			<span className={cellClass}>
+				{inDisplay}
+				{isBestDay && !isPast && <span className="sr-only">, suggested PTO day</span>}
+			</span>
+		)
 	}
 
 	const tooltipId = `holiday-${index}`
@@ -59,7 +68,10 @@ export default function CalendarDay({
 		<span className="relative">
 			<button
 				type="button"
-				className={twMerge(className, 'w-full cursor-pointer rounded-sm hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary')}
+				className={twMerge(
+					cellClass,
+					'cursor-pointer transition-colors hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary'
+				)}
 				aria-label={`${inDisplay}, public holiday: ${title}`}
 				aria-describedby={showName ? tooltipId : undefined}
 				onClick={() => setShowName((open) => !open)}

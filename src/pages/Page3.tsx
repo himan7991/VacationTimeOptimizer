@@ -112,7 +112,7 @@ export default function Page3() {
 							</div>
 
 							{emptyDays.map((_, index) => (
-								<p key={`empty-${index}`} />
+								<span className="h-7 w-7" key={`empty-${index}`} aria-hidden="true" />
 							))}
 
 							{daysInYearArr

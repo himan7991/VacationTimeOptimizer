@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+	font-family:
+		'Geist Sans',
+		Poppins,
+		-apple-system,
+		BlinkMacSystemFont,
+		'Segoe UI',
+		system-ui,
+		sans-serif;
+}
+
 :root {
 	--primary: 124, 58, 237;
 	--primary-content: 255, 255, 255;
