@@ -44,11 +44,17 @@ export default function Page3() {
 	const maxPtoDays = Math.max(1, workingDays.length)
 	const requestedDays = Math.min(ptoDays, maxPtoDays)
 
-	const plan: VacationPlan =
+	const planFor = (days: number): VacationPlan =>
 		mode === 'best'
-			? getBestOverallDays(workingDays, requestedDays, weekends, publicHolidaysNumbers)
-			: getBestConsecutiveDays(workingDays, requestedDays, weekends, publicHolidaysNumbers)
+			? getBestOverallDays(workingDays, days, weekends, publicHolidaysNumbers)
+			: getBestConsecutiveDays(workingDays, days, weekends, publicHolidaysNumbers)
+
+	const plan = planFor(requestedDays)
 	const bestDaySet = new Set(plan.ptoDays)
+
+	// What one more PTO day would buy, shown as a nudge when it unlocks more than just itself
+	const nextPlan = requestedDays < maxPtoDays ? planFor(requestedDays + 1) : null
+	const nextGain = nextPlan ? nextPlan.daysOff - plan.daysOff : 0
 
 	const handlePtoDaysChange = (value: string) => {
 		const parsed = parseInt(value, 10)
@@ -61,7 +67,7 @@ export default function Page3() {
 			<div className="relative flex w-full flex-col items-center justify-center gap-1 md:flex-row md:justify-around md:gap-4 xl:flex-1 xl:flex-col">
 				<h2 className="text-center text-6xl font-bold text-copy">Overview</h2>
 				<div className="text-center">
-					<p className='text-copy'>
+					<p className="text-copy">
 						In{' '}
 						<button
 							type="button"
@@ -118,6 +124,16 @@ export default function Page3() {
 				<p className="text-center text-sm text-copy">
 					You&apos;re getting <span className="font-semibold">{plan.daysOff} days</span> of vacation <br />
 					with just <span className="border-b border-primary font-semibold">{plan.ptoDays.length} days of PTO</span>!
+				</p>
+				<p className={`text-center text-xs text-copy-light ${nextPlan && nextGain > 1 ? 'visible' : 'invisible'}`} aria-live="polite">
+					Tip: one more PTO day would get you <span className="font-semibold text-copy">{nextPlan?.daysOff} days</span> off (+{nextGain}).{' '}
+					<button
+						type="button"
+						className="rounded-sm font-semibold text-primary underline hover:text-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+						onClick={() => setPtoDays(requestedDays + 1)}
+					>
+						Use {requestedDays + 1} days
+					</button>
 				</p>
 			</div>
 
