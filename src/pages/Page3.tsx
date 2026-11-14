@@ -9,8 +9,7 @@ import ModeToggle from '../components/toggles/ToggleMode'
 import { VacationPlan } from '../types/VacationPlan'
 
 export default function Page3() {
-	let count = 0
-	const [mode, setMode] = useState('best')
+	const [mode, setMode] = useState('consecutive') // 'consecutive' or 'best'
 	const [ptoDays, setPtoDays] = useState<number>(3)
 
 	const handleThemeChange = (_mode: string) => {
