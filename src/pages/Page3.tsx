@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import CalendarDay from '../components/CalendarDay'
 import { useAppContext } from '../context/AppContext'
 import { addDays, countHolidays, countWeekends, dayNumber, MONTH_NAMES } from '../functions/functions'
@@ -12,6 +12,8 @@ import { VacationPlan } from '../types/VacationPlan'
 export default function Page3() {
 	const [mode, setMode] = useState('consecutive') // 'consecutive' or 'best'
 	const [ptoDays, setPtoDays] = useState<number>(3)
+	// Working days the user insists on taking off; day numbers are window-relative, so they reset with the window
+	const [pinnedDays, setPinnedDays] = useState<number[]>([])
 
 	const handleThemeChange = (_mode: string) => {
 		localStorage.setItem('mode', _mode)
@@ -41,13 +43,23 @@ export default function Page3() {
 	const windowDays: number[] = Array.from({ length: window.length }, (_, index) => index + 1)
 	const workingDays: number[] = windowDays.filter((day) => !weekends.includes(day) && !publicHolidaysNumbers.includes(day) && day > todayNumber)
 
+	useEffect(() => setPinnedDays([]), [window, countryCode])
+
+	const workingDaySet = new Set(workingDays)
+	const pinned = pinnedDays.filter((day) => workingDaySet.has(day)).sort((a, b) => a - b)
+	const pinnedSet = new Set(pinned)
+	const togglePin = (day: number) => setPinnedDays((days) => (days.includes(day) ? days.filter((d) => d !== day) : [...days, day]))
+
+	// Pins raise the floor: overall mode needs one PTO day per pin, consecutive mode must cover the span between them
+	const pinnedSpan = pinned.length ? workingDays.indexOf(pinned[pinned.length - 1]) - workingDays.indexOf(pinned[0]) + 1 : 0
+	const minPtoDays = mode === 'best' ? pinned.length : pinnedSpan
 	const maxPtoDays = Math.max(1, workingDays.length)
-	const requestedDays = Math.min(ptoDays, maxPtoDays)
+	const requestedDays = Math.min(Math.max(ptoDays, minPtoDays), maxPtoDays)
 
 	const planFor = (days: number): VacationPlan =>
 		mode === 'best'
-			? getBestOverallDays(workingDays, days, weekends, publicHolidaysNumbers)
-			: getBestConsecutiveDays(workingDays, days, weekends, publicHolidaysNumbers)
+			? getBestOverallDays(workingDays, days, weekends, publicHolidaysNumbers, pinned)
+			: getBestConsecutiveDays(workingDays, days, weekends, publicHolidaysNumbers, pinned)
 
 	const plan = planFor(requestedDays)
 	const bestDaySet = new Set(plan.ptoDays)
@@ -101,7 +113,8 @@ export default function Page3() {
 					<button
 						type="button"
 						className="rounded-md border border-border bg-foreground p-1 text-copy hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
-						aria-label="Start one month earlier"
+						aria-label="Shift start one month earlier"
+						title="Shift start one month earlier"
 						disabled={!canShiftWindowStart(-1)}
 						onClick={() => shiftWindowStart(-1)}
 					>
@@ -113,7 +126,8 @@ export default function Page3() {
 					<button
 						type="button"
 						className="rounded-md border border-border bg-foreground p-1 text-copy hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
-						aria-label="Start one month later"
+						aria-label="Shift start one month later"
+						title="Shift start one month later"
 						disabled={!canShiftWindowStart(1)}
 						onClick={() => shiftWindowStart(1)}
 					>
@@ -124,6 +138,23 @@ export default function Page3() {
 				<p className="text-center text-sm text-copy">
 					You&apos;re getting <span className="font-semibold">{plan.daysOff} days</span> of vacation <br />
 					with just <span className="border-b border-primary font-semibold">{plan.ptoDays.length} days of PTO</span>!
+				</p>
+				<p className="text-center text-xs text-copy-light" aria-live="polite">
+					{pinned.length === 0 ? (
+						'Click a working day to pin it as a must-take PTO day.'
+					) : (
+						<>
+							<span className="font-semibold text-copy">{pinned.length} pinned</span> {pinned.length === 1 ? 'day' : 'days'} included in
+							the plan.{' '}
+							<button
+								type="button"
+								className="rounded-sm font-semibold text-primary underline hover:text-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+								onClick={() => setPinnedDays([])}
+							>
+								Clear
+							</button>
+						</>
+					)}
 				</p>
 				<p className={`text-center text-xs text-copy-light ${nextPlan && nextGain > 1 ? 'visible' : 'invisible'}`} aria-live="polite">
 					Tip: one more PTO day would get you <span className="font-semibold text-copy">{nextPlan?.daysOff} days</span> off (+{nextGain}).{' '}
@@ -180,6 +211,8 @@ export default function Page3() {
 										isWeekend={weekends.includes(day)}
 										isPublicHoliday={publicHolidaysNumbers.includes(day)}
 										isBestDay={bestDaySet.has(day)}
+										isPinned={pinnedSet.has(day)}
+										onTogglePin={workingDaySet.has(day) ? () => togglePin(day) : undefined}
 										title={holidayLabel(day)}
 										key={day}
 									/>

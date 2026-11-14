@@ -3,8 +3,9 @@ import { twMerge } from 'tailwind-merge'
 
 /**
  * Renders one day of the calendar. Every day sits in the same fixed-size cell so the numbers line up.
- * Holidays are buttons that reveal their name on click or focus, so the name is reachable by mouse,
- * touch and keyboard. Other days are plain text and stay out of the Tab order.
+ * Holidays are buttons that reveal their name on click or focus. Future working days are buttons
+ * that pin or unpin the day as a must-take PTO day. Everything else is plain text and stays out of
+ * the Tab order.
  *
  * @param {number} inDisplay - The day-of-month number to display
  * @param {boolean} isPast - The day is before today
@@ -12,6 +13,8 @@ import { twMerge } from 'tailwind-merge'
  * @param {boolean} [isWeekend] - Indicates if the day is a weekend
  * @param {boolean} [isPublicHoliday] - Indicates if the day is a public holiday
  * @param {boolean} isBestDay - Indicates if the day is a suggested PTO day
+ * @param {boolean} [isPinned] - The user has pinned this day as a must-take PTO day
+ * @param {() => void} [onTogglePin] - Pins or unpins the day; its presence makes the day clickable
  * @param {number} index - The day number within the planning window, used for element ids
  * @param {string} [title] - The holiday name, when the day is a public holiday
  * @return {JSX.Element} The rendered calendar day
@@ -19,6 +22,7 @@ import { twMerge } from 'tailwind-merge'
 
 /** Same box for every day, whatever element renders it */
 const CELL = 'grid h-7 w-7 place-items-center rounded border-b border-transparent text-center leading-none'
+const FOCUS = 'focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary'
 
 export default function CalendarDay({
 	inDisplay,
@@ -27,6 +31,8 @@ export default function CalendarDay({
 	isWeekend,
 	isPublicHoliday,
 	isBestDay,
+	isPinned,
+	onTogglePin,
 	index,
 	title
 }: {
@@ -36,6 +42,8 @@ export default function CalendarDay({
 	isWeekend?: boolean
 	isPublicHoliday?: boolean
 	isBestDay: boolean
+	isPinned?: boolean
+	onTogglePin?: () => void
 	index: number
 	title?: string
 }) {
@@ -56,45 +64,60 @@ export default function CalendarDay({
 		return 'text-copy'
 	}
 
-	const cellClass = twMerge(CELL, dayDecoration())
+	const cellClass = twMerge(CELL, dayDecoration(), isPinned && 'ring-2 ring-primary ring-offset-1 ring-offset-foreground')
 
-	// Holidays are the only interactive days
-	if (!isPublicHoliday || !title) {
+	// Holidays: a button that shows the holiday name
+	if (isPublicHoliday && title) {
+		const tooltipId = `holiday-${index}`
+
 		return (
-			<span className={cellClass}>
-				{inDisplay}
-				{isBestDay && !isPast && <span className="sr-only">, suggested PTO day</span>}
+			<span className="relative">
+				<button
+					type="button"
+					className={twMerge(cellClass, 'cursor-pointer transition-colors hover:underline', FOCUS)}
+					aria-label={`${inDisplay}, public holiday: ${title}`}
+					aria-describedby={showName ? tooltipId : undefined}
+					onClick={() => setShowName((open) => !open)}
+					onBlur={() => setShowName(false)}
+					onKeyDown={(event) => event.key === 'Escape' && setShowName(false)}
+				>
+					{inDisplay}
+				</button>
+				{showName && (
+					<span
+						id={tooltipId}
+						role="tooltip"
+						className="absolute left-1/2 top-full z-20 mt-1 w-max max-w-[12rem] -translate-x-1/2 rounded-md bg-primary px-2 py-1 text-xs text-white shadow-lg"
+					>
+						{title}
+					</span>
+				)}
 			</span>
 		)
 	}
 
-	const tooltipId = `holiday-${index}`
+	// Future working days: a toggle that pins the day
+	if (onTogglePin) {
+		const state = isPinned ? ', pinned' : isBestDay ? ', suggested PTO day' : ''
 
-	return (
-		<span className="relative">
+		return (
 			<button
 				type="button"
-				className={twMerge(
-					cellClass,
-					'cursor-pointer transition-colors hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary'
-				)}
-				aria-label={`${inDisplay}, public holiday: ${title}`}
-				aria-describedby={showName ? tooltipId : undefined}
-				onClick={() => setShowName((open) => !open)}
-				onBlur={() => setShowName(false)}
-				onKeyDown={(event) => event.key === 'Escape' && setShowName(false)}
+				className={twMerge(cellClass, 'cursor-pointer transition-colors hover:ring-2 hover:ring-primary/50', FOCUS)}
+				aria-pressed={Boolean(isPinned)}
+				aria-label={`${inDisplay}${state}. ${isPinned ? 'Unpin' : 'Pin as a must-take PTO day'}`}
+				onClick={onTogglePin}
 			>
 				{inDisplay}
 			</button>
-			{showName && (
-				<span
-					id={tooltipId}
-					role="tooltip"
-					className="absolute left-1/2 top-full z-20 mt-1 w-max max-w-[12rem] -translate-x-1/2 rounded-md bg-primary px-2 py-1 text-xs text-white shadow-lg"
-				>
-					{title}
-				</span>
-			)}
+		)
+	}
+
+	// Past days and weekends: plain text
+	return (
+		<span className={cellClass}>
+			{inDisplay}
+			{isBestDay && !isPast && <span className="sr-only">, suggested PTO day</span>}
 		</span>
 	)
 }
