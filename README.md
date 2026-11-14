@@ -48,10 +48,14 @@ The deploy workflow in `.github/workflows/deploy.yml` builds on every push to `m
 be run locally with [act](https://nektosact.com/):
 
 ```
-act push -P ubuntu-latest=catthehacker/ubuntu:act-latest --artifact-server-path .act-artifacts
+act push --artifact-server-path .act-artifacts
 ```
 
-The final GitHub Pages deploy step cannot run locally and is expected to fail under act.
+The runner image comes from the project `.actrc`. The artifact server path has to be given on the command line, or
+added to your user-level `act` config, because `act` does not take host paths from a project file.
+
+The final GitHub Pages deploy step only runs on GitHub. Under `act` it is skipped with a notice, so a green run locally
+means lint, tests, build and the artifact upload all passed.
 
 Optional future work is tracked in [TODO.md](TODO.md).
 

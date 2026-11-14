@@ -44,4 +44,11 @@ jobs:
         with:
           path: ./dist
 
+      # Deploying needs an OIDC token that only GitHub's own runners can mint, so the step
+      # is skipped under act (https://nektosact.com/), which sets the ACT environment variable.
       - uses: actions/deploy-pages@v4
+        if: ${{ !env.ACT }}
+
+      - name: Explain the skipped deploy when running under act
+        if: ${{ env.ACT }}
+        run: echo "::notice::Deploy skipped - GitHub Pages deployment only runs on GitHub. Everything before it passed."
