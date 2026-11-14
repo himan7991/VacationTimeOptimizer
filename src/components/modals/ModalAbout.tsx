@@ -38,27 +38,26 @@ export default function AboutModal({ isOpen, setIsOpen }: { isOpen: boolean; set
 						role="dialog"
 						aria-modal="true"
 						aria-labelledby="about-modal-title"
-						className="relative w-full max-w-xl cursor-default overflow-hidden rounded-lg bg-gradient-to-br from-primary to-primary-dark p-6 text-white shadow-xl"
+						className="relative w-full max-w-2xl cursor-default overflow-hidden rounded-lg bg-gradient-to-br from-primary to-primary-dark p-6 text-white shadow-xl"
 					>
 						<TbBeach className="absolute -left-24 -top-24 z-0 rotate-12 text-[250px] text-white/10" />
-						<div className="relative z-10 flex flex-col justify-center gap-6">
+						<div className="relative z-10 flex flex-col justify-center gap-4">
 							<div className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-white text-3xl text-primary">
 								<TbBeach />
 							</div>
 							<h2 id="about-modal-title" className="text-center text-3xl font-bold">
 								What is this all about?
 							</h2>
-							{/* <p className="text-center">Vacation Time Optimizer helps you find the perfect time to use your paid time off (PTO).</p> */}
 							<p className="text-center">
 								Vacation Time Optimizer is a user-friendly web application that helps you determine the optimal time to use your paid
 								time off (PTO), ensuring you make the most of your leisure days.
 							</p>
 
-							<div className="mb-2">
+							<div>
 								<p>
 									Choose from <span className="font-bold">two modes</span>:
 								</p>
-								<ul className="list-disc pl-6 marker:text-secondary-light">
+								<ul className="list-disc pl-6 marker:text-white">
 									<li>
 										<span className="font-bold">Best overall days</span>, for maximizing vacation days throughout the year
 									</li>
@@ -76,6 +75,7 @@ export default function AboutModal({ isOpen, setIsOpen }: { isOpen: boolean; set
 									Awesome!
 								</button>
 							</div>
+							<p className="text-center text-xs">v2.0.0</p>
 						</div>
 					</motion.div>
 				</motion.div>
