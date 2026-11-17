@@ -19,13 +19,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           version: 10
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: pnpm
@@ -38,17 +38,19 @@ jobs:
 
       - run: pnpm build
 
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
 
-      - uses: actions/upload-pages-artifact@v4
+      # The two GitHub Pages steps are skipped under act (https://nektosact.com/), which sets the ACT
+      # environment variable: act's artifact server does not speak the current upload protocol, and
+      # deploying needs an OIDC token that only GitHub's own runners can mint.
+      - uses: actions/upload-pages-artifact@v5
+        if: ${{ !env.ACT }}
         with:
           path: ./dist
 
-      # Deploying needs an OIDC token that only GitHub's own runners can mint, so the step
-      # is skipped under act (https://nektosact.com/), which sets the ACT environment variable.
-      - uses: actions/deploy-pages@v4
+      - uses: actions/deploy-pages@v5
         if: ${{ !env.ACT }}
 
-      - name: Explain the skipped deploy when running under act
+      - name: Explain the skipped steps when running under act
         if: ${{ env.ACT }}
-        run: echo "::notice::Deploy skipped - GitHub Pages deployment only runs on GitHub. Everything before it passed."
+        run: echo "::notice::Artifact upload and Pages deploy skipped - they only run on GitHub. Lint, tests and build passed."
