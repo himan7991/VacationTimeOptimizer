@@ -19,6 +19,8 @@ export type AppContextValue = {
 	setCountryCode: (arg: string) => void
 	/** Opens the country picker from anywhere in the app */
 	openCountryModal: () => void
+	/** Opens the About dialog, which also holds the calendar legend */
+	openAboutModal: () => void
 	weekends: number[]
 	supportedCountries: Country[]
 	publicHolidays: PublicHolidaySlice[]

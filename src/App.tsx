@@ -2,6 +2,7 @@ import Header from './components/Header'
 import BlurBackground from './components/BlurBackground'
 import Content from './components/Content'
 import CountryModal from './components/modals/ModalCountry'
+import AboutModal from './components/modals/ModalAbout'
 import ConsentNotice from './components/ConsentNotice'
 import { useEffect, useMemo, useState } from 'react'
 import AppContext, { AppContextValue, HolidayStatus } from './context/AppContext'
@@ -76,6 +77,7 @@ export default function App() {
 	const [holidayStatus, setHolidayStatus] = useState<HolidayStatus>('idle')
 	const [loadError, setLoadError] = useState<string | null>(null)
 	const [isCountryOpen, setIsCountryOpen] = useState<boolean>(false)
+	const [isAboutOpen, setIsAboutOpen] = useState<boolean>(false)
 
 	const currentMonth: YearMonth = { year: new Date().getFullYear(), month: new Date().getMonth() + 1 }
 	const canShiftWindowStart = (deltaMonths: number) =>
@@ -159,6 +161,7 @@ export default function App() {
 		countryCode,
 		setCountryCode,
 		openCountryModal: () => setIsCountryOpen(true),
+		openAboutModal: () => setIsAboutOpen(true),
 		weekends,
 		supportedCountries,
 		publicHolidays,
@@ -173,6 +176,7 @@ export default function App() {
 				<Content />
 				<BlurBackground />
 				<CountryModal isOpen={isCountryOpen} setIsOpen={setIsCountryOpen} />
+				<AboutModal isOpen={isAboutOpen} setIsOpen={setIsAboutOpen} />
 				<ConsentNotice />
 			</main>
 		</AppContext.Provider>

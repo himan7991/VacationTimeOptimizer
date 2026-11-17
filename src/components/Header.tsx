@@ -2,15 +2,13 @@ import { useEffect, useState } from 'react'
 import { FaGithub, FaGlobeEurope } from 'react-icons/fa'
 import { IoMenu, IoClose } from 'react-icons/io5'
 import { motion } from 'framer-motion'
-import AboutModal from './modals/ModalAbout'
 import ThemeToggle from './toggles/ToggleTheme'
 import { GITHUB } from '../constants/links'
 import { twMerge } from 'tailwind-merge'
 import { useAppContext } from '../context/AppContext'
 
 export default function Header() {
-	const { openCountryModal } = useAppContext()
-	const [isAboutOpen, setIsAboutOpen] = useState<boolean>(false)
+	const { openCountryModal, openAboutModal } = useAppContext()
 	const [theme, setTheme] = useState('light')
 	const [isMobileNavOpen, setIsMobileNavOpen] = useState<boolean>(false)
 
@@ -76,16 +74,18 @@ export default function Header() {
 					id="site-nav"
 					aria-label="Site"
 					className={twMerge(
-						'col-span-2 flex w-screen flex-col items-end gap-4 overflow-hidden bg-background pr-[7.5%] pt-4 transition-all duration-500',
-						'md:col-span-1 md:ml-0 md:w-fit md:flex-row md:items-center md:place-self-end md:overflow-visible md:bg-transparent md:p-0 md:pr-[10%]',
-						isMobileNavOpen ? 'h-screen' : 'h-0 md:h-fit'
+						// Phone: a full-screen overlay below the header bar that fades in, so the page underneath does not move
+						'fixed inset-x-0 bottom-0 top-16 z-40 flex flex-col items-end gap-4 bg-background/95 pr-[7.5%] pt-6 backdrop-blur transition-opacity duration-300',
+						isMobileNavOpen ? 'opacity-100' : 'pointer-events-none opacity-0',
+						// Tablet and up: an ordinary row inside the header
+						'md:pointer-events-auto md:static md:col-span-1 md:w-fit md:flex-row md:items-center md:place-self-end md:bg-transparent md:p-0 md:pr-[10%] md:opacity-100 md:backdrop-blur-none'
 					)}
 				>
 					<motion.button
 						type="button"
 						className="relative flex h-6 flex-col overflow-hidden font-semibold text-copy"
 						whileHover="hover"
-						onClick={() => setIsAboutOpen(true)}
+						onClick={openAboutModal}
 					>
 						<motion.span variants={buttonVariant} transition={buttonTransition}>
 							About
@@ -104,7 +104,12 @@ export default function Header() {
 						<motion.span className="flex items-center gap-2" variants={buttonVariant} transition={buttonTransition}>
 							Contribute <FaGithub aria-hidden="true" />
 						</motion.span>
-						<motion.span className="flex items-center gap-2 text-primary" variants={buttonVariant} transition={buttonTransition} aria-hidden="true">
+						<motion.span
+							className="flex items-center gap-2 text-primary"
+							variants={buttonVariant}
+							transition={buttonTransition}
+							aria-hidden="true"
+						>
 							Contribute <FaGithub aria-hidden="true" />
 						</motion.span>
 					</motion.a>
@@ -120,8 +125,6 @@ export default function Header() {
 					>
 						<p className="md:hidden">Select a country</p> <FaGlobeEurope aria-hidden="true" />
 					</motion.button>
-
-					<AboutModal isOpen={isAboutOpen} setIsOpen={setIsAboutOpen} />
 				</nav>
 			</header>
 		</>

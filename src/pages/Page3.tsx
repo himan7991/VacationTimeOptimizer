@@ -23,8 +23,17 @@ export default function Page3() {
 
 	const weekdays = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
 
-	const { supportedCountries, countryCode, weekends, publicHolidays, window, shiftWindowStart, canShiftWindowStart, openCountryModal } =
-		useAppContext()
+	const {
+		supportedCountries,
+		countryCode,
+		weekends,
+		publicHolidays,
+		window,
+		shiftWindowStart,
+		canShiftWindowStart,
+		openCountryModal,
+		openAboutModal
+	} = useAppContext()
 	const todayNumber = dayNumber(window, new Date())
 	const countryName = supportedCountries.find((c) => c.countryCode === countryCode)?.name ?? 'your country'
 	const publicHolidaysNumbers: number[] = publicHolidays.map((p) => p.date)
@@ -149,23 +158,19 @@ export default function Page3() {
 					You&apos;re getting <span className="font-semibold">{plan.daysOff} days</span> of vacation <br />
 					with just <span className="border-b border-primary font-semibold">{plan.ptoDays.length} days of PTO</span>!
 				</p>
-				<p className="text-center text-xs text-copy-light" aria-live="polite">
-					{pinned.length === 0 ? (
-						'Click a working day to pin it as a must-take PTO day.'
-					) : (
-						<>
-							<span className="font-semibold text-copy">{pinned.length} pinned</span> {pinned.length === 1 ? 'day' : 'days'} included in
-							the plan.{' '}
-							<button
-								type="button"
-								className="rounded-sm font-semibold text-primary underline hover:text-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
-								onClick={() => setPinnedDays([])}
-							>
-								Clear
-							</button>
-						</>
-					)}
-				</p>
+				{pinned.length > 0 && (
+					<p className="text-center text-xs text-copy-light" aria-live="polite">
+						<span className="font-semibold text-copy">{pinned.length} pinned</span> {pinned.length === 1 ? 'day' : 'days'} included in the
+						plan.{' '}
+						<button
+							type="button"
+							className="rounded-sm font-semibold text-primary underline hover:text-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+							onClick={() => setPinnedDays([])}
+						>
+							Clear
+						</button>
+					</p>
+				)}
 				<p className={`text-center text-xs text-copy-light ${nextPlan && nextGain > 1 ? 'visible' : 'invisible'}`} aria-live="polite">
 					Tip: one more PTO day would get you <span className="font-semibold text-copy">{nextPlan?.daysOff} days</span> off (+{nextGain}).{' '}
 					<button
@@ -176,6 +181,13 @@ export default function Page3() {
 						Use {requestedDays + 1} days
 					</button>
 				</p>
+				<button
+					type="button"
+					className="rounded-sm text-xs text-copy-light underline hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+					onClick={openAboutModal}
+				>
+					What do the colours mean?
+				</button>
 			</div>
 
 			<div className="grid w-full grid-cols-[repeat(auto-fit,16rem)] justify-center gap-4">

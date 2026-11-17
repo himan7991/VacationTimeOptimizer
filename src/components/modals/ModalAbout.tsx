@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect } from 'react'
 import { TbBeach } from 'react-icons/tb'
+import CalendarLegend from '../CalendarLegend'
 
 /**
  * Renders the AboutModal component based on the isOpen prop.
@@ -28,7 +29,7 @@ export default function AboutModal({ isOpen, setIsOpen }: { isOpen: boolean; set
 					animate={{ opacity: 1 }}
 					exit={{ opacity: 0 }}
 					onClick={() => setIsOpen(false)}
-					className="fixed inset-0 z-50 grid cursor-pointer place-items-center bg-background/30 p-8 backdrop-blur"
+					className="fixed inset-0 z-50 grid cursor-pointer place-items-center overflow-y-auto bg-background/30 p-4 backdrop-blur sm:p-8"
 				>
 					<motion.div
 						initial={{ scale: 0, rotate: '12.5deg' }}
@@ -67,6 +68,8 @@ export default function AboutModal({ isOpen, setIsOpen }: { isOpen: boolean; set
 								</ul>
 							</div>
 
+							<CalendarLegend />
+
 							<div className="flex gap-2">
 								<button
 									onClick={() => setIsOpen(false)}
@@ -75,7 +78,7 @@ export default function AboutModal({ isOpen, setIsOpen }: { isOpen: boolean; set
 									Awesome!
 								</button>
 							</div>
-							<p className="text-center text-xs">v2.0.1</p>
+							<p className="text-center text-xs">v2.0.2</p>
 						</div>
 					</motion.div>
 				</motion.div>
