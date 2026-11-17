@@ -1,11 +1,34 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Page1 from '../pages/Page1'
 import Page2 from '../pages/Page2'
 import Page3 from '../pages/Page3'
 import { motion, AnimatePresence } from 'framer-motion'
 
+type PageState = { page?: number } | null
+
+/**
+ * The three steps share one URL, so each step is pushed as a history entry. The browser's
+ * back and forward buttons then move between steps instead of leaving the site.
+ */
 export default function Content() {
 	const [page, setPage] = useState<number>(1)
+
+	useEffect(() => {
+		// A fresh load always starts at step 1; the data for later steps has not loaded yet
+		window.history.replaceState({ page: 1 }, '')
+
+		const onPopState = (event: PopStateEvent) => {
+			const state = event.state as PageState
+			setPage(state?.page ?? 1)
+		}
+		window.addEventListener('popstate', onPopState)
+		return () => window.removeEventListener('popstate', onPopState)
+	}, [])
+
+	const goto = (next: number) => {
+		window.history.pushState({ page: next }, '')
+		setPage(next)
+	}
 
 	const variants = {
 		hidden: { opacity: 0, x: '100vw' },
@@ -24,7 +47,7 @@ export default function Content() {
 						variants={variants}
 						className="flex w-full flex-1 items-center justify-center"
 					>
-						<Page1 goto={setPage} />
+						<Page1 goto={goto} />
 					</motion.div>
 				)}
 
@@ -37,7 +60,7 @@ export default function Content() {
 						variants={variants}
 						className="relative flex w-full flex-1 items-center justify-center"
 					>
-						<Page2 goto={setPage} />
+						<Page2 goto={goto} />
 					</motion.div>
 				)}
 
