@@ -13,20 +13,16 @@ export default function Header() {
 	const [isMobileNavOpen, setIsMobileNavOpen] = useState<boolean>(false)
 
 	const handleThemeChange = (_theme: string) => {
-		document.body.classList.remove('dark', 'light')
-		document.body.classList.add(_theme)
-		document.querySelector("meta[name='theme-color']")?.setAttribute('content', _theme === 'light' ? 'rgb(240, 240, 240)' : 'rgb(26, 26, 26)')
+		document.documentElement.classList.remove('dark', 'light')
+		document.documentElement.classList.add(_theme)
+		document.querySelector("meta[name='theme-color']")?.setAttribute('content', _theme === 'light' ? '#f0f0f0' : '#1a1a1a')
 		localStorage.setItem('theme', _theme)
 		setTheme(_theme)
 	}
 
 	useEffect(() => {
-		const selectedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-		document.body.classList.add(selectedTheme)
-		document
-			.querySelector("meta[name='theme-color']")
-			?.setAttribute('content', selectedTheme === 'light' ? 'rgb(240, 240, 240)' : 'rgb(26, 26, 26)')
-		setTheme(selectedTheme)
+		// The inline script in index.html already applied the theme before first paint; just mirror it into state
+		setTheme(document.documentElement.classList.contains('dark') ? 'dark' : 'light')
 	}, [])
 
 	useEffect(() => {

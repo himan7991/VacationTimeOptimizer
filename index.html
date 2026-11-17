@@ -1,11 +1,23 @@
 <!doctype html>
-<html lang="en" version="2.0.3">
+<html lang="en" version="2.0.4">
 	<head>
 		<meta charset="UTF-8" />
 		<link rel="icon" type="image/svg+xml" href="/beach.svg" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta name="theme-color" content="rgb(240, 240, 240)" />
-		<meta name="apple-mobile-web-app-status-bar-style" />
+		<meta name="theme-color" content="#f0f0f0" />
+		<script>
+			// Apply the saved or system theme before first paint, so the browser chrome and the page
+			// never flash the wrong colour. The React header keeps this in sync afterwards.
+			;(function () {
+				var theme = localStorage.getItem('theme')
+				if (theme !== 'light' && theme !== 'dark') {
+					theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+				}
+				document.documentElement.classList.add(theme)
+				var meta = document.querySelector("meta[name='theme-color']")
+				if (meta) meta.setAttribute('content', theme === 'dark' ? '#1a1a1a' : '#f0f0f0')
+			})()
+		</script>
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link

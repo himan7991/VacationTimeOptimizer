@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* The theme class lives on <html>, so the canvas behind everything (overscroll areas, Safari's tab bar) matches the app */
+html {
+	background-color: rgb(var(--background));
+	color-scheme: light;
+}
+html.dark {
+	color-scheme: dark;
+}
+
 * {
 	font-family:
 		'Geist Sans',

@@ -78,7 +78,7 @@ export default function AboutModal({ isOpen, setIsOpen }: { isOpen: boolean; set
 									Awesome!
 								</button>
 							</div>
-							<p className="text-center text-xs">v2.0.3</p>
+							<p className="text-center text-xs">v2.0.4</p>
 						</div>
 					</motion.div>
 				</motion.div>
