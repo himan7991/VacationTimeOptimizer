@@ -76,9 +76,13 @@ export default function Page3() {
 	}
 
 	return (
-		<motion.div id="page3" className="grid h-full w-full grid-cols-[1fr_2.5fr] items-center justify-center p-4 xl:gap-8" layoutId="pages">
-			<div className="relative flex w-full flex-col items-center justify-center gap-1 md:flex-row md:justify-around md:gap-4 xl:flex-1 xl:flex-col">
-				<h1 className="text-center text-6xl font-bold text-copy">Overview</h1>
+		<motion.div
+			id="page3"
+			className="grid h-full w-full grid-cols-1 items-center justify-center gap-6 p-4 xl:grid-cols-[1fr_2.5fr] xl:gap-8"
+			layoutId="pages"
+		>
+			<div className="relative flex w-full flex-col items-center justify-center gap-3 md:gap-4 xl:flex-1">
+				<h1 className="text-center text-4xl font-bold text-copy sm:text-6xl">Overview</h1>
 				<div className="text-center">
 					<p className="text-copy">
 						In{' '}
@@ -92,50 +96,55 @@ export default function Page3() {
 						</button>
 						, we found:
 					</p>
-					<p className="w-[60ch] text-center text-sm text-copy">
+					<p className="max-w-[60ch] text-center text-sm text-copy">
 						<span className="font-semibold text-primary">{holidays.total} public holidays</span>
 						{holidays.total > 0 && <span className="text-copy-light"> ({holidays.onWeekdays} on weekdays)</span>},<br />
 						<span className="font-semibold text-error">{weekendsInWindow} weekends</span> and <br />
 						<span className="font-semibold">{workingDays.length} working days</span> ahead
 					</p>
 				</div>
-				<label className="flex items-center gap-2 text-copy" htmlFor="pto-days">
-					PTO days
-					<input
-						type="number"
-						min={1}
-						max={maxPtoDays}
-						value={requestedDays}
-						className="w-20 rounded-md border border-border bg-foreground px-2 py-1 text-center text-copy accent-primary"
-						onChange={(event) => handlePtoDaysChange(event.target.value)}
-					/>
-				</label>
-				<div className="flex items-center text-copy" role="group" aria-label="Planning period">
-					<button
-						type="button"
-						className="rounded-md border border-border bg-foreground p-1 text-copy hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
-						aria-label="Shift start one month earlier"
-						title="Shift start one month earlier"
-						disabled={!canShiftWindowStart(-1)}
-						onClick={() => shiftWindowStart(-1)}
-					>
-						<IoChevronBack aria-hidden="true" />
-					</button>
-					<span className="min-w-[11rem] text-center font-semibold" aria-live="polite">
-						{window.label}
-					</span>
-					<button
-						type="button"
-						className="rounded-md border border-border bg-foreground p-1 text-copy hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
-						aria-label="Shift start one month later"
-						title="Shift start one month later"
-						disabled={!canShiftWindowStart(1)}
-						onClick={() => shiftWindowStart(1)}
-					>
-						<IoChevronForward aria-hidden="true" />
-					</button>
+				{/* Controls, grouped so they read as one panel and wrap on narrow screens */}
+				<div className="flex w-full max-w-md flex-wrap items-center justify-center gap-x-6 gap-y-3 rounded-xl border border-border bg-foreground/60 px-4 py-3">
+					<label className="flex items-center gap-2 text-copy" htmlFor="pto-days">
+						PTO days
+						<input
+							type="number"
+							min={1}
+							max={maxPtoDays}
+							value={requestedDays}
+							className="w-20 rounded-md border border-border bg-foreground px-2 py-1 text-center text-copy accent-primary"
+							onChange={(event) => handlePtoDaysChange(event.target.value)}
+						/>
+					</label>
+
+					<div className="flex items-center text-copy" role="group" aria-label="Planning period">
+						<button
+							type="button"
+							className="rounded-md border border-border bg-foreground p-1 text-copy hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
+							aria-label="Shift start one month earlier"
+							title="Shift start one month earlier"
+							disabled={!canShiftWindowStart(-1)}
+							onClick={() => shiftWindowStart(-1)}
+						>
+							<IoChevronBack aria-hidden="true" />
+						</button>
+						<span className="min-w-[11rem] text-center font-semibold" aria-live="polite">
+							{window.label}
+						</span>
+						<button
+							type="button"
+							className="rounded-md border border-border bg-foreground p-1 text-copy hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
+							aria-label="Shift start one month later"
+							title="Shift start one month later"
+							disabled={!canShiftWindowStart(1)}
+							onClick={() => shiftWindowStart(1)}
+						>
+							<IoChevronForward aria-hidden="true" />
+						</button>
+					</div>
+
+					<ModeToggle mode={mode} handleModeChange={handleThemeChange} />
 				</div>
-				<ModeToggle mode={mode} handleModeChange={handleThemeChange} />
 				<p className="text-center text-sm text-copy">
 					You&apos;re getting <span className="font-semibold">{plan.daysOff} days</span> of vacation <br />
 					with just <span className="border-b border-primary font-semibold">{plan.ptoDays.length} days of PTO</span>!
@@ -169,7 +178,7 @@ export default function Page3() {
 				</p>
 			</div>
 
-			<div className="xl:flex-2 grid grid-cols-1 gap-4 justify-self-center sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+			<div className="grid w-full grid-cols-[repeat(auto-fit,16rem)] justify-center gap-4">
 				{Array.from({ length: 12 }, (_, m) => {
 					const monthStart = new Date(window.startYear, window.startMonth - 1 + m, 1)
 					const daysInMonth = addDays(new Date(monthStart.getFullYear(), monthStart.getMonth() + 1, 1), -1).getDate()

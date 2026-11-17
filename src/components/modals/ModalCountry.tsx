@@ -60,7 +60,7 @@ export default function CountryModal({ isOpen, setIsOpen }: { isOpen: boolean; s
 										{group.map((c, j) => (
 											<button
 												type="button"
-												className={`w-fit p-2 text-start leading-5 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-white ${
+												className={`w-fit p-2 text-center: md:text-start leading-5 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-white ${
 													c.countryCode === countryCode
 														? 'w-full rounded-md bg-white text-primary-dark outline-double outline-2 outline-primary-light'
 														: ''
